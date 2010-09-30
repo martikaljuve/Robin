@@ -34,12 +34,12 @@
 			this.uxFilename = new System.Windows.Forms.TextBox();
 			this.uxFilenameLabel = new System.Windows.Forms.Label();
 			this.uxFilenameBrowse = new System.Windows.Forms.Button();
+			this.uxWebcam = new System.Windows.Forms.Button();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.uxSidePanel = new System.Windows.Forms.TabControl();
 			this.uxSidePanelTab1 = new System.Windows.Forms.TabPage();
 			this.uxTable = new System.Windows.Forms.TableLayoutPanel();
 			this.uxCannyCheckbox = new System.Windows.Forms.CheckBox();
-			this.uxWebcam = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.uxImage)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -53,8 +53,8 @@
 			// uxImage
 			// 
 			this.uxImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			                                                             | System.Windows.Forms.AnchorStyles.Left)
+			                                                            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel1.SetColumnSpan(this.uxImage, 4);
 			this.uxImage.Location = new System.Drawing.Point(3, 32);
 			this.uxImage.Name = "uxImage";
@@ -113,6 +113,18 @@
 			this.uxFilenameBrowse.Text = "&Browse";
 			this.uxFilenameBrowse.UseVisualStyleBackColor = true;
 			this.uxFilenameBrowse.Click += new System.EventHandler(this.uxFilenameBrowse_Click);
+			// 
+			// uxWebcam
+			// 
+			this.uxWebcam.AutoSize = true;
+			this.uxWebcam.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.uxWebcam.Location = new System.Drawing.Point(359, 3);
+			this.uxWebcam.Name = "uxWebcam";
+			this.uxWebcam.Size = new System.Drawing.Size(60, 23);
+			this.uxWebcam.TabIndex = 5;
+			this.uxWebcam.Text = "&Webcam";
+			this.uxWebcam.UseVisualStyleBackColor = true;
+			this.uxWebcam.Click += new System.EventHandler(this.uxWebcam_Click);
 			// 
 			// splitContainer1
 			// 
@@ -183,18 +195,6 @@
 			this.uxCannyCheckbox.Text = "Enabled";
 			this.uxCannyCheckbox.UseVisualStyleBackColor = true;
 			// 
-			// uxWebcam
-			// 
-			this.uxWebcam.AutoSize = true;
-			this.uxWebcam.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.uxWebcam.Location = new System.Drawing.Point(359, 3);
-			this.uxWebcam.Name = "uxWebcam";
-			this.uxWebcam.Size = new System.Drawing.Size(60, 23);
-			this.uxWebcam.TabIndex = 5;
-			this.uxWebcam.Text = "&Webcam";
-			this.uxWebcam.UseVisualStyleBackColor = true;
-			this.uxWebcam.Click += new System.EventHandler(this.uxWebcam_Click);
-			// 
 			// Window
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -235,4 +235,3 @@
 		private System.Windows.Forms.Button uxWebcam;
 	}
 }
-
