@@ -1,0 +1,25 @@
+// Direction - radiaanides või kraadides?
+// Speed - 0-100?
+
+void move(float direction, int speed);
+void moveDistance(float direction, int speed, float distance);
+void turn(float degrees, int speed);
+void stop();
+
+void moveFast(float direction);
+void moveSlow(float direction);
+
+void moveDistanceFast(float direction, float distance);
+void moveDistanceSlow(float direction, float distance);
+
+void turnFast(float degrees);
+void turnSlow(float degrees);
+
+void dribbleOn();
+void dribbleOff();
+void dribbleReverse();
+
+// Ulmevaldkond
+// Annad ette, mis suunas, kui palju ja kui kiiresti minna ja mis suunda pööratult peaks robot lõpuks seisma jääma. Funktsioon peaks jagama roboti pööramise ette antud distantsi vahele jääva tee peale ära - kui see pole võimalik, siis peaks robot lihtsalt pööramatult liikuma ja sihtkohta jõudes ennast paika pöörama.
+
+void moveAndTurnDistance(float moveDirection, int moveSpeed, float distance, float endDegrees);
