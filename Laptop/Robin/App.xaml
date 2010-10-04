@@ -1,0 +1,18 @@
+﻿<Application x:Class="Robin.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+	<Application.Resources>
+		<Style x:Key="TitleLabel" TargetType="Label">
+			<Setter Property="Background" Value="#79633C" />
+		</Style>
+		
+		<Style x:Key="TitleWindow" TargetType="Grid">
+			<Setter Property="Background">
+				<Setter.Value>
+					<ImageBrush ImageSource="/Robin;component/Images/VisualStudioBackgroundBrown.png" Stretch="None" TileMode="Tile" Viewport="0,0,12.0016748858372,12.0016748858372" ViewportUnits="Absolute" />
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Application.Resources>
+</Application>

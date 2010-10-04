@@ -24,7 +24,7 @@ namespace Rihma.FindGolfBalls
 			InitializeControls();
 
 			const double twoPi = 2 * Math.PI;
-			const string filename = "C:\\Downloads\\capture2-15.avi";
+			const string filename = @"C:\Temp\Rihma-Väljak-01.m4v";
 			_capture = new Capture(filename);
 			uxFilename.Text = filename;
 
@@ -70,14 +70,14 @@ namespace Rihma.FindGolfBalls
 					var img = _capture.QueryFrame();
 
 					if (img == null) return;
-
+										
 					var gray = img.Convert<Gray, byte>().PyrDown().PyrDown().PyrUp().PyrUp();
 					//gray._Dilate(2);
 					//gray._Erode(2);
 					//gray._EqualizeHist();
 					var binary = gray.ThresholdBinary(binaryThreshold, binaryMaximumValue);
 					//gray = gray.Canny(cannyThreshold, cannyThresholdLinking);
-
+					
 					var filteredImage = binary;
 					var displayedImage = img;
 
@@ -130,6 +130,65 @@ namespace Rihma.FindGolfBalls
 
 					uxImage.Image = displayedImage;
 				};
+		}
+
+		public void FindChessboard() {
+			//var patternSize = new Size(7, 7);
+			//PointF[] corners;
+			//var patternFound = CameraCalibration.FindChessboardCorners(gray, patternSize, CALIB_CB_TYPE.ADAPTIVE_THRESH | CALIB_CB_TYPE.NORMALIZE_IMAGE | CALIB_CB_TYPE.FILTER_QUADS, out corners);
+			//gray.FindCornerSubPix(new PointF[][] { corners }, new Size(10, 10), new Size(-1, -1), new MCvTermCriteria(0.05));
+
+			//CameraCalibration.DrawChessboardCorners(gray, patternSize, corners, patternFound);
+			//gray.Save("chess2" + DateTime.Now.Ticks + ".jpg");
+			//img.Save("chess1" + DateTime.Now.Ticks + ".jpg");
+			//Application.Exit();
+
+			//var objPts = new PointF[4];
+			//var imgPts = new PointF[4];
+			//int width = 7, height = 7;
+			//int wx = 450;
+			//int hy = 450;
+			//int lx = 400;
+			//int ly = 400;
+			//objPts[0] = new PointF(lx, ly);
+			//objPts[1] = new PointF(wx, ly);
+			//objPts[2] = new PointF(lx, hy);
+			//objPts[3] = new PointF(wx, hy);
+
+			//imgPts[0] = corners[0];
+			//imgPts[1] = corners[width - 1];
+			//imgPts[2] = corners[(height - 1) * width];
+			//imgPts[3] = corners[(height - 1) * width + width - 1];
+
+			//float[,] src = {
+			//          {objPts[0].X, objPts[0].Y},
+			//          {objPts[1].X, objPts[1].Y},
+			//          {objPts[2].X, objPts[2].Y},
+			//          {objPts[3].X, objPts[3].Y}
+			//      };
+			//float[,] dest = {
+			//          {imgPts[0].X, imgPts[0].Y},
+			//          {imgPts[1].X, imgPts[1].Y},
+			//          {imgPts[2].X, imgPts[2].Y},
+			//          {imgPts[3].X, imgPts[3].Y}
+			//      };
+
+			//Matrix<float> srcpm = new Matrix<float>(src);
+			//Matrix<float> dstpm = new Matrix<float>(dest);
+
+			//Matrix<float> homographyMatrix = CameraCalibration.FindHomography(
+			// dstpm, //points on the observed image
+			// srcpm, //points on the object image
+			// HOMOGRAPHY_METHOD.RANSAC,
+			// 3).Convert<float>();
+
+			////7. WARP PERSPECTIVE
+			////           Image<Gray, Byte> rotated = chessboardImage.WarpPerspective(homographyMatrix, INTER.CV_INTER_LINEAR,
+			////                                           Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new Gray(50));
+			//Image<Bgr, Byte> rotated = img.WarpPerspective(homographyMatrix, INTER.CV_INTER_LINEAR,
+			//                                Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new Bgr(Color.Black));
+
+			//rotated.Save("chess 3.jpg");
 		}
 
 		public ColorType ColorType { get; set; }
@@ -207,7 +266,7 @@ namespace Rihma.FindGolfBalls
 				new OpenFileDialog
 				{
 					DefaultExt = "avi",
-					Filter = "Video files (*.avi)|*.avi|All files (*.*)|*.*"
+					Filter = "Video files (*.avi, *.m4v)|*.avi;*.m4v|All files (*.*)|*.*"
 				};
 
 			var result = dialog.ShowDialog(this);
