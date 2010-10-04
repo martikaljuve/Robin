@@ -13,8 +13,6 @@ namespace Robin
         public MainWindow()
         {
             InitializeComponent();
-
-			Compose();
         }
 
         public void Compose()
