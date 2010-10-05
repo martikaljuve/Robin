@@ -17,6 +17,7 @@ namespace Rihma.FindGolfBalls
 		private Gray circleAccumulatorThreshold = new Gray(120);
 		private Gray binaryThreshold = new Gray(100);
 		private Gray binaryMaximumValue = new Gray(255);
+		private Matrix<float> _homographyMatrix;
 
 		public Window()
 		{
@@ -24,7 +25,7 @@ namespace Rihma.FindGolfBalls
 			InitializeControls();
 
 			const double twoPi = 2 * Math.PI;
-			const string filename = @"C:\Temp\Rihma-01.jpg";
+			const string filename = @"C:\Temp\Rihma-Väljak-01.m4v";
 			_capture = new Capture(filename);
 			uxFilename.Text = filename;
 
@@ -72,7 +73,11 @@ namespace Rihma.FindGolfBalls
 					if (img == null) return;
 
 					var gray = img.Convert<Gray, byte>();
-					FindChessboard(img, gray);
+
+					var chessBoard = img;
+					if (ImageSource == ImageSource.Warped)
+						chessBoard = FindChessboard(img, gray);
+
 					gray = gray.PyrDown().PyrDown().PyrUp().PyrUp();					
 					//gray._Dilate(2);
 					//gray._Erode(2);
@@ -83,13 +88,16 @@ namespace Rihma.FindGolfBalls
 					var filteredImage = binary;
 					var displayedImage = img;
 
-					switch (ColorType)
+					switch (ImageSource)
 					{
-						case ColorType.Gray:
+						case ImageSource.Gray:
 							displayedImage = gray.Convert<Bgr, byte>();
 							break;
-						case ColorType.BlackAndWhite:
+						case ImageSource.BlackAndWhite:
 							displayedImage = binary.Convert<Bgr, byte>();
+							break;
+						case ImageSource.Warped:
+							displayedImage = chessBoard.Copy();
 							break;
 					}
 
@@ -134,30 +142,55 @@ namespace Rihma.FindGolfBalls
 				};
 		}
 
-		public void FindChessboard(Image<Bgr, byte> img, Image<Gray, byte> gray) {
+		public Image<Bgr, byte> FindChessboard(Image<Bgr, byte> img, Image<Gray, byte> gray)
+		{
+			var matrix = FindHomographyMatrix(img, gray);
+
+			if (matrix != null)
+				_homographyMatrix = matrix;
+
+			if (_homographyMatrix == null)
+				return img;
+
+			Image<Bgr, Byte> rotated = img.WarpPerspective(
+				_homographyMatrix,
+				INTER.CV_INTER_LINEAR,
+				WARP.CV_WARP_FILL_OUTLIERS, new Bgr(Color.Black));
+
+			return rotated;
+		}
+
+		private Matrix<float> FindHomographyMatrix(Image<Bgr, byte> img, Image<Gray, byte> gray)
+		{
 			var patternSize = new Size(5, 8);
 			PointF[] corners;
+
 			var patternFound = CameraCalibration.FindChessboardCorners(
 				gray,
 				patternSize,
-				CALIB_CB_TYPE.ADAPTIVE_THRESH | CALIB_CB_TYPE.NORMALIZE_IMAGE | CALIB_CB_TYPE.FILTER_QUADS,
+				CALIB_CB_TYPE.DEFAULT,
 				out corners);
 
 			gray.FindCornerSubPix(new PointF[][] { corners }, new Size(10, 10), new Size(-1, -1), new MCvTermCriteria(0.05));
 
-			CameraCalibration.DrawChessboardCorners(gray, patternSize, corners, patternFound);
-			gray.Save("chess2" + DateTime.Now.Ticks + ".jpg");
-			//img.Save("chess1" + DateTime.Now.Ticks + ".jpg");
+			//var cornerCount = 0;
+			//CvInvoke.cvDrawChessboardCorners(img.Ptr, patternSize, corners, cornerCount, patternFound ? 1 : 0);
+			//CameraCalibration.DrawChessboardCorners(gray, patternSize, corners, patternFound);
+			//gray.Save("chess2" + DateTime.Now.Ticks + ".jpg");
+			//img.Save("chess1" + DateTime.Now.Ticks + (patternFound ? "Yes" : "No") + ".jpg");
 
-			if (!patternFound) return;
+			if (!patternFound) return null;
 
 			var objPts = new PointF[4];
 			var imgPts = new PointF[4];
-			int width = 5, height = 8;
+
+			int width = 5;
+			int height = 8;
 			int wx = 450;
 			int hy = 450;
 			int lx = 400;
 			int ly = 400;
+
 			objPts[0] = new PointF(lx, ly);
 			objPts[1] = new PointF(wx, ly);
 			objPts[2] = new PointF(lx, hy);
@@ -168,38 +201,36 @@ namespace Rihma.FindGolfBalls
 			imgPts[2] = corners[(height - 1) * width];
 			imgPts[3] = corners[(height - 1) * width + width - 1];
 
-			float[,] src = {
-			          {objPts[0].X, objPts[0].Y},
-			          {objPts[1].X, objPts[1].Y},
-			          {objPts[2].X, objPts[2].Y},
-			          {objPts[3].X, objPts[3].Y}
-			      };
-			float[,] dest = {
-			          {imgPts[0].X, imgPts[0].Y},
-			          {imgPts[1].X, imgPts[1].Y},
-			          {imgPts[2].X, imgPts[2].Y},
-			          {imgPts[3].X, imgPts[3].Y}
-			      };
+			float[,] src =
+			{
+				{objPts[0].X, objPts[0].Y},
+				{objPts[1].X, objPts[1].Y},
+				{objPts[2].X, objPts[2].Y},
+				{objPts[3].X, objPts[3].Y}
+			};
+
+			float[,] dest =
+			{
+				{imgPts[0].X, imgPts[0].Y},
+				{imgPts[1].X, imgPts[1].Y},
+				{imgPts[2].X, imgPts[2].Y},
+				{imgPts[3].X, imgPts[3].Y}
+			};
 
 			Matrix<float> srcpm = new Matrix<float>(src);
 			Matrix<float> dstpm = new Matrix<float>(dest);
 
 			Matrix<float> homographyMatrix = CameraCalibration.FindHomography(
-			 dstpm, //points on the observed image
-			 srcpm, //points on the object image
-			 HOMOGRAPHY_METHOD.RANSAC,
-			 3).Convert<float>();
+				dstpm, //points on the observed image
+				srcpm, //points on the object image
+				HOMOGRAPHY_METHOD.RANSAC,
+				3
+			).Convert<float>();
 
-			//7. WARP PERSPECTIVE
-			//           Image<Gray, Byte> rotated = chessboardImage.WarpPerspective(homographyMatrix, INTER.CV_INTER_LINEAR,
-			//                                           Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new Gray(50));
-			Image<Bgr, Byte> rotated = img.WarpPerspective(homographyMatrix, INTER.CV_INTER_LINEAR,
-											Emgu.CV.CvEnum.WARP.CV_WARP_FILL_OUTLIERS, new Bgr(Color.Black));
-
-			rotated.Save("chess 3.jpg");
+			return homographyMatrix;
 		}
 
-		public ColorType ColorType { get; set; }
+		public ImageSource ImageSource { get; set; }
 
 		//private static double GetEccentricity(MCvMoments moments) {
 		//    var m1 = moments.GetCentralMoment(2, 0);
@@ -220,7 +251,7 @@ namespace Rihma.FindGolfBalls
 			AddSlider("Threshold Linking", this, "CannyThresholdLinking", 0, 255);
 			AddSlider("Circle Accumulator Threshold", this, "CannyCircleAccumulatorThreshold", 0, 255);
 
-			AddSelection("Result color", Enum.GetNames(typeof(ColorType)), this, "ColorType");
+			AddSelection("Result color", typeof(ImageSource), Enum.GetNames(typeof(ImageSource)), this, "ImageSource");
 
 			uxTable.ResumeLayout(true);
 		}
@@ -249,7 +280,7 @@ namespace Rihma.FindGolfBalls
 			uxTable.Controls.Add(textbox, 2, row);
 		}
 
-		private void AddSelection(string text, object[] items, object dataSource, string dataMember)
+		private void AddSelection(string text, Type dataType, object[] items, object dataSource, string dataMember)
 		{
 			int row = uxTable.RowCount++ - 1;
 			uxTable.RowStyles.Insert(row, new RowStyle(SizeType.Absolute, 30));
@@ -259,8 +290,14 @@ namespace Rihma.FindGolfBalls
 			label.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
 
 			var combobox = new ComboBox();
+			combobox.DropDownStyle = ComboBoxStyle.DropDownList;
 			combobox.DataSource = items;
-			combobox.DataBindings.Add("SelectedValue", dataSource, dataMember, true, DataSourceUpdateMode.OnPropertyChanged);
+			//combobox.DataBindings.Add("SelectedValue", dataSource, dataMember, true);
+			combobox.SelectedValueChanged += (sender, e) => {
+				var value = Enum.Parse(dataType, combobox.SelectedItem.ToString());
+				this.GetType().GetProperty(dataMember).SetValue(dataSource, value, null);
+			};
+			combobox.SelectedValue = this.GetType().GetProperty(dataMember).GetValue(dataSource, null);
 
 			uxTable.Controls.Add(label, 0, row);
 			uxTable.Controls.Add(combobox, 1, row);
@@ -321,10 +358,11 @@ namespace Rihma.FindGolfBalls
 		}
 	}
 
-	public enum ColorType
+	public enum ImageSource
 	{
 		RGB,
 		Gray,
-		BlackAndWhite
+		BlackAndWhite,
+		Warped
 	}
 }
