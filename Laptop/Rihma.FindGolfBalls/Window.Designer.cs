@@ -28,7 +28,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.uxImage = new Emgu.CV.UI.ImageBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.uxFilename = new System.Windows.Forms.TextBox();
@@ -40,8 +39,11 @@
 			this.uxSidePanelTab1 = new System.Windows.Forms.TabPage();
 			this.uxTable = new System.Windows.Forms.TableLayoutPanel();
 			this.uxCannyCheckbox = new System.Windows.Forms.CheckBox();
+			this.uxImageProcessor = new System.Windows.Forms.ComboBox();
+			this.uxImageProcessorLabel = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.uxImage)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
@@ -53,8 +55,8 @@
 			// uxImage
 			// 
 			this.uxImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			                                                             | System.Windows.Forms.AnchorStyles.Left)
-			                                                            | System.Windows.Forms.AnchorStyles.Right)));
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel1.SetColumnSpan(this.uxImage, 4);
 			this.uxImage.Location = new System.Drawing.Point(3, 32);
 			this.uxImage.Name = "uxImage";
@@ -172,10 +174,13 @@
 			this.uxTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.uxTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
 			this.uxTable.Controls.Add(this.uxCannyCheckbox, 0, 0);
+			this.uxTable.Controls.Add(this.uxImageProcessor, 1, 1);
+			this.uxTable.Controls.Add(this.uxImageProcessorLabel, 0, 1);
 			this.uxTable.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.uxTable.Location = new System.Drawing.Point(3, 3);
 			this.uxTable.Name = "uxTable";
-			this.uxTable.RowCount = 2;
+			this.uxTable.RowCount = 3;
+			this.uxTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.uxTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.uxTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.uxTable.Size = new System.Drawing.Size(276, 343);
@@ -195,6 +200,27 @@
 			this.uxCannyCheckbox.Text = "Enabled";
 			this.uxCannyCheckbox.UseVisualStyleBackColor = true;
 			// 
+			// uxImageProcessor
+			// 
+			this.uxImageProcessor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.uxTable.SetColumnSpan(this.uxImageProcessor, 2);
+			this.uxImageProcessor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.uxImageProcessor.FormattingEnabled = true;
+			this.uxImageProcessor.Location = new System.Drawing.Point(120, 34);
+			this.uxImageProcessor.Name = "uxImageProcessor";
+			this.uxImageProcessor.Size = new System.Drawing.Size(153, 21);
+			this.uxImageProcessor.TabIndex = 1;
+			// 
+			// uxImageProcessorLabel
+			// 
+			this.uxImageProcessorLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.uxImageProcessorLabel.AutoSize = true;
+			this.uxImageProcessorLabel.Location = new System.Drawing.Point(3, 38);
+			this.uxImageProcessorLabel.Name = "uxImageProcessorLabel";
+			this.uxImageProcessorLabel.Size = new System.Drawing.Size(111, 13);
+			this.uxImageProcessorLabel.TabIndex = 2;
+			this.uxImageProcessorLabel.Text = "Processor";
+			// 
 			// Window
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -211,6 +237,7 @@
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel1.PerformLayout();
 			this.splitContainer1.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
 			this.uxSidePanel.ResumeLayout(false);
 			this.uxSidePanelTab1.ResumeLayout(false);
@@ -233,5 +260,7 @@
 		private System.Windows.Forms.CheckBox uxCannyCheckbox;
 		private System.Windows.Forms.TableLayoutPanel uxTable;
 		private System.Windows.Forms.Button uxWebcam;
+		private System.Windows.Forms.ComboBox uxImageProcessor;
+		private System.Windows.Forms.Label uxImageProcessorLabel;
 	}
 }

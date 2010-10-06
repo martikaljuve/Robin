@@ -3,6 +3,7 @@
 	public enum ArduinoQueries
 	{
 		BeaconServoRotation = 'B',
-		TripSensor = 'T'
+		TripSensor = 'T',
+		GyroRotation = 'G'
 	}
 }
