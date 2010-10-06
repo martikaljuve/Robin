@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
+﻿using System.ComponentModel.Composition.Hosting;
 using System.Windows;
+using System.ComponentModel.Composition;
 
 namespace Robin
 {
@@ -12,5 +9,11 @@ namespace Robin
     /// </summary>
     public partial class App : Application
     {
+    	public App()
+    	{
+    		var catalog = new DirectoryCatalog(@".\");
+    		var container = new CompositionContainer(catalog);
+			container.ComposeParts(this);
+    	}
     }
 }
