@@ -1,7 +1,7 @@
 void setup(){
-	Serial.begin(28800);
+	Serial.begin(9600);
 
-	//gyroSetup();
+	gyroSetup();
 	//sonarSetup();
 	//sharpIrSetup();
 
@@ -10,9 +10,9 @@ void setup(){
 
 void loop(){
 
-	//gyroLoop();
+	gyroLoop();
 	//sonarLoop();
 	//sharpIrLoop();
 		
-	delay(100);
+	//delay(100);
 }

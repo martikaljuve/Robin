@@ -15,8 +15,8 @@ void gyroLoop() {
 	temperature = getTemperature();
 	Serial.print("AR ");
 	Serial.println(adcToAngularRate(rate), DEC);
-	Serial.print("AT ");
-	Serial.println(adcToTemperature(temperature), DEC);
+	//Serial.print("TP ");
+	//Serial.println(adcToTemperature(temperature), DEC);
 }
 
 // get temperature adc in millivolts
@@ -81,7 +81,7 @@ int adcToAngularRate(unsigned int adcValue)
 	// from the data sheet, N2 version is 6,67	
 	// E2 is 13,33 and R2 is 26,67 mV/deg
 	// change accordingly.
-	return (vOutAngularRate - 2500)/26.67; 
+	return (vOutAngularRate - 2500)/6.67; 
 }
 
 // converts the adc reading to centigrades
