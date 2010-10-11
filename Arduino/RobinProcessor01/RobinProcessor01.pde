@@ -1,18 +1,20 @@
 void setup(){
 	Serial.begin(9600);
 
+	stateMachineSetup();
 	gyroSetup();
-	//sonarSetup();
-	//sharpIrSetup();
+	sonarSetup();
+	sharpIrSetup();
 
 	delay(100);
 }
 
 void loop(){
 
+	stateMachineLoop();
 	gyroLoop();
-	//sonarLoop();
-	//sharpIrLoop();
+	sonarLoop();
+	sharpIrLoop();
 		
 	//delay(100);
 }
