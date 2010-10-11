@@ -21,8 +21,5 @@ namespace Robin
             var container = new CompositionContainer(catalog);
             container.ComposeParts(this);
         }
-
-		[ImportMany]
-		public IList<ISensor> Sensors { get; set; }
     }
 }

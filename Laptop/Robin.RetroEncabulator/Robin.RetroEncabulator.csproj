@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{78C692B6-33F4-4F38-8B6C-360C8F69989C}</ProjectGuid>
+    <ProjectGuid>{EE5171C9-1700-46FF-9A30-3D38C557F0DC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Robin</RootNamespace>
-    <AssemblyName>Robin.Contracts</AssemblyName>
+    <RootNamespace>Robin.RetroEncabulator</RootNamespace>
+    <AssemblyName>Robin.RetroEncabulator</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Stateless">
+      <HintPath>..\lib\Stateless.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,9 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IProcessor.cs" />
-    <Compile Include="SensorData.cs" />
+    <Compile Include="State.cs" />
+    <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Trigger.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Robin.Contracts\Robin.Contracts.csproj">
+      <Project>{78C692B6-33F4-4F38-8B6C-360C8F69989C}</Project>
+      <Name>Robin.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
