@@ -33,8 +33,8 @@ typedef volatile uint8_t* REG_PTR;
 // The Drivers on to the Motors Plate
 #define DRIVER_L PORTA
 #define DRIVER_R PORTA
-#define DRIVER_B PORTC
-#define DRIVER_U PORTC
+#define DRIVER_B PORTD
+#define DRIVER_U PORTD
  
 #define FWD 1 
 #define BWD 0
