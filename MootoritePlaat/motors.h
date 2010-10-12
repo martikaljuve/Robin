@@ -1,7 +1,7 @@
 #pragma once
 #include <stdlib.h>
 #include <avr/io.h>
-#include "binary.h"
+#include "../utils/binary.h"
  
 /*
 	@author Jorma Rebane, Universitas Tartuensis
@@ -30,11 +30,10 @@ typedef volatile uint8_t* REG_PTR;
 #define M3_DIR PC4	//DIR_U
 #define M3_PWM PD6	//PWM_U
  
-// The Drivers on to the Motors Plate
-#define DRIVER_L PORTA
-#define DRIVER_R PORTA
-#define DRIVER_B PORTD
-#define DRIVER_U PORTD
+#define M0_FWD 1
+#define M1_FWD 1
+#define M2_FWD 0
+#define M3_FWD 1
  
 #define FWD 1 
 #define BWD 0
@@ -47,16 +46,19 @@ typedef struct __Motor {
 	uint8_t	dir_pin;  // the pin to flip, in order to change motor dir
 	REG_PTR dir_port; // port where to flip the dir_pin
 	uint8_t	current_direction; // current direction of the motor (FORWARD 1 or 0 BACKWARD)
+	uint8_t fwd_dir; // The direction which is 'forward' on this motor
 } Motor;
  
  
-/* Creates a new motor struct with the given pwm REG_PTR, dir_port REG_PTR and the dir_pin number in the dir_port. */
-Motor* newMotor(REG_PTR pwm, uint8_t dir_pin, REG_PTR dir_port)
+/* Creates a new motor struct with the given pwm REG_PTR, dir_port REG_PTR, 
+ the dir_pin number in the dir_port and forwardDirection 0/1 - which direction is forward */
+Motor* newMotor(REG_PTR pwm, uint8_t dir_pin, REG_PTR dir_port, uint8_t forwardDirection)
 {
 	Motor* m = (Motor*)malloc(sizeof(Motor));
 	m->pwm = pwm;
 	m->dir_pin = dir_pin;
 	m->dir_port = dir_port;
+	m->fwd_dir = forwardDirection;
 	return m;
 }
  
@@ -78,7 +80,8 @@ Motor* motors[MotorCount];
  
  
 /* Sets the direction of a motor struct pointer. */
-#define set_motor_dir(motor_ptr, dir) motor_ptr->current_direction = dir; (dir) \
+#define set_motor_dir(motor_ptr, dir) motor_ptr->current_direction = dir; \
+	(motor_ptr->fwd_dir ? dir : !dir) \
 	? output_hi( motor_ptr->dir_port,  motor_ptr->dir_pin ) \
 	: output_lo( motor_ptr->dir_port,  motor_ptr->dir_pin )
 /* Toggles the direction of a motor struct pointer. */
@@ -123,6 +126,8 @@ Motor* motors[MotorCount];
 (0..MotorCount-1) in the motors array by the given value */
 #define decr_pwm(motor_id, value) decr_motor_pwm(motors[motor_id], value)
  
+#define DECAY_MODE_FAST 0
+#define DECAY_MODE_SLOW 1
  
 #define PWM_MODE_FAST 1
 #define PWM_MODE_PHASE_CORRECT 2
@@ -178,7 +183,7 @@ void pwm_mode(uint8_t pwm_mode, uint8_t prescaler)
 		// similar settings as above, but:
 		// clear OC2A on match, clear OC2B on match
 		TCCR2A = B8(10100011);
-		TCCR0B = __prescaling;
+		TCCR2B = __prescaling;
 		break;
 	case PWM_MODE_PHASE_CORRECT:
 		// PHASE CORRECT PWM MODE
@@ -201,22 +206,41 @@ void pwm_mode(uint8_t pwm_mode, uint8_t prescaler)
  
 		// similar settings as above, but for OC2A and OC2B
 		TCCR2A = B8(10100001);
-		TCCR0B = __prescaling;
+		TCCR2B = __prescaling;
 		break;
 	}
  
 }
  
+/* Sets the decay mode of the motors.
+   Possible options:
+	DECAY_MODE_FAST
+	DECAY_MODE_SLOW
+*/
+void set_decay_mode(uint8_t DECAY_MODE_)
+{
+	/*@note PORTC, pin PC7 (7) sets the
+	 decay mode
+	 */
+	switch(DECAY_MODE_) {
+	case DECAY_MODE_FAST: // 0
+		output_lo(&PORTC, PC7);
+		break;
+	case DECAY_MODE_SLOW: // 1
+		output_hi(&PORTC, PC7);
+		break;
+	}
+}
  
 /* Initializes the motors */
 void init_motors(uint8_t PWM_MODE_, uint8_t PRESCALING_)
 {
 	pwm_mode(PWM_MODE_, PRESCALING_);
  
-	motors[0] =	newMotor(&OCR0A, M0_DIR, &DRIVER_L);
-	motors[1] =	newMotor(&OCR0B, M1_DIR, &DRIVER_R);
-	motors[2] =	newMotor(&OCR2A, M2_DIR, &DRIVER_B);
-	motors[3] =	newMotor(&OCR2B, M3_DIR, &DRIVER_U);
+	motors[0] =	newMotor(&OCR0A, M0_DIR, &PORTA, M0_FWD);
+	motors[1] =	newMotor(&OCR0B, M1_DIR, &PORTA, M1_FWD);
+	motors[2] =	newMotor(&OCR2A, M2_DIR, &PORTC, M2_FWD);
+	motors[3] =	newMotor(&OCR2B, M3_DIR, &PORTC, M3_FWD);
  
 	// Set port pins to 'output' mode (1)
 	output_hi(&DDRA, M0_DIR); //PA2
