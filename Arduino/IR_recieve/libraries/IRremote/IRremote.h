@@ -31,10 +31,7 @@ public:
 };
 
 // Values for decode_type
-#define NEC 1
-#define SONY 2
 #define RC5 3
-#define RC6 4
 #define UNKNOWN -1
 
 // Decoded value for NEC when a repeat code is received
@@ -53,10 +50,8 @@ public:
 private:
   // These are called by decode
   int getRClevel(decode_results *results, int *offset, int *used, int t1);
-  long decodeNEC(decode_results *results);
-  long decodeSony(decode_results *results);
   long decodeRC5(decode_results *results);
-  long decodeRC6(decode_results *results);
+  volatile irparams_t irparams;
 } 
 ;
 
@@ -66,22 +61,6 @@ private:
 #else
 #define VIRTUAL
 #endif
-
-class IRsend
-{
-public:
-  IRsend() {}
-  void sendNEC(unsigned long data, int nbits);
-  void sendSony(unsigned long data, int nbits);
-  void sendRaw(unsigned int buf[], int len, int hz);
-  void sendRC5(unsigned long data, int nbits);
-  void sendRC6(unsigned long data, int nbits);
-  // private:
-  void enableIROut(int khz);
-  VIRTUAL void mark(int usec);
-  VIRTUAL void space(int usec);
-}
-;
 
 // Some useful constants
 

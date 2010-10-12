@@ -13,7 +13,7 @@ void setup()
 {
   Serial.begin(9600);
   irrecv_left.enableIRIn(); // Start the receiver
-  //irrecv_right.enableIRIn();
+  irrecv_right.enableIRIn();
 }
 /*
 void loop() {
@@ -37,17 +37,8 @@ void dump(decode_results *results) {
     Serial.println("Could not decode message");
   } 
   else {
-    if (results->decode_type == NEC) {
-      Serial.print("Decoded NEC: ");
-    } 
-    else if (results->decode_type == SONY) {
-      Serial.print("Decoded SONY: ");
-    } 
-    else if (results->decode_type == RC5) {
+    if (results->decode_type == RC5) {
       Serial.print("Decoded RC5: ");
-    } 
-    else if (results->decode_type == RC6) {
-      Serial.print("Decoded RC6: ");
     }
     Serial.print(results->value, HEX);
     Serial.print(" (");
@@ -81,8 +72,8 @@ void loop() {
     dump(&results_left);
     irrecv_left.resume(); // Receive the next value
   }
-   /*
-   if (irrecv_right.decode(&results_right)) {
+
+  if (irrecv_right.decode(&results_right)) {
     Serial.println("RIGHT");
     Serial.print("val: ");
     Serial.println(results_right.value, BIN);
@@ -91,8 +82,4 @@ void loop() {
     dump(&results_right);
     irrecv_right.resume(); // Receive the next value
   }
-  */
 }
-
-
-

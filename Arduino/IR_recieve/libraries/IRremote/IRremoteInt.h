@@ -84,8 +84,7 @@
 
 // information for the interrupt handler
 typedef struct {
-  int recvpin[2];           // pin for IR data from detector
-  unsigned int recvpin_count; 
+  int recvpin;           // pin for IR data from detector
   uint8_t rcvstate;          // state machine
   uint8_t blinkflag;         // TRUE to enable blinking of pin 13 on IR processing
   unsigned int timer;     // state timer, counts 50uS ticks.
@@ -96,7 +95,7 @@ typedef struct {
 irparams_t;
 
 // Defined in IRremote.cpp
-extern volatile irparams_t irparams;
+//extern volatile irparams_t irparams;
 
 // IR detector output is active low
 #define MARK  0
