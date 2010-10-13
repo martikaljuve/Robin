@@ -1,0 +1,28 @@
+------------------------------------
+Arduino -> PC
+------------------------------------
+CG [0,1] - coilgun charge status
+TR [0,1] - trip sensor status
+GY [float] - gyro direction
+BL [0,1] - left beacon ir receiver has contact
+BR [0,1] - right beacon ir receiver has contact
+BD [float] - servo direction
+
+example:
+CG 0
+TR 1
+GY 20.0
+BL 1
+BR 0
+BD 120.0
+
+------------------------------------
+PC -> Arduino
+------------------------------------
+Move robot:
+MV [float] [int] - move(direction, speed)
+MD [float] [int] [float] - moveDistance(direction, speed, distance)
+RO [float] [int] - turn(degrees, speed)
+ST - stop()
+DR [0,1] - toggleDribbler(toggle)
+MT [float] [int] [float] [float] - moveAndTurnDistance(moveDirection, moveSpeed, distance, endDegrees)

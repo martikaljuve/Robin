@@ -2,6 +2,6 @@ namespace Robin
 {
 	public interface IProcessor
 	{
-		void Update(SensorData data);
+		void Update(ArduinoSensorData data);
 	}
 }

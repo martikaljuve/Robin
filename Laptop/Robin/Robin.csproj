@@ -47,10 +47,13 @@
     <Compile Include="ArduinoCommands.cs" />
     <Compile Include="ArduinoDataReceivedEventArgs.cs" />
     <Compile Include="ArduinoHelper.cs" />
+    <Compile Include="ArduinoPrefix.cs" />
     <Compile Include="ArduinoQueries.cs" />
+    <Compile Include="ArduinoSensorData.cs" />
     <Compile Include="ArduinoSerial.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

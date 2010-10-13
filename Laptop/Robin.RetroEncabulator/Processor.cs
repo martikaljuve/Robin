@@ -24,7 +24,7 @@ namespace Robin.RetroEncabulator
 			
 		}
 
-		public void Update(SensorData data)
+		public void Update(ArduinoSensorData data)
 		{
 
 		}

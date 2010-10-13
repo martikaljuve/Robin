@@ -7,25 +7,31 @@ namespace Robin
 	public class ArduinoSerial
 	{
 		private const int BaudRate = 56600;
-		private SerialPort _port;
+		private readonly SerialPort _port = new SerialPort();
 		private string _portName;
 		private readonly int _baudRate;
 
-		//public event EventHandler<ArduinoDataReceivedEventArgs> DataReceived;
+		public event EventHandler<ArduinoDataReceivedEventArgs> DataReceived;
 
 		public ArduinoSerial(string portName = null, int baudRate = BaudRate)
 		{
 			_portName = portName;
 			_baudRate = baudRate;
+			_port.DataReceived += (sender, args) => OnDataReceived(new ArduinoDataReceivedEventArgs(_port.ReadExisting()));
+		}
+
+		public bool IsOpen
+		{
+			get { return _port.IsOpen; }
 		}
 
 		public void Open()
 		{
-			if (TryOpenPort(_portName, out _port))
+			if (TryOpenPort(_portName))
 				return;
 
 			var names = SerialPort.GetPortNames();
-			if (names.Any(name => TryOpenPort(name, out _port)))
+			if (names.Any(TryOpenPort))
 				return;
 		}
 
@@ -41,22 +47,21 @@ namespace Robin
 				_port.Close();
 		}
 
-		private bool TryOpenPort(string name, out SerialPort port)
+		private bool TryOpenPort(string name)
 		{
 			try
 			{
-				port = new SerialPort(name, _baudRate);
-				port.NewLine = "\n";
-				port.DtrEnable = true;
-				port.ReadTimeout = 2000;
-				port.WriteTimeout = 2000;
-				//port.DataReceived += (sender, args) => OnDataReceived(new ArduinoDataReceivedEventArgs(_port.ReadExisting()));
-				port.Open();
-				return port.IsOpen;
+				_port.PortName = name;
+				_port.BaudRate = _baudRate;
+				_port.NewLine = "\n";
+				_port.DtrEnable = true;
+				_port.ReadTimeout = 2000;
+				_port.WriteTimeout = 2000;
+				_port.Open();
+				return _port.IsOpen;
 			}
 			catch (Exception)
 			{
-				port = null;
 				return false;
 			}
 		}
@@ -109,12 +114,12 @@ namespace Robin
 			}
 		}
 
-		//public void OnDataReceived(ArduinoDataReceivedEventArgs eventArgs)
-		//{
-		//    var temp = DataReceived;
-		//    if (temp != null)
-		//        temp(this, eventArgs);
-		//}
+		public void OnDataReceived(ArduinoDataReceivedEventArgs eventArgs)
+		{
+			var temp = DataReceived;
+			if (temp != null)
+				temp(this, eventArgs);
+		}
 
 		public static ArduinoSerial Open(string portName, int baudRate)
 		{
