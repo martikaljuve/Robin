@@ -5,6 +5,7 @@
 		BallFound,
 		BallCollected,
 		BallLaunched,
-		BallLost
+		BallLost,
+		Timeout
 	}
 }

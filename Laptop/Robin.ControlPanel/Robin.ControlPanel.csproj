@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command.cs" />
+    <Compile Include="ConnectCommand.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,13 +82,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Robin.Arduino\Robin.Arduino.csproj">
+      <Project>{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}</Project>
+      <Name>Robin.Arduino</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Robin.Contracts\Robin.Contracts.csproj">
       <Project>{78C692B6-33F4-4F38-8B6C-360C8F69989C}</Project>
       <Name>Robin.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Robin\Robin.csproj">
-      <Project>{56660028-7B4E-4224-805B-7B162356E210}</Project>
-      <Name>Robin</Name>
+    <ProjectReference Include="..\Robin.RetroEncabulator\Robin.RetroEncabulator.csproj">
+      <Project>{EE5171C9-1700-46FF-9A30-3D38C557F0DC}</Project>
+      <Name>Robin.RetroEncabulator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

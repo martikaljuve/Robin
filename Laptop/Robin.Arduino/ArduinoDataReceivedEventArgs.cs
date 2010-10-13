@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Robin
+namespace Robin.Arduino
 {
 	public class ArduinoDataReceivedEventArgs : EventArgs
 	{

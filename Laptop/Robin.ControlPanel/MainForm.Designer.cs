@@ -35,6 +35,7 @@
 			this.uxPortConnect = new System.Windows.Forms.Button();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.uxFps = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
@@ -57,7 +58,7 @@
 			// 
 			this.label2.AutoSize = true;
 			this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-			this.tableLayoutPanel1.SetColumnSpan(this.label2, 4);
+			this.tableLayoutPanel1.SetColumnSpan(this.label2, 5);
 			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
 			this.label2.ForeColor = System.Drawing.Color.White;
@@ -107,14 +108,16 @@
 			// 
 			this.tableLayoutPanel1.AutoSize = true;
 			this.tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(89)))), ((int)(((byte)(89)))), ((int)(((byte)(89)))));
-			this.tableLayoutPanel1.ColumnCount = 4;
+			this.tableLayoutPanel1.ColumnCount = 5;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.Controls.Add(this.uxPorts, 2, 0);
+			this.tableLayoutPanel1.Controls.Add(this.uxFps, 2, 0);
+			this.tableLayoutPanel1.Controls.Add(this.uxPorts, 3, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.uxPortConnect, 3, 0);
+			this.tableLayoutPanel1.Controls.Add(this.uxPortConnect, 4, 0);
 			this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -126,6 +129,17 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(567, 89);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
+			// uxFps
+			// 
+			this.uxFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.uxFps.AutoSize = true;
+			this.uxFps.BackColor = System.Drawing.Color.Transparent;
+			this.uxFps.Location = new System.Drawing.Point(188, 24);
+			this.uxFps.Name = "uxFps";
+			this.uxFps.Size = new System.Drawing.Size(21, 13);
+			this.uxFps.TabIndex = 6;
+			this.uxFps.Text = "fps";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -133,7 +147,9 @@
 			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
 			this.ClientSize = new System.Drawing.Size(567, 382);
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.DoubleBuffered = true;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(400, 240);
 			this.Name = "MainForm";
 			this.Text = "Form1";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -152,6 +168,7 @@
 		private System.Windows.Forms.Button uxPortConnect;
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.Label uxFps;
 	}
 }
 

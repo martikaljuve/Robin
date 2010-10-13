@@ -2,7 +2,7 @@
 using System.IO.Ports;
 using System.Linq;
 
-namespace Robin
+namespace Robin.Arduino
 {
 	public class ArduinoSerial
 	{
@@ -66,9 +66,9 @@ namespace Robin
 			}
 		}
 
-		public string Query(ArduinoQueries command, params  object[] parameters)
+		public string Query(string command, params  object[] parameters)
 		{
-			var data = string.Join(" ", new[] { command.ToString() }.Concat(parameters));
+			var data = string.Join(" ", new[] { command }.Concat(parameters));
 			return Query(data);
 		}
 
@@ -78,9 +78,9 @@ namespace Robin
 			return Read();
 		}
 
-		public void Command(ArduinoCommands command, params object[] parameters)
+		public void Command(string command, params object[] parameters)
 		{
-			var data = string.Join(" ", new[] { command.ToString() }.Concat(parameters));
+			var data = string.Join(" ", new[] { command }.Concat(parameters));
 			Command(data);
 		}
 

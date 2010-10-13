@@ -35,6 +35,7 @@
       <HintPath>..\lib\Stateless.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -47,15 +48,16 @@
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Trigger.cs" />
+    <Compile Include="VisionData.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Robin.Arduino\Robin.Arduino.csproj">
+      <Project>{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}</Project>
+      <Name>Robin.Arduino</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Robin.Contracts\Robin.Contracts.csproj">
       <Project>{78C692B6-33F4-4F38-8B6C-360C8F69989C}</Project>
       <Name>Robin.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Robin\Robin.csproj">
-      <Project>{56660028-7B4E-4224-805B-7B162356E210}</Project>
-      <Name>Robin</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

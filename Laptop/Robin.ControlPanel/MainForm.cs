@@ -1,37 +1,39 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.IO.Ports;
-using System.Threading;
 using System.Windows.Forms;
+using Robin.Arduino;
 using Robin.ControlPanel.Properties;
+using Robin.RetroEncabulator;
 
 namespace Robin.ControlPanel
 {
 	public partial class MainForm : Form
 	{
-		private readonly BackgroundWorker _logicWorker;
-		private readonly BackgroundWorker _sensorWorker;
+		private readonly Stopwatch _timer = new Stopwatch();
+		private readonly BackgroundWorker _logicWorker = new BackgroundWorker();
+		private readonly ArduinoSerial _arduinoSerial = new ArduinoSerial();
+
 		public static ArduinoSensorData SensorData { get; set; }
 
 		[Import]
 		public IProcessor Processor { get; set; }
 
+		static MainForm()
+		{
+			SensorData = new ArduinoSensorData();
+		}
+
 		public MainForm()
 		{
 			InitializeComponent();
 
+			Processor = new Processor();
+			Processor.Commander = new ArduinoCommander(_arduinoSerial);
+
 			InitializeUserControls();
-
-			_sensorWorker = new BackgroundWorker();
-			_sensorWorker.DoWork += SensorWorkerOnDoWork;
-			_sensorWorker.RunWorkerAsync();
-
-			_logicWorker = new BackgroundWorker();
-			_logicWorker.DoWork += LogicWorkerOnDoWork;
-			_logicWorker.RunWorkerAsync();
-
-
 		}
 
 		private void InitializeUserControls()
@@ -60,99 +62,55 @@ namespace Robin.ControlPanel
 				};
 
 			uxPortConnect.Click += UxPortConnectOnClick;
+
+			_timer.Start();
+
+			_logicWorker.DoWork += LogicWorkerOnDoWork;
+			_logicWorker.ProgressChanged += LogicWorkerOnProgressChanged;
+			_logicWorker.WorkerReportsProgress = true;
+			_logicWorker.RunWorkerAsync();
 		}
 
 		private void UxPortConnectOnClick(object sender, EventArgs eventArgs)
 		{
-			var serial = new ArduinoSerial(uxPorts.SelectedText);
-			serial.Open();
+			_arduinoSerial.Open(uxPorts.SelectedText);
+			_arduinoSerial.DataReceived += (o, args) => SensorData.UpdateFromSerialData(args.Data);
 		}
-
-		private void SensorWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
-		{
-			
-		}
-
+		
 		private void LogicWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
 		{
-			Processor.Update(SensorData);
-		}
+			float fps = 0;
+			long timeElapsed = 0;
+			long timeLast = 0;
+			long timerCount = 0;
 
-		private static void LogicWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-		{
-			
-		}
-	}
-
-	public abstract class Command : INotifyPropertyChanged
-	{
-		private bool _enabled;
-		private string _displayName;
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		public string Key { get; protected set; }
-		public string DisplayName {
-			get { return _displayName; }
-			protected set {
-				if (_displayName == value) return;
-				_displayName = value;
-				OnPropertyChanged(new PropertyChangedEventArgs("DisplayName"));
-			}
-		}
-
-		public bool Enabled {
-			get { return _enabled; }
-			set {
-				if (_enabled == value) return;
-				_enabled = value;
-
-				OnPropertyChanged(new PropertyChangedEventArgs("Enabled"));
-			}
-		}
-
-		public abstract void Execute();
-
-		protected void OnPropertyChanged(PropertyChangedEventArgs e) {
-			PropertyChangedEventHandler handler = PropertyChanged;
-
-			if (handler != null)
-				handler(this, e);
-		}
-	}
-
-	public class ActionCommand<T> : Command {
-		private readonly Func<T> _function;
-
-		public ActionCommand(Func<T> func)
-		{
-			_function = func;
-		}
-
-		public override void Execute() { _function(); }
-	}
-
-	public class ConnectCommand : Command
-	{
-		private readonly ArduinoSerial _serial;
-
-		public ConnectCommand(ArduinoSerial serial)
-		{
-			_serial = serial;
-			DisplayName = "Connect";
-		}
-
-		public override void Execute()
-		{
-			if (_serial.IsOpen) {
-				_serial.Close();
-				DisplayName = "Connect";
-			}
-			else
+			while (true)
 			{
-				_serial.Open();
-				DisplayName = "Disconnect";
+				if (_timer.IsRunning)
+				{
+					timerCount++;
+					var timeNow = _timer.ElapsedMilliseconds;
+					var timeDelta = timeNow - timeLast;
+					timeElapsed += timeDelta;
+					timeLast = timeNow;
+
+					if (timeElapsed >= 1000)
+					{
+						fps = timerCount / (timeElapsed / 1000f);
+						timerCount = 0;
+						timeElapsed = 0;
+					}
+				}
+
+				Processor.Update(SensorData);
+				_logicWorker.ReportProgress(0, fps);
 			}
+		}
+
+		private void LogicWorkerOnProgressChanged(object sender, ProgressChangedEventArgs progressChangedEventArgs)
+		{
+			var fps = (float)progressChangedEventArgs.UserState;
+			uxFps.Text = fps.ToString();
 		}
 	}
 }

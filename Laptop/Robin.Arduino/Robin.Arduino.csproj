@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{78C692B6-33F4-4F38-8B6C-360C8F69989C}</ProjectGuid>
+    <ProjectGuid>{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Robin</RootNamespace>
-    <AssemblyName>Robin.Contracts</AssemblyName>
+    <RootNamespace>Robin.Arduino</RootNamespace>
+    <AssemblyName>Robin.Arduino</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,14 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IProcessor.cs" />
+    <Compile Include="ArduinoCommander.cs" />
+    <Compile Include="ArduinoDataReceivedEventArgs.cs" />
+    <Compile Include="ArduinoPrefix.cs" />
+    <Compile Include="ArduinoSensorData.cs" />
+    <Compile Include="ArduinoSerial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Robin.Arduino\Robin.Arduino.csproj">
-      <Project>{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}</Project>
-      <Name>Robin.Arduino</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

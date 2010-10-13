@@ -19,10 +19,21 @@ BD 120.0
 ------------------------------------
 PC -> Arduino
 ------------------------------------
-Move robot:
+CF - fire coilgun
+CH - fire coilgun half
 MV [float] [int] - move(direction, speed)
 MD [float] [int] [float] - moveDistance(direction, speed, distance)
 RO [float] [int] - turn(degrees, speed)
 ST - stop()
 DR [0,1] - toggleDribbler(toggle)
 MT [float] [int] [float] [float] - moveAndTurnDistance(moveDirection, moveSpeed, distance, endDegrees)
+
+example:
+CF
+CH
+MV 100.0 100
+MD 359.0 100 500.0
+RO 359.0 50
+ST
+DR 1
+MT 100.0 25 1000.0 350.0

@@ -1,4 +1,4 @@
-namespace Robin
+namespace Robin.Arduino
 {
 	public class ArduinoSensorData
 	{
@@ -20,6 +20,14 @@ namespace Robin
 		}
 
 		public void UpdateFromSerialData(string data)
+		{
+			var commands = data.Split('\n');
+
+			foreach (var command in commands)
+				ParseCommand(command);
+		}
+
+		private void ParseCommand(string data)
 		{
 			var tokens = data.Split(' ');
 			if (tokens.Length == 0) return;
