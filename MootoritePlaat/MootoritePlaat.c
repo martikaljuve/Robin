@@ -117,22 +117,33 @@ int main(void){
 
 	output_fwd(PORTA, MOTOR_0_DIR);
 	output_fwd(PORTA, MOTOR_1_DIR);
-	output_fwd(PORTC, MOTOR_2_DIR);
-	output_fwd(PORTC, MOTOR_3_DIR);
+	output_fwd(PORTD, MOTOR_2_DIR);
+	output_fwd(PORTD, MOTOR_3_DIR);
 
 	start_pwm();
 
 	//for(i=0;i<40;i+=j){
-	set_speed(0, 100);
-	set_speed(1, 100);
-	set_speed(2, 100);
-	set_speed(3, 100);
+	set_speed(0, 0);
+	set_speed(1, 0);
+	set_speed(2, 0);
+	set_speed(3, 0);
 	//}
 
+
+	//Triangle (Should make the robot move in a triangle using motors 0 - LEFT, 1 - RIGHT, 2 - BACK
+	int i = 0;
 	while(1){
-		_delay_ms(1000);
 		
-		output_toggle(PORTD, LED);
+		//We set the speed of one pair of motors to 100
+		set_speed((i+0)%3, 100);
+		set_speed((i+1)%3, 100);
+		set_speed((i+2)%3, 0); //Third motor speed to 0
+
+		_delay_ms(1000); //Wait 1 second
+		
+		output_toggle(PORTD, LED); //Led blinking
+
+		i++; //Switch the pair of motors
 	}
 
 
