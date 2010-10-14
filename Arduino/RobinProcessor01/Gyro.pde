@@ -4,19 +4,91 @@ const int SS = 10;
 
 int rate;
 int temperature;
+unsigned long timeLast = 0;
+unsigned long timeNext = 0;
+const int SampleFirstSkipCount = 100;
+const int SampleCount = 500;
+const int SampleTotalCount = SampleCount + SampleFirstSkipCount;
+int updateMilliseconds = 500;
+int sampleIterator = 0;
+long samplingMin = 0;
+long samplingMax = 0;
+float samplingAvg = 0;
+int samplingAvgDeg = 0;
+
+float currentAngle = 0;
+float samplingRate = 0.01;
 
 void gyroSetup() {
+	SPCR = // Configure SPI mode:
+		(1<<SPE) |  // to enable SPI
+		(1<<MSTR) | // to set Master SPI mode
+		(1<<CPOL) | // SCK is high when idle
+		(1<<CPHA) | // data is sampled on the trailing edge of the SCK
+		(1<<SPR0);  // It sets SCK freq. in 8 times less than a system clock
+
 	SPI.begin();
+
 	digitalWrite(SS, HIGH);
+	timeLast = millis();
+	timeNext = timeLast + updateMilliseconds;
 }
 
 void gyroLoop() {
 	rate = getAngularRate();
 	temperature = getTemperature();
-	Serial.print("AR ");
-	Serial.println(adcToAngularRate(rate), DEC);
-	//Serial.print("TP ");
-	//Serial.println(adcToTemperature(temperature), DEC);
+	unsigned long timeNow = millis();
+	unsigned long timeDelta = timeNow - timeLast;
+
+	if (sampleIterator <= SampleTotalCount) {
+		if (sampleIterator < SampleFirstSkipCount) {
+			sampleIterator++;
+		}
+		else if (sampleIterator == SampleFirstSkipCount) {
+			sampleIterator++;
+			samplingAvg = rate;
+			samplingMin = rate;
+			samplingMax = rate;
+		}
+		else if (sampleIterator < SampleTotalCount) {
+			if (rate > samplingMax) samplingMax = rate;
+			if (rate < samplingMin) samplingMin = rate;
+			samplingAvg = ((samplingAvg * sampleIterator) + rate) / (sampleIterator+1);
+			sampleIterator++;
+		}
+		else if (sampleIterator == SampleTotalCount) {
+			sampleIterator++;
+			samplingAvgDeg = adcToAngularRate(samplingAvg);
+			Serial.print("MIN: ");
+			Serial.print(adcToAngularRate(samplingMin));
+			Serial.print(", MAX: ");
+			Serial.print(adcToAngularRate(samplingMax));
+			Serial.print(", AVG: ");
+			Serial.println(samplingAvgDeg);
+		}
+	}
+	else {
+		unsigned int angularRate = adcToAngularRate(rate);
+		currentAngle = ((angularRate - samplingAvgDeg) * samplingRate) + currentAngle;
+
+		if(timeNow > timeNext) {
+			timeNext = timeNow + updateMilliseconds;
+
+			Serial.print("AR ");
+			Serial.print(angularRate, DEC);
+
+			Serial.print(", \tAN ");
+			Serial.print(currentAngle);
+
+			Serial.print(", \tTP ");
+			Serial.print(adcToTemperature(temperature), DEC);
+
+			Serial.print(", \tMS ");
+			Serial.println(timeDelta, DEC);
+		}
+	}
+
+	timeLast = timeNow;
 }
 
 // get temperature adc in millivolts
@@ -28,7 +100,7 @@ unsigned int getTemperature()
 	digitalWrite(SS, LOW);
 	SPI.transfer(0b10011100); // ADCC for temperature channel
 	digitalWrite(SS, HIGH);
-	delay(250);
+	delayMicroseconds(250);
 	digitalWrite(SS, LOW);
 	SPI.transfer(0b10000000);  // ADCR (ADC reading) Instruction
 	dataH = SPI.transfer(0x00);  // get the sensor response high byte
@@ -42,7 +114,8 @@ unsigned int getTemperature()
 	// high byte.
 	// (dataL>>1) gets the upper 7 bits value from the lower byte.
 	// The temperature is the resulting word of the high and low bytes
-	unsigned int result = word((dataH & 0b00001111), (dataL>>1));
+	
+	unsigned int result = ((dataH & 0b00001111)<<7) + (dataL>>1);
 	return result;
 }
 
@@ -69,7 +142,7 @@ unsigned int getAngularRate()
 	// high byte.
 	// (dataL>>1) gets the upper 7 bits value from the lower byte.
 	// The angular rate is the resulting word of the high and low bytes
-	unsigned int result = word((dataH & 0b00001111), (dataL>>1));
+	unsigned int result = (word(0, dataH & 0b00001111)<<7) + (dataL>>1);
 	return result;
 }
 
