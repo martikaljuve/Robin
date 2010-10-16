@@ -6,7 +6,6 @@ void initialize(){
  
 	init_motors(mode, PRESCALING_OFF);
  
-	set_output(DDRD, LED);
 }
  
  
