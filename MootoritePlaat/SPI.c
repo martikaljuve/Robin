@@ -52,10 +52,15 @@ void InitSPI(void){
 	SPCR = 0b11010110;
 
 
+
+
 	//Sensor output
-	set_output(SENSOR_DDR, SENSOR_PIN);
+	set_output(SENSOR_L_DDR, SENSOR_L_PIN);
+	set_output(SENSOR_R_DDR, SENSOR_R_PIN);
+	set_output(SENSOR_U_DDR, SENSOR_U_PIN);
+	set_output(SENSOR_B_DDR, SENSOR_B_PIN);
 	//Sensor high
-	set_output(SENSOR_PORT, SENSOR_PIN);
+	set_high(SENSOR_R_PORT, SENSOR_R_PIN);
 
 
 }
@@ -119,27 +124,30 @@ void checkSPI(void) {
 
  
  	//If we start the buffer-cycle... index is 0
-    if (rx_idx == 0) {
-
-		set_input(SENSOR_PORT, SENSOR_PIN); // select angle sensor
+    if(rx_idx == 0){
+	
+		
+		set_low(SENSOR_L_PORT, SENSOR_L_PIN); 
+		set_high(SENSOR_R_PORT, SENSOR_R_PIN); // select angle sensor
+		set_low(SENSOR_U_PORT, SENSOR_U_PIN); 
+		set_low(SENSOR_B_PORT, SENSOR_B_PIN); 
         //PORTA &= ~(1 << 7);     
         _delay_us(6);
-        rx_buffer[rx_idx] = spi_transmit_byte(0xAA);
-		
-
+        rx_buffer[rx_idx] = spi_transmit_byte(0xAA); //55?
         rx_idx++;
-    } else {
 		
+    }else{
 	 
-        if (rx_idx < 8) {
+        if(rx_idx < 8){
+		
             rx_buffer[rx_idx] = spi_transmit_byte(0xFF);
             rx_idx++;
+			
 			//set_input(PORTD, LED);       
 			
-        } else {
+        }else{
 
-
-			set_output(SENSOR_PORT, SENSOR_PIN); // deselect angle sensor
+			set_output(SENSOR_R_PORT, SENSOR_R_PIN); // deselect angle sensor
             //PORTA |= (1 << 7);     
             _delay_ms(2);
             rx_idx = 0;
@@ -151,6 +159,8 @@ void checkSPI(void) {
                 temp = (rx_buffer[2] << 8) + rx_buffer[3];
 
                 if (temp < 0xffff) {    // angle cannot be 0xffff
+					set_low(PORTD, LED);
+					_delay_ms(400);
                     angle = temp >> 2;  // bits 0..1 of data doesn't mean anything
 					//set_output(PORTD, LED);
 
@@ -161,7 +171,7 @@ void checkSPI(void) {
 						set_input(PORTD, LED);
 					}
                 }else{
-					 set_output(PORTD, LED);
+					 set_high(PORTD, LED);
 					 //FOR SOME REASON WE END UP HERE!!!!
 				}
             }else{

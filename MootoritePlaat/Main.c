@@ -13,8 +13,25 @@ void blink(int a){
  
 int main()
 {
-	initialize();
+
+
+	set_output(DDRD, LED);
+	//set_high(PORTD, LED);
+	//initialize();
+
+		
+
+		//set_output(SENSOR_R_DDR, SENSOR_R_PIN);
+		//set_high(SENSOR_R_PORT, SENSOR_R_PIN);
+		
+		InitSPI();
+		while(1){
+			
+			checkSPI();
+		
+		}
  
+	/*
 	int dir = FWD;
  
 	set_dir(0, dir);
@@ -24,15 +41,16 @@ int main()
 
 	InitSPI();
 	set_input(PORTD, LED);
+	*/
  
-	while(1)
-	{
+
 		// stop all
-		checkSPI();
+		//checkSPI();
+
 
 		//blink(rx_idx+1);
 
-		_delay_ms(200);
+		//_delay_ms(200);
 
 		/*set_all(0);
 
@@ -51,11 +69,9 @@ int main()
 			set_input(PORTD, LED);
 		*/
  
-		dir = !dir;
+		//dir = !dir;
 
 
-		
-	}
  
  
 	return 0;
