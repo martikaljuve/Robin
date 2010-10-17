@@ -1,0 +1,1529 @@
+
+ATmegaBOOT_324p.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000007aa  00007800  00007800  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .bss          00000089  00800100  00800100  0000081e  2**0
+                  ALLOC
+  2 .debug_aranges 00000020  00000000  00000000  0000081e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_pubnames 000000d6  00000000  00000000  0000083e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   000003bd  00000000  00000000  00000914  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 000001a2  00000000  00000000  00000cd1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   00000713  00000000  00000000  00000e73  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  000000a0  00000000  00000000  00001588  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    00000157  00000000  00000000  00001628  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    000002a6  00000000  00000000  0000177f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00007800 <__vectors>:
+    7800:	0c 94 3e 3c 	jmp	0x787c	; 0x787c <__ctors_end>
+    7804:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7808:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    780c:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7810:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7814:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7818:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    781c:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7820:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7824:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7828:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    782c:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7830:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7834:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7838:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    783c:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7840:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7844:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7848:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    784c:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7850:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7854:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7858:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    785c:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7860:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7864:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7868:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    786c:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7870:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7874:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+    7878:	0c 94 50 3c 	jmp	0x78a0	; 0x78a0 <__bad_interrupt>
+
+0000787c <__ctors_end>:
+    787c:	11 24       	eor	r1, r1
+    787e:	1f be       	out	0x3f, r1	; 63
+    7880:	cf ef       	ldi	r28, 0xFF	; 255
+    7882:	d8 e0       	ldi	r29, 0x08	; 8
+    7884:	de bf       	out	0x3e, r29	; 62
+    7886:	cd bf       	out	0x3d, r28	; 61
+
+00007888 <__do_clear_bss>:
+    7888:	11 e0       	ldi	r17, 0x01	; 1
+    788a:	a0 e0       	ldi	r26, 0x00	; 0
+    788c:	b1 e0       	ldi	r27, 0x01	; 1
+    788e:	01 c0       	rjmp	.+2      	; 0x7892 <.do_clear_bss_start>
+
+00007890 <.do_clear_bss_loop>:
+    7890:	1d 92       	st	X+, r1
+
+00007892 <.do_clear_bss_start>:
+    7892:	a9 38       	cpi	r26, 0x89	; 137
+    7894:	b1 07       	cpc	r27, r17
+    7896:	e1 f7       	brne	.-8      	; 0x7890 <.do_clear_bss_loop>
+    7898:	0e 94 ac 3d 	call	0x7b58	; 0x7b58 <main>
+    789c:	0c 94 d3 3f 	jmp	0x7fa6	; 0x7fa6 <_exit>
+
+000078a0 <__bad_interrupt>:
+    78a0:	0c 94 00 3c 	jmp	0x7800	; 0x7800 <__vectors>
+
+000078a4 <putch>:
+    putch(al);
+}
+
+
+void putch(char ch)
+{
+    78a4:	98 2f       	mov	r25, r24
+    while (!(UCSR0A & _BV(UDRE0)));
+    78a6:	80 91 c0 00 	lds	r24, 0x00C0
+    78aa:	85 ff       	sbrs	r24, 5
+    78ac:	fc cf       	rjmp	.-8      	; 0x78a6 <putch+0x2>
+    UDR0 = ch;
+    78ae:	90 93 c6 00 	sts	0x00C6, r25
+}
+    78b2:	08 95       	ret
+
+000078b4 <puthex>:
+    return (ah << 4) + al;
+}
+
+
+void puthex(char ch)
+{
+    78b4:	1f 93       	push	r17
+    78b6:	28 2f       	mov	r18, r24
+    char ah,al;
+
+    ah = (ch & 0xf0) >> 4;
+    78b8:	99 27       	eor	r25, r25
+    78ba:	87 fd       	sbrc	r24, 7
+    78bc:	90 95       	com	r25
+    78be:	80 7f       	andi	r24, 0xF0	; 240
+    78c0:	90 70       	andi	r25, 0x00	; 0
+    78c2:	95 95       	asr	r25
+    78c4:	87 95       	ror	r24
+    78c6:	95 95       	asr	r25
+    78c8:	87 95       	ror	r24
+    78ca:	95 95       	asr	r25
+    78cc:	87 95       	ror	r24
+    78ce:	95 95       	asr	r25
+    78d0:	87 95       	ror	r24
+	if(ah >= 0x0a)
+    78d2:	8a 30       	cpi	r24, 0x0A	; 10
+    78d4:	84 f0       	brlt	.+32     	; 0x78f6 <puthex+0x42>
+		ah = ah - 0x0a + 'a';
+    78d6:	98 2f       	mov	r25, r24
+    78d8:	99 5a       	subi	r25, 0xA9	; 169
+	else
+		ah += '0';
+
+    al = (ch & 0x0f);
+    78da:	82 2f       	mov	r24, r18
+    78dc:	8f 70       	andi	r24, 0x0F	; 15
+	if(al >= 0x0a)
+    78de:	8a 30       	cpi	r24, 0x0A	; 10
+    78e0:	84 f4       	brge	.+32     	; 0x7902 <puthex+0x4e>
+		al = al - 0x0a + 'a';
+	else
+		al += '0';
+    78e2:	18 2f       	mov	r17, r24
+    78e4:	10 5d       	subi	r17, 0xD0	; 208
+
+    putch(ah);
+    78e6:	89 2f       	mov	r24, r25
+    78e8:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+    putch(al);
+    78ec:	81 2f       	mov	r24, r17
+    78ee:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+}
+    78f2:	1f 91       	pop	r17
+    78f4:	08 95       	ret
+
+    ah = (ch & 0xf0) >> 4;
+	if(ah >= 0x0a)
+		ah = ah - 0x0a + 'a';
+	else
+		ah += '0';
+    78f6:	98 2f       	mov	r25, r24
+    78f8:	90 5d       	subi	r25, 0xD0	; 208
+
+    al = (ch & 0x0f);
+    78fa:	82 2f       	mov	r24, r18
+    78fc:	8f 70       	andi	r24, 0x0F	; 15
+	if(al >= 0x0a)
+    78fe:	8a 30       	cpi	r24, 0x0A	; 10
+    7900:	84 f3       	brlt	.-32     	; 0x78e2 <puthex+0x2e>
+		al = al - 0x0a + 'a';
+    7902:	18 2f       	mov	r17, r24
+    7904:	19 5a       	subi	r17, 0xA9	; 169
+	else
+		al += '0';
+
+    putch(ah);
+    7906:	89 2f       	mov	r24, r25
+    7908:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+    putch(al);
+    790c:	81 2f       	mov	r24, r17
+    790e:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+}
+    7912:	1f 91       	pop	r17
+    7914:	08 95       	ret
+
+00007916 <getch>:
+
+
+
+
+char getch(void)
+{
+    7916:	ef 92       	push	r14
+    7918:	ff 92       	push	r15
+    791a:	0f 93       	push	r16
+    791c:	1f 93       	push	r17
+    uint32_t count = 0;
+
+#ifdef ADABOOT
+	LED_PORT &= ~_BV(LED);          // toggle LED to show activity - BBR/LF 10/3/2007 & 9/13/2008
+    791e:	5a 98       	cbi	0x0b, 2	; 11
+    7920:	ee 24       	eor	r14, r14
+    7922:	ff 24       	eor	r15, r15
+    7924:	87 01       	movw	r16, r14
+#endif
+
+    while(!(UCSR0A & _BV(RXC0)))
+    7926:	80 91 c0 00 	lds	r24, 0x00C0
+    792a:	87 fd       	sbrc	r24, 7
+    792c:	17 c0       	rjmp	.+46     	; 0x795c <getch+0x46>
+	{
+    	/* 20060803 DojoCorp:: Addon coming from the previous Bootloader*/
+    	/* HACKME:: here is a good place to count times*/
+    	count++;
+    792e:	08 94       	sec
+    7930:	e1 1c       	adc	r14, r1
+    7932:	f1 1c       	adc	r15, r1
+    7934:	01 1d       	adc	r16, r1
+    7936:	11 1d       	adc	r17, r1
+    	if (count > (MAX_TIME_COUNT))
+    7938:	81 e0       	ldi	r24, 0x01	; 1
+    793a:	e8 16       	cp	r14, r24
+    793c:	89 e0       	ldi	r24, 0x09	; 9
+    793e:	f8 06       	cpc	r15, r24
+    7940:	8d e3       	ldi	r24, 0x3D	; 61
+    7942:	08 07       	cpc	r16, r24
+    7944:	80 e0       	ldi	r24, 0x00	; 0
+    7946:	18 07       	cpc	r17, r24
+    7948:	70 f3       	brcs	.-36     	; 0x7926 <getch+0x10>
+    		app_start();
+    794a:	e0 91 01 01 	lds	r30, 0x0101
+    794e:	f0 91 02 01 	lds	r31, 0x0102
+    7952:	09 95       	icall
+
+#ifdef ADABOOT
+	LED_PORT &= ~_BV(LED);          // toggle LED to show activity - BBR/LF 10/3/2007 & 9/13/2008
+#endif
+
+    while(!(UCSR0A & _BV(RXC0)))
+    7954:	80 91 c0 00 	lds	r24, 0x00C0
+    7958:	87 ff       	sbrs	r24, 7
+    795a:	e9 cf       	rjmp	.-46     	; 0x792e <getch+0x18>
+    	if (count > (MAX_TIME_COUNT))
+    		app_start();
+     }
+
+#ifdef ADABOOT
+	LED_PORT |= _BV(LED);          // toggle LED to show activity - BBR/LF 10/3/2007 & 9/13/2008
+    795c:	5a 9a       	sbi	0x0b, 2	; 11
+#endif
+
+    return UDR0;
+    795e:	80 91 c6 00 	lds	r24, 0x00C6
+}
+    7962:	1f 91       	pop	r17
+    7964:	0f 91       	pop	r16
+    7966:	ff 90       	pop	r15
+    7968:	ef 90       	pop	r14
+    796a:	08 95       	ret
+
+0000796c <gethex>:
+    /* end of forever loop */
+}
+
+
+char gethex(void)
+{
+    796c:	0f 93       	push	r16
+    796e:	1f 93       	push	r17
+    char ah,al;
+
+    ah = getch();
+    7970:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7974:	18 2f       	mov	r17, r24
+	putch(ah);
+    7976:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+    al = getch();
+    797a:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    797e:	08 2f       	mov	r16, r24
+	putch(al);
+    7980:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+
+	if(ah >= 'a')
+    7984:	11 36       	cpi	r17, 0x61	; 97
+    7986:	6c f0       	brlt	.+26     	; 0x79a2 <gethex+0x36>
+		ah = ah - 'a' + 0x0a;
+    7988:	17 55       	subi	r17, 0x57	; 87
+	else if(ah >= '0')
+		ah -= '0';
+    if(al >= 'a')
+    798a:	01 36       	cpi	r16, 0x61	; 97
+    798c:	7c f4       	brge	.+30     	; 0x79ac <gethex+0x40>
+		al = al - 'a' + 0x0a;
+	else if(al >= '0')
+    798e:	00 33       	cpi	r16, 0x30	; 48
+    7990:	0c f0       	brlt	.+2      	; 0x7994 <gethex+0x28>
+		al -= '0';
+    7992:	00 53       	subi	r16, 0x30	; 48
+    7994:	12 95       	swap	r17
+    7996:	10 7f       	andi	r17, 0xF0	; 240
+
+    return (ah << 4) + al;
+}
+    7998:	80 2f       	mov	r24, r16
+    799a:	81 0f       	add	r24, r17
+    799c:	1f 91       	pop	r17
+    799e:	0f 91       	pop	r16
+    79a0:	08 95       	ret
+    al = getch();
+	putch(al);
+
+	if(ah >= 'a')
+		ah = ah - 'a' + 0x0a;
+	else if(ah >= '0')
+    79a2:	10 33       	cpi	r17, 0x30	; 48
+    79a4:	94 f3       	brlt	.-28     	; 0x798a <gethex+0x1e>
+		ah -= '0';
+    79a6:	10 53       	subi	r17, 0x30	; 48
+    if(al >= 'a')
+    79a8:	01 36       	cpi	r16, 0x61	; 97
+    79aa:	8c f3       	brlt	.-30     	; 0x798e <gethex+0x22>
+		al = al - 'a' + 0x0a;
+    79ac:	07 55       	subi	r16, 0x57	; 87
+	else if(al >= '0')
+		al -= '0';
+    79ae:	12 95       	swap	r17
+    79b0:	10 7f       	andi	r17, 0xF0	; 240
+
+    return (ah << 4) + al;
+}
+    79b2:	80 2f       	mov	r24, r16
+    79b4:	81 0f       	add	r24, r17
+    79b6:	1f 91       	pop	r17
+    79b8:	0f 91       	pop	r16
+    79ba:	08 95       	ret
+
+000079bc <getNch>:
+    return UDR0;
+}
+
+
+void getNch(uint8_t count)
+{
+    79bc:	28 2f       	mov	r18, r24
+    uint8_t i;
+    for(i=0;i<count;i++)
+    79be:	88 23       	and	r24, r24
+    79c0:	51 f0       	breq	.+20     	; 0x79d6 <getNch+0x1a>
+    79c2:	90 e0       	ldi	r25, 0x00	; 0
+	{
+		while(!(UCSR0A & _BV(RXC0)));
+    79c4:	80 91 c0 00 	lds	r24, 0x00C0
+    79c8:	87 ff       	sbrs	r24, 7
+    79ca:	fc cf       	rjmp	.-8      	; 0x79c4 <getNch+0x8>
+		UDR0;
+    79cc:	80 91 c6 00 	lds	r24, 0x00C6
+
+
+void getNch(uint8_t count)
+{
+    uint8_t i;
+    for(i=0;i<count;i++)
+    79d0:	9f 5f       	subi	r25, 0xFF	; 255
+    79d2:	92 17       	cp	r25, r18
+    79d4:	b8 f3       	brcs	.-18     	; 0x79c4 <getNch+0x8>
+    79d6:	08 95       	ret
+
+000079d8 <byte_response>:
+    }
+}
+
+
+void byte_response(uint8_t val)
+{
+    79d8:	1f 93       	push	r17
+    79da:	18 2f       	mov	r17, r24
+    if (getch() == ' ')
+    79dc:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    79e0:	80 32       	cpi	r24, 0x20	; 32
+    79e2:	81 f0       	breq	.+32     	; 0x7a04 <byte_response+0x2c>
+		putch(val);
+		putch(0x10);
+    }
+	else
+	{
+		if (++error_count == MAX_ERROR_COUNT)
+    79e4:	80 91 00 01 	lds	r24, 0x0100
+    79e8:	8f 5f       	subi	r24, 0xFF	; 255
+    79ea:	80 93 00 01 	sts	0x0100, r24
+    79ee:	85 30       	cpi	r24, 0x05	; 5
+    79f0:	11 f0       	breq	.+4      	; 0x79f6 <byte_response+0x1e>
+		    app_start();
+    }
+}
+    79f2:	1f 91       	pop	r17
+    79f4:	08 95       	ret
+		putch(0x10);
+    }
+	else
+	{
+		if (++error_count == MAX_ERROR_COUNT)
+		    app_start();
+    79f6:	e0 91 01 01 	lds	r30, 0x0101
+    79fa:	f0 91 02 01 	lds	r31, 0x0102
+    79fe:	09 95       	icall
+    }
+}
+    7a00:	1f 91       	pop	r17
+    7a02:	08 95       	ret
+
+void byte_response(uint8_t val)
+{
+    if (getch() == ' ')
+	{
+		putch(0x14);
+    7a04:	84 e1       	ldi	r24, 0x14	; 20
+    7a06:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+		putch(val);
+    7a0a:	81 2f       	mov	r24, r17
+    7a0c:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+		putch(0x10);
+    7a10:	80 e1       	ldi	r24, 0x10	; 16
+    7a12:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+	else
+	{
+		if (++error_count == MAX_ERROR_COUNT)
+		    app_start();
+    }
+}
+    7a16:	1f 91       	pop	r17
+    7a18:	08 95       	ret
+
+00007a1a <nothing_response>:
+
+
+void nothing_response(void)
+{
+    if (getch() == ' ')
+    7a1a:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7a1e:	80 32       	cpi	r24, 0x20	; 32
+    7a20:	71 f0       	breq	.+28     	; 0x7a3e <nothing_response+0x24>
+		putch(0x14);
+		putch(0x10);
+    }
+	else
+	{
+		if (++error_count == MAX_ERROR_COUNT)
+    7a22:	80 91 00 01 	lds	r24, 0x0100
+    7a26:	8f 5f       	subi	r24, 0xFF	; 255
+    7a28:	80 93 00 01 	sts	0x0100, r24
+    7a2c:	85 30       	cpi	r24, 0x05	; 5
+    7a2e:	09 f0       	breq	.+2      	; 0x7a32 <nothing_response+0x18>
+    7a30:	08 95       	ret
+		    app_start();
+    7a32:	e0 91 01 01 	lds	r30, 0x0101
+    7a36:	f0 91 02 01 	lds	r31, 0x0102
+    7a3a:	09 95       	icall
+    7a3c:	08 95       	ret
+
+void nothing_response(void)
+{
+    if (getch() == ' ')
+	{
+		putch(0x14);
+    7a3e:	84 e1       	ldi	r24, 0x14	; 20
+    7a40:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+		putch(0x10);
+    7a44:	80 e1       	ldi	r24, 0x10	; 16
+    7a46:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+    7a4a:	08 95       	ret
+
+00007a4c <flash_led>:
+}
+
+#ifdef ADABOOT
+
+void flash_led(uint8_t count)
+{
+    7a4c:	df 93       	push	r29
+    7a4e:	cf 93       	push	r28
+    7a50:	00 d0       	rcall	.+0      	; 0x7a52 <flash_led+0x6>
+    7a52:	00 d0       	rcall	.+0      	; 0x7a54 <flash_led+0x8>
+    7a54:	cd b7       	in	r28, 0x3d	; 61
+    7a56:	de b7       	in	r29, 0x3e	; 62
+	/* l needs to be volatile or the delay loops below might get      */
+	/* optimized away if compiling with optimizations (DAM).          */
+
+    volatile uint32_t l;
+
+    if (count == 0) {
+    7a58:	88 23       	and	r24, r24
+    7a5a:	09 f0       	breq	.+2      	; 0x7a5e <flash_led+0x12>
+    7a5c:	76 c0       	rjmp	.+236    	; 0x7b4a <flash_led+0xfe>
+    7a5e:	44 e0       	ldi	r20, 0x04	; 4
+    7a60:	50 e0       	ldi	r21, 0x00	; 0
+    7a62:	20 e0       	ldi	r18, 0x00	; 0
+    7a64:	30 e0       	ldi	r19, 0x00	; 0
+    }
+
+
+	int8_t i;
+    for (i = 0; i < count; ++i) {
+		LED_PORT |= _BV(LED);					// LED on
+    7a66:	5a 9a       	sbi	0x0b, 2	; 11
+		for(l = 0; l < (F_CPU / 1000); ++l);		// delay NGvalue was 1000 for both loops - BBR
+    7a68:	19 82       	std	Y+1, r1	; 0x01
+    7a6a:	1a 82       	std	Y+2, r1	; 0x02
+    7a6c:	1b 82       	std	Y+3, r1	; 0x03
+    7a6e:	1c 82       	std	Y+4, r1	; 0x04
+    7a70:	89 81       	ldd	r24, Y+1	; 0x01
+    7a72:	9a 81       	ldd	r25, Y+2	; 0x02
+    7a74:	ab 81       	ldd	r26, Y+3	; 0x03
+    7a76:	bc 81       	ldd	r27, Y+4	; 0x04
+    7a78:	80 52       	subi	r24, 0x20	; 32
+    7a7a:	9e 44       	sbci	r25, 0x4E	; 78
+    7a7c:	a0 40       	sbci	r26, 0x00	; 0
+    7a7e:	b0 40       	sbci	r27, 0x00	; 0
+    7a80:	a0 f4       	brcc	.+40     	; 0x7aaa <flash_led+0x5e>
+    7a82:	89 81       	ldd	r24, Y+1	; 0x01
+    7a84:	9a 81       	ldd	r25, Y+2	; 0x02
+    7a86:	ab 81       	ldd	r26, Y+3	; 0x03
+    7a88:	bc 81       	ldd	r27, Y+4	; 0x04
+    7a8a:	01 96       	adiw	r24, 0x01	; 1
+    7a8c:	a1 1d       	adc	r26, r1
+    7a8e:	b1 1d       	adc	r27, r1
+    7a90:	89 83       	std	Y+1, r24	; 0x01
+    7a92:	9a 83       	std	Y+2, r25	; 0x02
+    7a94:	ab 83       	std	Y+3, r26	; 0x03
+    7a96:	bc 83       	std	Y+4, r27	; 0x04
+    7a98:	89 81       	ldd	r24, Y+1	; 0x01
+    7a9a:	9a 81       	ldd	r25, Y+2	; 0x02
+    7a9c:	ab 81       	ldd	r26, Y+3	; 0x03
+    7a9e:	bc 81       	ldd	r27, Y+4	; 0x04
+    7aa0:	80 52       	subi	r24, 0x20	; 32
+    7aa2:	9e 44       	sbci	r25, 0x4E	; 78
+    7aa4:	a0 40       	sbci	r26, 0x00	; 0
+    7aa6:	b0 40       	sbci	r27, 0x00	; 0
+    7aa8:	60 f3       	brcs	.-40     	; 0x7a82 <flash_led+0x36>
+		LED_PORT &= ~_BV(LED);					// LED off
+    7aaa:	5a 98       	cbi	0x0b, 2	; 11
+		for(l = 0; l < (F_CPU / 250); ++l);		// delay asymmteric for ADA BOOT BBR
+    7aac:	19 82       	std	Y+1, r1	; 0x01
+    7aae:	1a 82       	std	Y+2, r1	; 0x02
+    7ab0:	1b 82       	std	Y+3, r1	; 0x03
+    7ab2:	1c 82       	std	Y+4, r1	; 0x04
+    7ab4:	89 81       	ldd	r24, Y+1	; 0x01
+    7ab6:	9a 81       	ldd	r25, Y+2	; 0x02
+    7ab8:	ab 81       	ldd	r26, Y+3	; 0x03
+    7aba:	bc 81       	ldd	r27, Y+4	; 0x04
+    7abc:	80 58       	subi	r24, 0x80	; 128
+    7abe:	98 43       	sbci	r25, 0x38	; 56
+    7ac0:	a1 40       	sbci	r26, 0x01	; 1
+    7ac2:	b0 40       	sbci	r27, 0x00	; 0
+    7ac4:	a0 f4       	brcc	.+40     	; 0x7aee <flash_led+0xa2>
+    7ac6:	89 81       	ldd	r24, Y+1	; 0x01
+    7ac8:	9a 81       	ldd	r25, Y+2	; 0x02
+    7aca:	ab 81       	ldd	r26, Y+3	; 0x03
+    7acc:	bc 81       	ldd	r27, Y+4	; 0x04
+    7ace:	01 96       	adiw	r24, 0x01	; 1
+    7ad0:	a1 1d       	adc	r26, r1
+    7ad2:	b1 1d       	adc	r27, r1
+    7ad4:	89 83       	std	Y+1, r24	; 0x01
+    7ad6:	9a 83       	std	Y+2, r25	; 0x02
+    7ad8:	ab 83       	std	Y+3, r26	; 0x03
+    7ada:	bc 83       	std	Y+4, r27	; 0x04
+    7adc:	89 81       	ldd	r24, Y+1	; 0x01
+    7ade:	9a 81       	ldd	r25, Y+2	; 0x02
+    7ae0:	ab 81       	ldd	r26, Y+3	; 0x03
+    7ae2:	bc 81       	ldd	r27, Y+4	; 0x04
+    7ae4:	80 58       	subi	r24, 0x80	; 128
+    7ae6:	98 43       	sbci	r25, 0x38	; 56
+    7ae8:	a1 40       	sbci	r26, 0x01	; 1
+    7aea:	b0 40       	sbci	r27, 0x00	; 0
+    7aec:	60 f3       	brcs	.-40     	; 0x7ac6 <flash_led+0x7a>
+    7aee:	2f 5f       	subi	r18, 0xFF	; 255
+    7af0:	3f 4f       	sbci	r19, 0xFF	; 255
+      count = ADABOOT;
+    }
+
+
+	int8_t i;
+    for (i = 0; i < count; ++i) {
+    7af2:	24 17       	cp	r18, r20
+    7af4:	35 07       	cpc	r19, r21
+    7af6:	0c f4       	brge	.+2      	; 0x7afa <flash_led+0xae>
+    7af8:	b6 cf       	rjmp	.-148    	; 0x7a66 <flash_led+0x1a>
+		for(l = 0; l < (F_CPU / 1000); ++l);		// delay NGvalue was 1000 for both loops - BBR
+		LED_PORT &= ~_BV(LED);					// LED off
+		for(l = 0; l < (F_CPU / 250); ++l);		// delay asymmteric for ADA BOOT BBR
+	}
+
+	for(l = 0; l < (F_CPU / 100); ++l);		    // pause ADA BOOT BBR
+    7afa:	19 82       	std	Y+1, r1	; 0x01
+    7afc:	1a 82       	std	Y+2, r1	; 0x02
+    7afe:	1b 82       	std	Y+3, r1	; 0x03
+    7b00:	1c 82       	std	Y+4, r1	; 0x04
+    7b02:	89 81       	ldd	r24, Y+1	; 0x01
+    7b04:	9a 81       	ldd	r25, Y+2	; 0x02
+    7b06:	ab 81       	ldd	r26, Y+3	; 0x03
+    7b08:	bc 81       	ldd	r27, Y+4	; 0x04
+    7b0a:	80 54       	subi	r24, 0x40	; 64
+    7b0c:	9d 40       	sbci	r25, 0x0D	; 13
+    7b0e:	a3 40       	sbci	r26, 0x03	; 3
+    7b10:	b0 40       	sbci	r27, 0x00	; 0
+    7b12:	a0 f4       	brcc	.+40     	; 0x7b3c <flash_led+0xf0>
+    7b14:	89 81       	ldd	r24, Y+1	; 0x01
+    7b16:	9a 81       	ldd	r25, Y+2	; 0x02
+    7b18:	ab 81       	ldd	r26, Y+3	; 0x03
+    7b1a:	bc 81       	ldd	r27, Y+4	; 0x04
+    7b1c:	01 96       	adiw	r24, 0x01	; 1
+    7b1e:	a1 1d       	adc	r26, r1
+    7b20:	b1 1d       	adc	r27, r1
+    7b22:	89 83       	std	Y+1, r24	; 0x01
+    7b24:	9a 83       	std	Y+2, r25	; 0x02
+    7b26:	ab 83       	std	Y+3, r26	; 0x03
+    7b28:	bc 83       	std	Y+4, r27	; 0x04
+    7b2a:	89 81       	ldd	r24, Y+1	; 0x01
+    7b2c:	9a 81       	ldd	r25, Y+2	; 0x02
+    7b2e:	ab 81       	ldd	r26, Y+3	; 0x03
+    7b30:	bc 81       	ldd	r27, Y+4	; 0x04
+    7b32:	80 54       	subi	r24, 0x40	; 64
+    7b34:	9d 40       	sbci	r25, 0x0D	; 13
+    7b36:	a3 40       	sbci	r26, 0x03	; 3
+    7b38:	b0 40       	sbci	r27, 0x00	; 0
+    7b3a:	60 f3       	brcs	.-40     	; 0x7b14 <flash_led+0xc8>
+
+}
+    7b3c:	0f 90       	pop	r0
+    7b3e:	0f 90       	pop	r0
+    7b40:	0f 90       	pop	r0
+    7b42:	0f 90       	pop	r0
+    7b44:	cf 91       	pop	r28
+    7b46:	df 91       	pop	r29
+    7b48:	08 95       	ret
+      count = ADABOOT;
+    }
+
+
+	int8_t i;
+    for (i = 0; i < count; ++i) {
+    7b4a:	48 2f       	mov	r20, r24
+    7b4c:	50 e0       	ldi	r21, 0x00	; 0
+    7b4e:	41 15       	cp	r20, r1
+    7b50:	51 05       	cpc	r21, r1
+    7b52:	09 f0       	breq	.+2      	; 0x7b56 <flash_led+0x10a>
+    7b54:	86 cf       	rjmp	.-244    	; 0x7a62 <flash_led+0x16>
+    7b56:	d1 cf       	rjmp	.-94     	; 0x7afa <flash_led+0xae>
+
+00007b58 <main>:
+
+void (*app_start)(void) = 0x0000;
+
+/* main program starts here */
+int main(void)
+{
+    7b58:	ef 92       	push	r14
+    7b5a:	ff 92       	push	r15
+    7b5c:	0f 93       	push	r16
+    7b5e:	1f 93       	push	r17
+    7b60:	cf 93       	push	r28
+    7b62:	df 93       	push	r29
+    uint8_t ch,ch2;
+    uint16_t w;
+	uint16_t i;
+
+    asm volatile("nop\n\t");
+    7b64:	00 00       	nop
+
+#ifdef ADABOOT		// BBR/LF 10/8/2007 & 9/13/2008
+    ch = MCUSR;
+    7b66:	94 b7       	in	r25, 0x34	; 52
+    MCUSR = 0;
+    7b68:	14 be       	out	0x34, r1	; 52
+
+    WDTCSR |= _BV(WDCE) | _BV(WDE);
+    7b6a:	80 91 60 00 	lds	r24, 0x0060
+    7b6e:	88 61       	ori	r24, 0x18	; 24
+    7b70:	80 93 60 00 	sts	0x0060, r24
+    WDTCSR = 0;
+    7b74:	10 92 60 00 	sts	0x0060, r1
+
+    // Check if the WDT was used to reset, in which case we dont bootload and skip straight to the code. woot.
+    if (! (ch &  _BV(EXTRF))) // if its a not an external reset...
+    7b78:	91 ff       	sbrs	r25, 1
+    7b7a:	a0 c1       	rjmp	.+832    	; 0x7ebc <main+0x364>
+      app_start();  // skip bootloader
+#endif
+
+
+	//initialize our serial port.
+    UBRR0L = (uint8_t)(F_CPU/(BAUD_RATE*16L)-1);
+    7b7c:	80 e4       	ldi	r24, 0x40	; 64
+    7b7e:	80 93 c4 00 	sts	0x00C4, r24
+    UBRR0H = (F_CPU/(BAUD_RATE*16L)-1) >> 8;
+    7b82:	10 92 c5 00 	sts	0x00C5, r1
+    UCSR0B = (1<<RXEN0) | (1<<TXEN0);
+    7b86:	88 e1       	ldi	r24, 0x18	; 24
+    7b88:	80 93 c1 00 	sts	0x00C1, r24
+    UCSR0C = (1<<UCSZ00) | (1<<UCSZ01);
+    7b8c:	86 e0       	ldi	r24, 0x06	; 6
+    7b8e:	80 93 c2 00 	sts	0x00C2, r24
+
+    /* Enable internal pull-up resistor on pin D0 (RX), in order
+    to supress line noise that prevents the bootloader from
+    timing out (DAM: 20070509) */
+    DDRD &= ~_BV(PIND0);
+    7b92:	50 98       	cbi	0x0a, 0	; 10
+    PORTD |= _BV(PIND0);
+    7b94:	58 9a       	sbi	0x0b, 0	; 11
+
+    /* set LED pin as output */
+    LED_DDR |= _BV(LED);
+    7b96:	52 9a       	sbi	0x0a, 2	; 10
+	    /* flash onboard LED to signal entering of bootloader                   */
+	    /* ADABOOT will do two series of flashes. first 4 - signifying ADABOOT  */
+	    /* then a pause and another flash series signifying ADABOOT sub-version */
+
+
+	flash_led(NUM_LED_FLASHES);
+    7b98:	84 e0       	ldi	r24, 0x04	; 4
+    7b9a:	0e 94 26 3d 	call	0x7a4c	; 0x7a4c <flash_led>
+
+	#ifdef	ADABOOT
+		flash_led(ADABOOT_VER);		// BBR 9/13/2008
+    7b9e:	81 e0       	ldi	r24, 0x01	; 1
+    7ba0:	0e 94 26 3d 	call	0x7a4c	; 0x7a4c <flash_led>
+
+    /* forever loop */
+    for (;;)
+	{
+		/* get character from UART */
+		ch = getch();
+    7ba4:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+
+		/* A bunch of if...else if... gives smaller code than switch...case ! */
+
+		/* Hello is anyone home ? */
+		if(ch=='0')
+    7ba8:	80 33       	cpi	r24, 0x30	; 48
+    7baa:	b9 f1       	breq	.+110    	; 0x7c1a <main+0xc2>
+
+
+		/* Request programmer ID */
+		/* Not using PROGMEM string due to boot block in m128 being beyond 64kB boundry  */
+		/* Would need to selectively manipulate RAMPZ, and it's only 9 characters anyway so who cares.  */
+		else if(ch=='1')
+    7bac:	81 33       	cpi	r24, 0x31	; 49
+    7bae:	c1 f1       	breq	.+112    	; 0x7c20 <main+0xc8>
+		    }
+		}
+
+
+		/* AVR ISP/STK500 board commands  DON'T CARE so default nothing_response */
+		else if(ch=='@')
+    7bb0:	80 34       	cpi	r24, 0x40	; 64
+    7bb2:	09 f4       	brne	.+2      	; 0x7bb6 <main+0x5e>
+    7bb4:	55 c0       	rjmp	.+170    	; 0x7c60 <main+0x108>
+		    nothing_response();
+		}
+
+
+		/* AVR ISP/STK500 board requests */
+		else if(ch=='A')
+    7bb6:	81 34       	cpi	r24, 0x41	; 65
+    7bb8:	09 f4       	brne	.+2      	; 0x7bbc <main+0x64>
+    7bba:	5b c0       	rjmp	.+182    	; 0x7c72 <main+0x11a>
+				byte_response(0x00);		// Covers various unnecessary responses we don't care about
+		}
+
+
+		/* Device Parameters  DON'T CARE, DEVICE IS FIXED  */
+		else if(ch=='B')
+    7bbc:	82 34       	cpi	r24, 0x42	; 66
+    7bbe:	09 f4       	brne	.+2      	; 0x7bc2 <main+0x6a>
+    7bc0:	6a c0       	rjmp	.+212    	; 0x7c96 <main+0x13e>
+		    nothing_response();
+		}
+
+
+		/* Parallel programming stuff  DON'T CARE  */
+		else if(ch=='E')
+    7bc2:	85 34       	cpi	r24, 0x45	; 69
+    7bc4:	09 f4       	brne	.+2      	; 0x7bc8 <main+0x70>
+    7bc6:	6d c0       	rjmp	.+218    	; 0x7ca2 <main+0x14a>
+		    nothing_response();
+		}
+
+
+		/* Enter programming mode  */
+		else if(ch=='P')
+    7bc8:	80 35       	cpi	r24, 0x50	; 80
+    7bca:	39 f1       	breq	.+78     	; 0x7c1a <main+0xc2>
+		    nothing_response();
+		}
+
+
+		/* Leave programming mode  */
+		else if(ch=='Q')
+    7bcc:	81 35       	cpi	r24, 0x51	; 81
+    7bce:	09 f4       	brne	.+2      	; 0x7bd2 <main+0x7a>
+    7bd0:	44 c1       	rjmp	.+648    	; 0x7e5a <main+0x302>
+#endif
+		}
+
+
+		/* Erase device, don't care as we will erase one page at a time anyway.  */
+		else if(ch=='R')
+    7bd2:	82 35       	cpi	r24, 0x52	; 82
+    7bd4:	11 f1       	breq	.+68     	; 0x7c1a <main+0xc2>
+
+
+		/* Set address, little endian. EEPROM in bytes, FLASH in words  */
+		/* Perhaps extra address bytes may be added in future to support > 128kB FLASH.  */
+		/* This might explain why little endian was used here, big endian used everywhere else.  */
+		else if(ch=='U')
+    7bd6:	85 35       	cpi	r24, 0x55	; 85
+    7bd8:	09 f4       	brne	.+2      	; 0x7bdc <main+0x84>
+    7bda:	69 c0       	rjmp	.+210    	; 0x7cae <main+0x156>
+		    nothing_response();
+		}
+
+
+		/* Universal SPI programming command, disabled.  Would be used for fuses and lock bits.  */
+		else if(ch=='V')
+    7bdc:	86 35       	cpi	r24, 0x56	; 86
+    7bde:	09 f4       	brne	.+2      	; 0x7be2 <main+0x8a>
+    7be0:	71 c0       	rjmp	.+226    	; 0x7cc4 <main+0x16c>
+		    byte_response(0x00);
+		}
+
+
+		/* Write memory, length is big endian and is in bytes  */
+		else if(ch=='d')
+    7be2:	84 36       	cpi	r24, 0x64	; 100
+    7be4:	09 f4       	brne	.+2      	; 0x7be8 <main+0x90>
+    7be6:	ce c0       	rjmp	.+412    	; 0x7d84 <main+0x22c>
+				    app_start();
+		    }
+		}
+
+		/* Read memory block mode, length is big endian.  */
+		else if(ch=='t')
+    7be8:	84 37       	cpi	r24, 0x74	; 116
+    7bea:	09 f4       	brne	.+2      	; 0x7bee <main+0x96>
+    7bec:	72 c0       	rjmp	.+228    	; 0x7cd2 <main+0x17a>
+		    }
+		}
+
+
+		/* Get device signature bytes  */
+		else if(ch=='u')
+    7bee:	85 37       	cpi	r24, 0x75	; 117
+    7bf0:	09 f4       	brne	.+2      	; 0x7bf4 <main+0x9c>
+    7bf2:	49 c1       	rjmp	.+658    	; 0x7e86 <main+0x32e>
+			}
+		}
+
+
+		/* Read oscillator calibration byte */
+		else if(ch=='v')
+    7bf4:	86 37       	cpi	r24, 0x76	; 118
+    7bf6:	09 f4       	brne	.+2      	; 0x7bfa <main+0xa2>
+    7bf8:	4a c0       	rjmp	.+148    	; 0x7c8e <main+0x136>
+			byte_response(0x00);
+
+		else if (++error_count == MAX_ERROR_COUNT)
+    7bfa:	80 91 00 01 	lds	r24, 0x0100
+    7bfe:	8f 5f       	subi	r24, 0xFF	; 255
+    7c00:	80 93 00 01 	sts	0x0100, r24
+    7c04:	85 30       	cpi	r24, 0x05	; 5
+    7c06:	71 f6       	brne	.-100    	; 0x7ba4 <main+0x4c>
+		    app_start();
+    7c08:	e0 91 01 01 	lds	r30, 0x0101
+    7c0c:	f0 91 02 01 	lds	r31, 0x0102
+    7c10:	09 95       	icall
+
+    /* forever loop */
+    for (;;)
+	{
+		/* get character from UART */
+		ch = getch();
+    7c12:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+
+		/* A bunch of if...else if... gives smaller code than switch...case ! */
+
+		/* Hello is anyone home ? */
+		if(ch=='0')
+    7c16:	80 33       	cpi	r24, 0x30	; 48
+    7c18:	49 f6       	brne	.-110    	; 0x7bac <main+0x54>
+
+		/* Device Parameters  DON'T CARE, DEVICE IS FIXED  */
+		else if(ch=='B')
+		{
+		    getNch(20);
+		    nothing_response();
+    7c1a:	0e 94 0d 3d 	call	0x7a1a	; 0x7a1a <nothing_response>
+    7c1e:	c2 cf       	rjmp	.-124    	; 0x7ba4 <main+0x4c>
+		/* Request programmer ID */
+		/* Not using PROGMEM string due to boot block in m128 being beyond 64kB boundry  */
+		/* Would need to selectively manipulate RAMPZ, and it's only 9 characters anyway so who cares.  */
+		else if(ch=='1')
+		{
+		    if (getch() == ' ')
+    7c20:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7c24:	80 32       	cpi	r24, 0x20	; 32
+    7c26:	49 f7       	brne	.-46     	; 0x7bfa <main+0xa2>
+			{
+				putch(0x14);
+    7c28:	84 e1       	ldi	r24, 0x14	; 20
+    7c2a:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch('A');
+    7c2e:	81 e4       	ldi	r24, 0x41	; 65
+    7c30:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch('V');
+    7c34:	86 e5       	ldi	r24, 0x56	; 86
+    7c36:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch('R');
+    7c3a:	82 e5       	ldi	r24, 0x52	; 82
+    7c3c:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch(' ');
+    7c40:	80 e2       	ldi	r24, 0x20	; 32
+    7c42:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch('I');
+    7c46:	89 e4       	ldi	r24, 0x49	; 73
+    7c48:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch('S');
+    7c4c:	83 e5       	ldi	r24, 0x53	; 83
+    7c4e:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch('P');
+    7c52:	80 e5       	ldi	r24, 0x50	; 80
+    7c54:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch(0x10);
+    7c58:	80 e1       	ldi	r24, 0x10	; 16
+    7c5a:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+    7c5e:	a2 cf       	rjmp	.-188    	; 0x7ba4 <main+0x4c>
+
+
+		/* AVR ISP/STK500 board commands  DON'T CARE so default nothing_response */
+		else if(ch=='@')
+		{
+		    ch2 = getch();
+    7c60:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+		    if (ch2 > 0x85)
+    7c64:	86 38       	cpi	r24, 0x86	; 134
+    7c66:	c8 f2       	brcs	.-78     	; 0x7c1a <main+0xc2>
+				getch();
+    7c68:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+
+		/* Device Parameters  DON'T CARE, DEVICE IS FIXED  */
+		else if(ch=='B')
+		{
+		    getNch(20);
+		    nothing_response();
+    7c6c:	0e 94 0d 3d 	call	0x7a1a	; 0x7a1a <nothing_response>
+    7c70:	99 cf       	rjmp	.-206    	; 0x7ba4 <main+0x4c>
+
+
+		/* AVR ISP/STK500 board requests */
+		else if(ch=='A')
+		{
+		    ch2 = getch();
+    7c72:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+		    if(ch2 == 0x80)
+    7c76:	80 38       	cpi	r24, 0x80	; 128
+    7c78:	09 f4       	brne	.+2      	; 0x7c7c <main+0x124>
+    7c7a:	01 c1       	rjmp	.+514    	; 0x7e7e <main+0x326>
+				byte_response(HW_VER);		// Hardware version
+		    else if(ch2==0x81)
+    7c7c:	81 38       	cpi	r24, 0x81	; 129
+    7c7e:	09 f4       	brne	.+2      	; 0x7c82 <main+0x12a>
+    7c80:	fa c0       	rjmp	.+500    	; 0x7e76 <main+0x31e>
+				byte_response(SW_MAJOR);	// Software major version
+		    else if(ch2==0x82)
+    7c82:	82 38       	cpi	r24, 0x82	; 130
+    7c84:	09 f4       	brne	.+2      	; 0x7c88 <main+0x130>
+    7c86:	f3 c0       	rjmp	.+486    	; 0x7e6e <main+0x316>
+				byte_response(SW_MINOR);	// Software minor version
+		    else if(ch2==0x98)
+    7c88:	88 39       	cpi	r24, 0x98	; 152
+    7c8a:	09 f4       	brne	.+2      	; 0x7c8e <main+0x136>
+    7c8c:	ec c0       	rjmp	.+472    	; 0x7e66 <main+0x30e>
+		}
+
+
+		/* Read oscillator calibration byte */
+		else if(ch=='v')
+			byte_response(0x00);
+    7c8e:	80 e0       	ldi	r24, 0x00	; 0
+    7c90:	0e 94 ec 3c 	call	0x79d8	; 0x79d8 <byte_response>
+    7c94:	87 cf       	rjmp	.-242    	; 0x7ba4 <main+0x4c>
+
+
+		/* Device Parameters  DON'T CARE, DEVICE IS FIXED  */
+		else if(ch=='B')
+		{
+		    getNch(20);
+    7c96:	84 e1       	ldi	r24, 0x14	; 20
+    7c98:	0e 94 de 3c 	call	0x79bc	; 0x79bc <getNch>
+		    nothing_response();
+    7c9c:	0e 94 0d 3d 	call	0x7a1a	; 0x7a1a <nothing_response>
+    7ca0:	81 cf       	rjmp	.-254    	; 0x7ba4 <main+0x4c>
+
+
+		/* Parallel programming stuff  DON'T CARE  */
+		else if(ch=='E')
+		{
+		    getNch(5);
+    7ca2:	85 e0       	ldi	r24, 0x05	; 5
+    7ca4:	0e 94 de 3c 	call	0x79bc	; 0x79bc <getNch>
+		    nothing_response();
+    7ca8:	0e 94 0d 3d 	call	0x7a1a	; 0x7a1a <nothing_response>
+    7cac:	7b cf       	rjmp	.-266    	; 0x7ba4 <main+0x4c>
+		/* Set address, little endian. EEPROM in bytes, FLASH in words  */
+		/* Perhaps extra address bytes may be added in future to support > 128kB FLASH.  */
+		/* This might explain why little endian was used here, big endian used everywhere else.  */
+		else if(ch=='U')
+		{
+		    address.byte[0] = getch();
+    7cae:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7cb2:	80 93 03 01 	sts	0x0103, r24
+		    address.byte[1] = getch();
+    7cb6:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7cba:	80 93 04 01 	sts	0x0104, r24
+		    nothing_response();
+    7cbe:	0e 94 0d 3d 	call	0x7a1a	; 0x7a1a <nothing_response>
+    7cc2:	70 cf       	rjmp	.-288    	; 0x7ba4 <main+0x4c>
+
+
+		/* Universal SPI programming command, disabled.  Would be used for fuses and lock bits.  */
+		else if(ch=='V')
+		{
+		    getNch(4);
+    7cc4:	84 e0       	ldi	r24, 0x04	; 4
+    7cc6:	0e 94 de 3c 	call	0x79bc	; 0x79bc <getNch>
+		    byte_response(0x00);
+    7cca:	80 e0       	ldi	r24, 0x00	; 0
+    7ccc:	0e 94 ec 3c 	call	0x79d8	; 0x79d8 <byte_response>
+    7cd0:	69 cf       	rjmp	.-302    	; 0x7ba4 <main+0x4c>
+		}
+
+		/* Read memory block mode, length is big endian.  */
+		else if(ch=='t')
+		{
+			length.byte[1] = getch();
+    7cd2:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7cd6:	80 93 86 01 	sts	0x0186, r24
+			length.byte[0] = getch();
+    7cda:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7cde:	80 93 85 01 	sts	0x0185, r24
+
+			if (getch() == 'E')
+    7ce2:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7ce6:	85 34       	cpi	r24, 0x45	; 69
+    7ce8:	09 f4       	brne	.+2      	; 0x7cec <main+0x194>
+    7cea:	e2 c0       	rjmp	.+452    	; 0x7eb0 <main+0x358>
+				flags.eeprom = 1;
+			else
+			{
+				flags.eeprom = 0;
+    7cec:	80 91 88 01 	lds	r24, 0x0188
+    7cf0:	8e 7f       	andi	r24, 0xFE	; 254
+    7cf2:	80 93 88 01 	sts	0x0188, r24
+				address.word = address.word << 1;	        // address * 2 -> byte location
+    7cf6:	80 91 03 01 	lds	r24, 0x0103
+    7cfa:	90 91 04 01 	lds	r25, 0x0104
+    7cfe:	88 0f       	add	r24, r24
+    7d00:	99 1f       	adc	r25, r25
+    7d02:	90 93 04 01 	sts	0x0104, r25
+    7d06:	80 93 03 01 	sts	0x0103, r24
+			}
+
+			// Command terminator
+			if (getch() == ' ')
+    7d0a:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7d0e:	80 32       	cpi	r24, 0x20	; 32
+    7d10:	09 f0       	breq	.+2      	; 0x7d14 <main+0x1bc>
+    7d12:	48 cf       	rjmp	.-368    	; 0x7ba4 <main+0x4c>
+			{
+				putch(0x14);
+    7d14:	84 e1       	ldi	r24, 0x14	; 20
+    7d16:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				for (w=0; w<length.word; w++)
+    7d1a:	80 91 85 01 	lds	r24, 0x0185
+    7d1e:	90 91 86 01 	lds	r25, 0x0186
+    7d22:	00 97       	sbiw	r24, 0x00	; 0
+    7d24:	09 f4       	brne	.+2      	; 0x7d28 <main+0x1d0>
+    7d26:	c0 c0       	rjmp	.+384    	; 0x7ea8 <main+0x350>
+    7d28:	00 e0       	ldi	r16, 0x00	; 0
+    7d2a:	10 e0       	ldi	r17, 0x00	; 0
+    7d2c:	e0 91 03 01 	lds	r30, 0x0103
+    7d30:	f0 91 04 01 	lds	r31, 0x0104
+    7d34:	0d c0       	rjmp	.+26     	; 0x7d50 <main+0x1f8>
+
+						address.word++;
+				    }
+				    else
+					{
+						if (!flags.rampz)
+    7d36:	21 ff       	sbrs	r18, 1
+    7d38:	2a c1       	rjmp	.+596    	; 0x7f8e <block_done+0x4>
+							putch(pgm_read_byte_near(address.word));
+
+						address.word++;
+    7d3a:	31 96       	adiw	r30, 0x01	; 1
+    7d3c:	f0 93 04 01 	sts	0x0104, r31
+    7d40:	e0 93 03 01 	sts	0x0103, r30
+
+			// Command terminator
+			if (getch() == ' ')
+			{
+				putch(0x14);
+				for (w=0; w<length.word; w++)
+    7d44:	0f 5f       	subi	r16, 0xFF	; 255
+    7d46:	1f 4f       	sbci	r17, 0xFF	; 255
+    7d48:	08 17       	cp	r16, r24
+    7d4a:	19 07       	cpc	r17, r25
+    7d4c:	08 f0       	brcs	.+2      	; 0x7d50 <main+0x1f8>
+    7d4e:	ac c0       	rjmp	.+344    	; 0x7ea8 <main+0x350>
+				{
+					// Can handle odd and even lengths okay
+				    if (flags.eeprom)
+    7d50:	20 91 88 01 	lds	r18, 0x0188
+    7d54:	20 ff       	sbrs	r18, 0
+    7d56:	ef cf       	rjmp	.-34     	; 0x7d36 <main+0x1de>
+					{
+						// Byte access EEPROM read
+						while(EECR & (1<<EEPE));
+    7d58:	f9 99       	sbic	0x1f, 1	; 31
+    7d5a:	fe cf       	rjmp	.-4      	; 0x7d58 <main+0x200>
+						EEAR = (uint16_t)(void *)address.word;
+    7d5c:	f2 bd       	out	0x22, r31	; 34
+    7d5e:	e1 bd       	out	0x21, r30	; 33
+						EECR |= (1<<EERE);
+    7d60:	f8 9a       	sbi	0x1f, 0	; 31
+						putch(EEDR);
+    7d62:	80 b5       	in	r24, 0x20	; 32
+    7d64:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+
+						address.word++;
+    7d68:	e0 91 03 01 	lds	r30, 0x0103
+    7d6c:	f0 91 04 01 	lds	r31, 0x0104
+    7d70:	31 96       	adiw	r30, 0x01	; 1
+    7d72:	f0 93 04 01 	sts	0x0104, r31
+    7d76:	e0 93 03 01 	sts	0x0103, r30
+    7d7a:	80 91 85 01 	lds	r24, 0x0185
+    7d7e:	90 91 86 01 	lds	r25, 0x0186
+    7d82:	e0 cf       	rjmp	.-64     	; 0x7d44 <main+0x1ec>
+
+
+		/* Write memory, length is big endian and is in bytes  */
+		else if(ch=='d')
+		{
+		    length.byte[1] = getch();
+    7d84:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7d88:	80 93 86 01 	sts	0x0186, r24
+		    length.byte[0] = getch();
+    7d8c:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7d90:	80 93 85 01 	sts	0x0185, r24
+
+		    flags.eeprom = 0;
+    7d94:	80 91 88 01 	lds	r24, 0x0188
+    7d98:	8e 7f       	andi	r24, 0xFE	; 254
+    7d9a:	80 93 88 01 	sts	0x0188, r24
+		    if (getch() == 'E')
+    7d9e:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7da2:	85 34       	cpi	r24, 0x45	; 69
+    7da4:	29 f4       	brne	.+10     	; 0x7db0 <main+0x258>
+				flags.eeprom = 1;
+    7da6:	80 91 88 01 	lds	r24, 0x0188
+    7daa:	81 60       	ori	r24, 0x01	; 1
+    7dac:	80 93 88 01 	sts	0x0188, r24
+    7db0:	65 e0       	ldi	r22, 0x05	; 5
+    7db2:	e6 2e       	mov	r14, r22
+    7db4:	61 e0       	ldi	r22, 0x01	; 1
+    7db6:	f6 2e       	mov	r15, r22
+    7db8:	f7 01       	movw	r30, r14
+
+			for (i=0; i<PAGE_SIZE; i++)
+				buff[i] = 0;
+    7dba:	11 92       	st	Z+, r1
+
+		    flags.eeprom = 0;
+		    if (getch() == 'E')
+				flags.eeprom = 1;
+
+			for (i=0; i<PAGE_SIZE; i++)
+    7dbc:	81 e0       	ldi	r24, 0x01	; 1
+    7dbe:	e5 34       	cpi	r30, 0x45	; 69
+    7dc0:	f8 07       	cpc	r31, r24
+    7dc2:	d9 f7       	brne	.-10     	; 0x7dba <main+0x262>
+				buff[i] = 0;
+
+		    for (w = 0; w < length.word; w++)
+    7dc4:	80 91 85 01 	lds	r24, 0x0185
+    7dc8:	90 91 86 01 	lds	r25, 0x0186
+    7dcc:	89 2b       	or	r24, r25
+    7dce:	89 f0       	breq	.+34     	; 0x7df2 <main+0x29a>
+    7dd0:	00 e0       	ldi	r16, 0x00	; 0
+    7dd2:	10 e0       	ldi	r17, 0x00	; 0
+			{
+				// Store data in buffer, can't keep up with serial data stream whilst programming pages
+				buff[w] = getch();
+    7dd4:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7dd8:	f8 01       	movw	r30, r16
+    7dda:	eb 5f       	subi	r30, 0xFB	; 251
+    7ddc:	fe 4f       	sbci	r31, 0xFE	; 254
+    7dde:	80 83       	st	Z, r24
+				flags.eeprom = 1;
+
+			for (i=0; i<PAGE_SIZE; i++)
+				buff[i] = 0;
+
+		    for (w = 0; w < length.word; w++)
+    7de0:	0f 5f       	subi	r16, 0xFF	; 255
+    7de2:	1f 4f       	sbci	r17, 0xFF	; 255
+    7de4:	80 91 85 01 	lds	r24, 0x0185
+    7de8:	90 91 86 01 	lds	r25, 0x0186
+    7dec:	08 17       	cp	r16, r24
+    7dee:	19 07       	cpc	r17, r25
+    7df0:	88 f3       	brcs	.-30     	; 0x7dd4 <main+0x27c>
+			{
+				// Store data in buffer, can't keep up with serial data stream whilst programming pages
+				buff[w] = getch();
+		    }
+
+		    if (getch() == ' ')
+    7df2:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7df6:	80 32       	cpi	r24, 0x20	; 32
+    7df8:	09 f0       	breq	.+2      	; 0x7dfc <main+0x2a4>
+    7dfa:	ff ce       	rjmp	.-514    	; 0x7bfa <main+0xa2>
+			{
+				if (flags.eeprom)
+    7dfc:	80 91 88 01 	lds	r24, 0x0188
+    7e00:	80 ff       	sbrs	r24, 0
+    7e02:	62 c0       	rjmp	.+196    	; 0x7ec8 <main+0x370>
+				{
+					//Write to EEPROM one byte at a time
+				    for(w=0;w<length.word;w++)
+    7e04:	60 91 85 01 	lds	r22, 0x0185
+    7e08:	70 91 86 01 	lds	r23, 0x0186
+    7e0c:	61 15       	cp	r22, r1
+    7e0e:	71 05       	cpc	r23, r1
+    7e10:	e9 f0       	breq	.+58     	; 0x7e4c <main+0x2f4>
+    7e12:	40 91 03 01 	lds	r20, 0x0103
+    7e16:	50 91 04 01 	lds	r21, 0x0104
+    7e1a:	9a 01       	movw	r18, r20
+    7e1c:	fb 01       	movw	r30, r22
+    7e1e:	eb 5f       	subi	r30, 0xFB	; 251
+    7e20:	fe 4f       	sbci	r31, 0xFE	; 254
+					{
+						while(EECR & (1<<EEPE));
+    7e22:	f9 99       	sbic	0x1f, 1	; 31
+    7e24:	fe cf       	rjmp	.-4      	; 0x7e22 <main+0x2ca>
+
+						EEAR = (uint16_t)(void *)address.word;
+    7e26:	32 bd       	out	0x22, r19	; 34
+    7e28:	21 bd       	out	0x21, r18	; 33
+						EEDR = buff[w];
+    7e2a:	d7 01       	movw	r26, r14
+    7e2c:	8d 91       	ld	r24, X+
+    7e2e:	7d 01       	movw	r14, r26
+    7e30:	80 bd       	out	0x20, r24	; 32
+						EECR |= (1<<EEMPE);
+    7e32:	fa 9a       	sbi	0x1f, 2	; 31
+						EECR |= (1<<EEPE);
+    7e34:	f9 9a       	sbi	0x1f, 1	; 31
+    7e36:	2f 5f       	subi	r18, 0xFF	; 255
+    7e38:	3f 4f       	sbci	r19, 0xFF	; 255
+		    if (getch() == ' ')
+			{
+				if (flags.eeprom)
+				{
+					//Write to EEPROM one byte at a time
+				    for(w=0;w<length.word;w++)
+    7e3a:	ae 17       	cp	r26, r30
+    7e3c:	bf 07       	cpc	r27, r31
+    7e3e:	89 f7       	brne	.-30     	; 0x7e22 <main+0x2ca>
+    7e40:	46 0f       	add	r20, r22
+    7e42:	57 1f       	adc	r21, r23
+    7e44:	50 93 04 01 	sts	0x0104, r21
+    7e48:	40 93 03 01 	sts	0x0103, r20
+						 "clr	__zero_reg__	\n\t"	//restore zero register
+						 : "=m" (SPMCSR) : "M" (PAGE_SIZE) : "r0","r16","r17","r24","r25","r28","r29","r30","r31"
+
+						 );
+				}
+				putch(0x14);
+    7e4c:	84 e1       	ldi	r24, 0x14	; 20
+    7e4e:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch(0x10);
+    7e52:	80 e1       	ldi	r24, 0x10	; 16
+    7e54:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+    7e58:	a5 ce       	rjmp	.-694    	; 0x7ba4 <main+0x4c>
+
+
+		/* Leave programming mode  */
+		else if(ch=='Q')
+		{
+		    nothing_response();
+    7e5a:	0e 94 0d 3d 	call	0x7a1a	; 0x7a1a <nothing_response>
+#ifdef ADABOOT
+			// autoreset via watchdog (sneaky!) BBR/LF 9/13/2008
+	  		WDTCSR = _BV(WDE);
+    7e5e:	88 e0       	ldi	r24, 0x08	; 8
+    7e60:	80 93 60 00 	sts	0x0060, r24
+    7e64:	ff cf       	rjmp	.-2      	; 0x7e64 <main+0x30c>
+		    else if(ch2==0x81)
+				byte_response(SW_MAJOR);	// Software major version
+		    else if(ch2==0x82)
+				byte_response(SW_MINOR);	// Software minor version
+		    else if(ch2==0x98)
+				byte_response(0x03);		// Unknown but seems to be required by avr studio 3.56
+    7e66:	83 e0       	ldi	r24, 0x03	; 3
+    7e68:	0e 94 ec 3c 	call	0x79d8	; 0x79d8 <byte_response>
+    7e6c:	9b ce       	rjmp	.-714    	; 0x7ba4 <main+0x4c>
+		    if(ch2 == 0x80)
+				byte_response(HW_VER);		// Hardware version
+		    else if(ch2==0x81)
+				byte_response(SW_MAJOR);	// Software major version
+		    else if(ch2==0x82)
+				byte_response(SW_MINOR);	// Software minor version
+    7e6e:	80 e1       	ldi	r24, 0x10	; 16
+    7e70:	0e 94 ec 3c 	call	0x79d8	; 0x79d8 <byte_response>
+    7e74:	97 ce       	rjmp	.-722    	; 0x7ba4 <main+0x4c>
+		{
+		    ch2 = getch();
+		    if(ch2 == 0x80)
+				byte_response(HW_VER);		// Hardware version
+		    else if(ch2==0x81)
+				byte_response(SW_MAJOR);	// Software major version
+    7e76:	81 e0       	ldi	r24, 0x01	; 1
+    7e78:	0e 94 ec 3c 	call	0x79d8	; 0x79d8 <byte_response>
+    7e7c:	93 ce       	rjmp	.-730    	; 0x7ba4 <main+0x4c>
+		/* AVR ISP/STK500 board requests */
+		else if(ch=='A')
+		{
+		    ch2 = getch();
+		    if(ch2 == 0x80)
+				byte_response(HW_VER);		// Hardware version
+    7e7e:	82 e0       	ldi	r24, 0x02	; 2
+    7e80:	0e 94 ec 3c 	call	0x79d8	; 0x79d8 <byte_response>
+    7e84:	8f ce       	rjmp	.-738    	; 0x7ba4 <main+0x4c>
+
+
+		/* Get device signature bytes  */
+		else if(ch=='u')
+		{
+			if (getch() == ' ')
+    7e86:	0e 94 8b 3c 	call	0x7916	; 0x7916 <getch>
+    7e8a:	80 32       	cpi	r24, 0x20	; 32
+    7e8c:	09 f0       	breq	.+2      	; 0x7e90 <main+0x338>
+    7e8e:	b5 ce       	rjmp	.-662    	; 0x7bfa <main+0xa2>
+			{
+				putch(0x14);
+    7e90:	84 e1       	ldi	r24, 0x14	; 20
+    7e92:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch(SIG1);
+    7e96:	8e e1       	ldi	r24, 0x1E	; 30
+    7e98:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch(SIG2);
+    7e9c:	85 e9       	ldi	r24, 0x95	; 149
+    7e9e:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch(SIG3);
+    7ea2:	88 e0       	ldi	r24, 0x08	; 8
+    7ea4:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+				putch(0x10);
+    7ea8:	80 e1       	ldi	r24, 0x10	; 16
+    7eaa:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+    7eae:	7a ce       	rjmp	.-780    	; 0x7ba4 <main+0x4c>
+		{
+			length.byte[1] = getch();
+			length.byte[0] = getch();
+
+			if (getch() == 'E')
+				flags.eeprom = 1;
+    7eb0:	80 91 88 01 	lds	r24, 0x0188
+    7eb4:	81 60       	ori	r24, 0x01	; 1
+    7eb6:	80 93 88 01 	sts	0x0188, r24
+    7eba:	27 cf       	rjmp	.-434    	; 0x7d0a <main+0x1b2>
+    WDTCSR |= _BV(WDCE) | _BV(WDE);
+    WDTCSR = 0;
+
+    // Check if the WDT was used to reset, in which case we dont bootload and skip straight to the code. woot.
+    if (! (ch &  _BV(EXTRF))) // if its a not an external reset...
+      app_start();  // skip bootloader
+    7ebc:	e0 91 01 01 	lds	r30, 0x0101
+    7ec0:	f0 91 02 01 	lds	r31, 0x0102
+    7ec4:	09 95       	icall
+    7ec6:	5a ce       	rjmp	.-844    	; 0x7b7c <main+0x24>
+				    }
+				}
+				else
+				{
+					//address * 2 -> byte location
+				    address.word = address.word << 1;
+    7ec8:	80 91 03 01 	lds	r24, 0x0103
+    7ecc:	90 91 04 01 	lds	r25, 0x0104
+    7ed0:	88 0f       	add	r24, r24
+    7ed2:	99 1f       	adc	r25, r25
+    7ed4:	90 93 04 01 	sts	0x0104, r25
+    7ed8:	80 93 03 01 	sts	0x0103, r24
+
+					//Even up an odd number of bytes
+					if ((length.byte[0] & 0x01))
+    7edc:	80 91 85 01 	lds	r24, 0x0185
+    7ee0:	80 ff       	sbrs	r24, 0
+    7ee2:	09 c0       	rjmp	.+18     	; 0x7ef6 <main+0x39e>
+						length.word++;
+    7ee4:	80 91 85 01 	lds	r24, 0x0185
+    7ee8:	90 91 86 01 	lds	r25, 0x0186
+    7eec:	01 96       	adiw	r24, 0x01	; 1
+    7eee:	90 93 86 01 	sts	0x0186, r25
+    7ef2:	80 93 85 01 	sts	0x0185, r24
+
+					// HACKME: EEPE used to be EEWE
+				    //Wait for previous EEPROM writes to complete
+					//while(bit_is_set(EECR,EEPE));
+					while(EECR & (1<<EEPE));
+    7ef6:	f9 99       	sbic	0x1f, 1	; 31
+    7ef8:	fe cf       	rjmp	.-4      	; 0x7ef6 <main+0x39e>
+
+				    asm volatile(
+    7efa:	11 27       	eor	r17, r17
+    7efc:	e0 91 03 01 	lds	r30, 0x0103
+    7f00:	f0 91 04 01 	lds	r31, 0x0104
+    7f04:	c5 e0       	ldi	r28, 0x05	; 5
+    7f06:	d1 e0       	ldi	r29, 0x01	; 1
+    7f08:	80 91 85 01 	lds	r24, 0x0185
+    7f0c:	90 91 86 01 	lds	r25, 0x0186
+
+00007f10 <length_loop>:
+    7f10:	10 30       	cpi	r17, 0x00	; 0
+    7f12:	91 f4       	brne	.+36     	; 0x7f38 <no_page_erase>
+
+00007f14 <wait_spm1>:
+    7f14:	00 91 57 00 	lds	r16, 0x0057
+    7f18:	01 70       	andi	r16, 0x01	; 1
+    7f1a:	01 30       	cpi	r16, 0x01	; 1
+    7f1c:	d9 f3       	breq	.-10     	; 0x7f14 <wait_spm1>
+    7f1e:	03 e0       	ldi	r16, 0x03	; 3
+    7f20:	00 93 57 00 	sts	0x0057, r16
+    7f24:	e8 95       	spm
+
+00007f26 <wait_spm2>:
+    7f26:	00 91 57 00 	lds	r16, 0x0057
+    7f2a:	01 70       	andi	r16, 0x01	; 1
+    7f2c:	01 30       	cpi	r16, 0x01	; 1
+    7f2e:	d9 f3       	breq	.-10     	; 0x7f26 <wait_spm2>
+    7f30:	01 e1       	ldi	r16, 0x11	; 17
+    7f32:	00 93 57 00 	sts	0x0057, r16
+    7f36:	e8 95       	spm
+
+00007f38 <no_page_erase>:
+    7f38:	09 90       	ld	r0, Y+
+    7f3a:	19 90       	ld	r1, Y+
+
+00007f3c <wait_spm3>:
+    7f3c:	00 91 57 00 	lds	r16, 0x0057
+    7f40:	01 70       	andi	r16, 0x01	; 1
+    7f42:	01 30       	cpi	r16, 0x01	; 1
+    7f44:	d9 f3       	breq	.-10     	; 0x7f3c <wait_spm3>
+    7f46:	01 e0       	ldi	r16, 0x01	; 1
+    7f48:	00 93 57 00 	sts	0x0057, r16
+    7f4c:	e8 95       	spm
+    7f4e:	13 95       	inc	r17
+    7f50:	10 34       	cpi	r17, 0x40	; 64
+    7f52:	98 f0       	brcs	.+38     	; 0x7f7a <same_page>
+
+00007f54 <write_page>:
+    7f54:	11 27       	eor	r17, r17
+
+00007f56 <wait_spm4>:
+    7f56:	00 91 57 00 	lds	r16, 0x0057
+    7f5a:	01 70       	andi	r16, 0x01	; 1
+    7f5c:	01 30       	cpi	r16, 0x01	; 1
+    7f5e:	d9 f3       	breq	.-10     	; 0x7f56 <wait_spm4>
+    7f60:	05 e0       	ldi	r16, 0x05	; 5
+    7f62:	00 93 57 00 	sts	0x0057, r16
+    7f66:	e8 95       	spm
+
+00007f68 <wait_spm5>:
+    7f68:	00 91 57 00 	lds	r16, 0x0057
+    7f6c:	01 70       	andi	r16, 0x01	; 1
+    7f6e:	01 30       	cpi	r16, 0x01	; 1
+    7f70:	d9 f3       	breq	.-10     	; 0x7f68 <wait_spm5>
+    7f72:	01 e1       	ldi	r16, 0x11	; 17
+    7f74:	00 93 57 00 	sts	0x0057, r16
+    7f78:	e8 95       	spm
+
+00007f7a <same_page>:
+    7f7a:	32 96       	adiw	r30, 0x02	; 2
+    7f7c:	02 97       	sbiw	r24, 0x02	; 2
+    7f7e:	09 f0       	breq	.+2      	; 0x7f82 <final_write>
+    7f80:	c7 cf       	rjmp	.-114    	; 0x7f10 <length_loop>
+
+00007f82 <final_write>:
+    7f82:	10 30       	cpi	r17, 0x00	; 0
+    7f84:	11 f0       	breq	.+4      	; 0x7f8a <block_done>
+    7f86:	02 96       	adiw	r24, 0x02	; 2
+    7f88:	e5 cf       	rjmp	.-54     	; 0x7f54 <write_page>
+
+00007f8a <block_done>:
+    7f8a:	11 24       	eor	r1, r1
+    7f8c:	5f cf       	rjmp	.-322    	; 0x7e4c <main+0x2f4>
+						address.word++;
+				    }
+				    else
+					{
+						if (!flags.rampz)
+							putch(pgm_read_byte_near(address.word));
+    7f8e:	84 91       	lpm	r24, Z+
+    7f90:	0e 94 52 3c 	call	0x78a4	; 0x78a4 <putch>
+    7f94:	80 91 85 01 	lds	r24, 0x0185
+    7f98:	90 91 86 01 	lds	r25, 0x0186
+    7f9c:	e0 91 03 01 	lds	r30, 0x0103
+    7fa0:	f0 91 04 01 	lds	r31, 0x0104
+    7fa4:	ca ce       	rjmp	.-620    	; 0x7d3a <main+0x1e2>
+
+00007fa6 <_exit>:
+    7fa6:	f8 94       	cli
+
+00007fa8 <__stop_program>:
+    7fa8:	ff cf       	rjmp	.-2      	; 0x7fa8 <__stop_program>
