@@ -1,0 +1,20 @@
+##############################################################
+
+coilgun8.name=Coilguni plaat w/ ATmega88
+
+coilgun8.upload.protocol=avrispmkii
+coilgun8.upload.maximum_size=7168
+coilgun8.upload.speed=19200
+coilgun8.upload.using=avrispmkii
+
+coilgun8.bootloader.low_fuses=0xe2
+coilgun8.bootloader.high_fuses=0xdf
+coilgun8.bootloader.extended_fuses=0xf9
+coilgun8.bootloader.path=atmega8
+coilgun8.bootloader.file=ATmegaBOOT.hex
+coilgun8.bootloader.unlock_bits=0x3F
+coilgun8.bootloader.lock_bits=0x0F
+
+coilgun8.build.mcu=atmega88
+coilgun8.build.f_cpu=8000000L
+coilgun8.build.core=arduino

@@ -1,0 +1,18 @@
+##############################################################
+
+motoplaat.name=Mootorite plaat w/ ATMEGA324PV
+motoplaat.upload.protocol=stk500
+motoplaat.upload.maximum_size=30720
+motoplaat.upload.speed=19200
+
+motoplaat.bootloader.low_fuses=0xFF
+motoplaat.bootloader.high_fuses=0xDA
+motoplaat.bootloader.extended_fuses=0xFD
+motoplaat.bootloader.path=atmega644p
+motoplaat.bootloader.file=ATmegaBOOT_324P.hex
+motoplaat.bootloader.unlock_bits=0x3F
+motoplaat.bootloader.lock_bits=0x0F
+
+motoplaat.build.mcu=atmega324p
+motoplaat.build.f_cpu=20000000L
+motoplaat.build.core=arduino
