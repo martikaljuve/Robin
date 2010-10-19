@@ -1,39 +1,41 @@
+Kasutame arvatavasti Messenger teeki.
+
 ------------------------------------
 Arduino -> PC
 ------------------------------------
-CG [0,1] - coilgun charge status
-TR [0,1] - trip sensor status
-GY [float] - gyro direction
-BL [0,1] - left beacon ir receiver has contact
-BR [0,1] - right beacon ir receiver has contact
-BD [float] - servo direction
+c [0,1] - coilgun charge status
+o [0,1] - trip sensor status
+g [float] - gyro direction
+l [0,1] - left beacon ir receiver has contact
+r [0,1] - right beacon ir receiver has contact
+d [float] - servo direction
 
 example:
-CG 0
-TR 1
-GY 20.0
-BL 1
-BR 0
-BD 120.0
+c 0
+o 1
+g 20.0
+l 1
+r 0
+d 120.0
 
 ------------------------------------
 PC -> Arduino
 ------------------------------------
-CF - fire coilgun
-CH - fire coilgun half
-MV [float] [int] - move(direction, speed)
-MD [float] [int] [float] - moveDistance(direction, speed, distance)
-RO [float] [int] - turn(degrees, speed)
-ST - stop()
-DR [0,1] - toggleDribbler(toggle)
-MT [float] [int] [float] [float] - moveAndTurnDistance(moveDirection, moveSpeed, distance, endDegrees)
+F - fire coilgun
+H - fire coilgun half
+M [float] [int] - move(direction, speed)
+G [float] [int] [float] - moveDistance(direction, speed, distance)
+T [float] [int] - turn(degrees, speed)
+S - stop()
+D [0,1] - toggleDribbler(toggle)
+Z [float] [int] [float] [float] - moveAndTurnDistance(moveDirection, moveSpeed, distance, endDegrees)
 
 example:
-CF
-CH
-MV 100.0 100
-MD 359.0 100 500.0
-RO 359.0 50
-ST
-DR 1
-MT 100.0 25 1000.0 350.0
+F
+H
+M 100.0 100
+G 359.0 100 500.0
+T 359.0 50
+S
+D 1
+Z 100.0 25 1000.0 350.0
