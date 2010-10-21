@@ -21,12 +21,15 @@ void setup() {
   Serial.begin(57600); //For serial output
   motor_logic_setup();
   mag_sens_setup();
-  setSpeed(255, 255, 255);
+  
+  frag2ball();
   
 }
 
 void loop() {
   mag_sens_loop();
+  
+
   //int m[] = {6, 8, 1, 3, 1, 4, 5, 1, 7, 2};
   //Serial.println(find_median(m, 10));
   //delay(500);

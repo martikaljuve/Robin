@@ -3,6 +3,7 @@
 
 void motor_logic_setup(){
   pinMode(MOTOR_MODE, OUTPUT);
+  digitalWrite(MOTOR_MODE, HIGH);
   for(int i = 0; i < 4; i++){ //All motor dir pins to output
     pinMode(motors_dir[i], OUTPUT);
     digitalWrite(motors_dir[i], motors_dir_values[i]);

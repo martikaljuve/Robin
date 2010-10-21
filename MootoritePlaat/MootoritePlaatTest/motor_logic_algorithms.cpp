@@ -1,5 +1,28 @@
 #include "motor_logic_algorithms.h"
 
+void frag2ball(){
+  
+  delay(2000);  //Wait for 2 seconds until start, in that time motor_up is working
+
+  moveAndTurn(285, 255, 0); //Try to move left. Because of the inbalances, 285 was used instead
+  delay(1130); //Wait some time
+  setSpeed(0,0,-170); //Because out moving to 285 (~270) degrees was fucked up, we need to balance things out
+  delay(240); //For 250 ms
+  stop(); //Stop everything, robot is in front of the gate
+  delay(200); //Wait a bit
+  
+  analogWrite(MOTOR_UP_PWM, 0); //Tribbler stop
+  delay(10); 
+  digitalWrite(MOTOR_UP_DIR, HIGH); //We start turning the tribbler in the opposite direction
+  analogWrite(MOTOR_UP_PWM, 255); 
+  moveAndTurn(0, 255, 0); //We move in a straight line towards the enemy gate. This works suprisingly well.
+  delay(2000); //Do that for about 2 secons
+  stop(); //Done
+  
+  analogWrite(MOTOR_UP_PWM, 0); //Stop tribbles
+  
+}
+
 void test_motor_speeds(){
   int d = STEP_PWM;
   boolean change_dir;
