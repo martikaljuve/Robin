@@ -10,11 +10,47 @@
 #define sck 13 // PB5
 */
 
+#define KICK_TIME_MS 10
+
 void setup() {
-	pinMode(plunger, OUTPUT);
-	digitalWrite(plunger, HIGH);
+  pinMode(plunger, INPUT);
+  pinMode(done, INPUT);
+  
+  // interrupt 0 - PD2 / plunger
+  // interrupt 1 - PD3 / done
+  attachInterrupt(0, fireCoilgun, RISING); // fireCoilgun() is called when input changes from LOW to HIGH
+  chargeInterruptOn();
+  
+  pinMode(kick2, OUTPUT);
+  pinMode(charge2, OUTPUT);
+  
+  digitalWrite(kick2, LOW);
+  digitalWrite(charge2, HIGH);
 }
 
 void loop() {
-	
+  
+}
+
+void fireCoilgun() {
+  chargeInterruptOff();
+  digitalWrite(kick2, HIGH);
+  delay(KICK_TIME_MS);
+  digitalWrite(kick2, LOW);
+  chargeInterruptOn();
+}
+
+void chargeDone() {
+  int val = digitalRead(done);
+  
+  delay(100);
+  digitalWrite(charge2, val);
+}
+
+void chargeInterruptOn() {
+  attachInterrupt(1, chargeDone, CHANGE); // chargeDone() is called when input changes LOW->HIGH or HIGH->LOW
+}
+
+void chargeInterruptOff() {
+  detachInterrupt(1);
 }
