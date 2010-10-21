@@ -6,3 +6,7 @@ void test_motor_speeds();
 void figureRectangle();
 
 void figureCircle();
+
+void frag2ball();
+
+void frag1ball();

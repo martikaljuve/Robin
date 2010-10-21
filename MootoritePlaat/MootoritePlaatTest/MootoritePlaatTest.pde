@@ -22,7 +22,8 @@ void setup() {
   motor_logic_setup();
   mag_sens_setup();
   
-  frag2ball();
+  //frag2ball();
+  frag1ball();
   
 }
 
