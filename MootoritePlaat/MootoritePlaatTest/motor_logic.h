@@ -7,11 +7,6 @@
 #define STEP_PWM 8 //PWM step (value we increase/decrease by)
 #define RADIUS 1
 
-//Arrays for motor pwm, dir pins and dir values
-static int motors_pwm[] = {MOTOR_LEFT_PWM, MOTOR_RIGHT_PWM, MOTOR_BACK_PWM, MOTOR_UP_PWM};
-static int motors_dir[] = {MOTOR_LEFT_DIR, MOTOR_RIGHT_DIR, MOTOR_BACK_DIR, MOTOR_UP_DIR};
-static int motors_dir_values[] = {HIGH, HIGH, HIGH, HIGH};
-
 void motor_logic_setup();
 
 void moveAndTurn(int direction, int moveSpeed, int turnSpeed);
@@ -20,4 +15,13 @@ void stop();
 
 void setSpeed(int left, int right, int back);
 
+void setOneSpeed(int motor_nr, int speed);
+
+void setOnePWM(int motor_nr, int pwm);
+
+int getOneSpeed(int motor_nr);
+
 float degreesToRadians(int degrees);
+
+void stopDribbler();
+void startDribbler();

@@ -9,35 +9,75 @@ This code speeds motors up to max speed, then slows down to 0, changes direction
 */
 #include <TimedAction.h>
 #include <MLX90316.h>
+#include <PID_Beta6.h>
+
 #include "pins.h"
-#include "ir_rec.h"
+
 #include "motor_logic.h"
+#include "mag_sens.h"
+#include "pid_logic.h"
+
 #include "motor_logic_algorithms.h"
+
+//An action for some extra output
+TimedAction printAction = TimedAction(750, printSpeeds);
+
+//Test of some motor algoritms using timed actions
+TimedAction runAction = TimedAction(3500, runLoop);
 
 
 void setup() {
-  pinMode(LED, OUTPUT);  
+
+  pinMode(LED, OUTPUT);   //Set the led
   digitalWrite(LED, HIGH);
   Serial.begin(57600); //For serial output
-  motor_logic_setup();
-  mag_sens_setup();
+
+  delay(5000); //Wait 5 sec in the beginning
+
+  motor_logic_setup(); //Setup motors
+  mag_sens_setup(); //Setup magnets
+  pid_setup(); //Setup PID
+  Serial.println("Setup done!");
+
+  moveAndTurn(0, 150, 0);
+  //setSpeed(150, 150, 0);
   
-  //frag2ball();
-  frag1ball();
+  //frag2ball(); //Go get them ballz
+
+  //frag1ball();
+  //setSpeed(100, 100, 100);
+  //setSpeed(150, 0, 0);
+  //stopDribbler();
   
 }
+
 
 void loop() {
-  mag_sens_loop();
-  
+	mag_sens_loop(); //Loop the mag sens
+	pid_loop(); //Loop the pids
 
-  //int m[] = {6, 8, 1, 3, 1, 4, 5, 1, 7, 2};
-  //Serial.println(find_median(m, 10));
-  //delay(500);
+	//runAction.check(); //Uncomment for the dancing queen
+  
+    //For extra output we can call for printAction
+	printAction.check();
+
+
 }
 
+/*
+Function that prints the last measured speeds of 3 wheels
+*/
+void printSpeeds(){
+	for(int i = 0; i < 3; i++){
+		Serial.print("Motor ");
+		Serial.print(i);
+		Serial.print(" measured speed: ");
+		Serial.print(getRealSpeed(i));
+		Serial.print("\t");
+	}
+	Serial.println();
 
-
+}
 
 
 

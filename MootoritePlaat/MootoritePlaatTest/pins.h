@@ -18,10 +18,11 @@
 #define MOSI 5 //PB5
 #define MISO 6 //PB6
 
-#define SS_MS_LEFT 31 //PA0
-#define SS_MS_RIGHT 30 //PA1
-#define SS_MS_TOP 1 //PB1
+#define SS_MS_LEFT 30 //PA1   30
+#define SS_MS_RIGHT 31 //PA0
 #define SS_MS_BACK 0 //PB0
+#define SS_MS_TOP 1 //PB1
+
 
 //In schematics, back and top are different!!!
 

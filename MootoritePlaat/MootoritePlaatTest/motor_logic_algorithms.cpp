@@ -1,5 +1,19 @@
 #include "motor_logic_algorithms.h"
 
+//For a rectangle test
+int fullCorners[] = {0, 90, 180, 270};
+int j = 0;
+void runLoop(){
+	if(j%2 == 1){
+		stop();
+		Serial.println("STOP");
+	}else{
+		moveAndTurn(fullCorners[j], 200, 0);
+		Serial.println("Turn");
+	}
+	j++;
+}
+
 void frag1ball(){
     delay(10);   
     analogWrite(MOTOR_UP_PWM, 0); //Tribbler stop
@@ -59,22 +73,18 @@ void test_motor_speeds(){
     //Cycle over all motors
     for(int m = 0; m<3 ; m++){
       
-      analogWrite(motors_pwm[m], i); //Change motor pwm
+		setOneSpeed(m, i);
+      
   
       //If we nee to change direction      
       if(change_dir){
-          analogWrite(motors_pwm[m], 0); //Change motor pwm to 0
-          Serial.println("Change dir!!");
-          motors_dir_values[m] = (motors_dir_values[m]==HIGH)? LOW : HIGH; //Change it's value
-          digitalWrite(motors_dir[m], motors_dir_values[m]); //Send new value to digital pin
+		  setOneSpeed(m, 0); //Change motor pwm to 0
       }
      
      
        //Output stuff
       Serial.print("Motor: ");
       Serial.print(m);
-      Serial.print("dir: ");
-      Serial.print(motors_dir_values[m]);      
       Serial.print(" speed: ");
       Serial.println(i);
       
