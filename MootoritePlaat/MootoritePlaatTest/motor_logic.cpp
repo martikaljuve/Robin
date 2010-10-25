@@ -138,13 +138,13 @@ Always use this function to set the speed of a motor (except for PID).
 void setOneSpeed(int motor_nr, int speed){
 	if(speed >= -255 && speed <= 255){
 		if(speed >= 0){
-			digitalWrite(motors_dir[motor_nr], LOW);
+			//digitalWrite(motors_dir[motor_nr], LOW);
 			motors_dir_values[motor_nr] = LOW;
 		}else{
-			digitalWrite(motors_dir[motor_nr], HIGH);
+			//digitalWrite(motors_dir[motor_nr], HIGH);
 			motors_dir_values[motor_nr] = HIGH;
 		}
-		analogWrite(motors_pwm[motor_nr], abs(speed));
+		//analogWrite(motors_pwm[motor_nr], abs(speed));
 		motors_pwm_values[motor_nr] = abs(speed);
 	}
 }
@@ -160,7 +160,7 @@ void setOnePWM(int motor_nr, int pwm){
 		}else{
 			motors_dir_values[motor_nr] = LOW;
 		}
-		analogWrite(motors_pwm[motor_nr], abs(pwm));
+		//analogWrite(motors_pwm[motor_nr], abs(pwm));
 	}
 }
 

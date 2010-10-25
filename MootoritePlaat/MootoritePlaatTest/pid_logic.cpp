@@ -25,12 +25,12 @@ void pid_setup() {
 		
 		//Pid only works with positive values, something to keep the dir is needed here
 
-		input[i] = abs(getRealSpeed(i)); //We get the input from getRealSpeed in the mag_sens file
-		setpoint[i] = abs(2*getOneSpeed(i)); // RPM =~ 2*pwm, we get the pwm from the motor_logic file
+		input[i] = getRealSpeed(i)/2; //We get the input from getRealSpeed in the mag_sens file and convert RPM to PWM with /2
+		setpoint[i] = getOneSpeed(i); // we get the pwm from the motor_logic file
 		
 		//Some more pidInstance parameters
 		pidInstances[i].SetMode(AUTO); 
-		pidInstances[i].SetOutputLimits(0, 500);
+		pidInstances[i].SetOutputLimits(-255, 255); //PID is set to work in our PWM range [-255, 255]
 	}
 
 }
@@ -51,10 +51,13 @@ void pid_loop() {
 		setpoint[i] = abs(2*getOneSpeed(i)); // RPM =~ 2*pwm, pwm that we want for that instane
 		pidInstances[i].Compute(); //Compute the new RPM
 
-		long value = map(output[i], 0, 500, 0, 255); //Map the RPM to the PWM
-		
-		setOnePWM(i, dir*value); //Set the new PWM directly (normally we should use setOneSpeed)
-
+		//long value = map(output[i], , 500, 0, 255); //Map the RPM to the PWM
+                if(abs(output[i]) > 255){
+                  Serial.println("VIGA PID-IS!");
+                }else{
+                  setOnePWM(i, output[i]); //Set the new PWM directly (normally we should use setOneSpeed)
+                }
+                
 		//Some serials for breakfast
 		if (prevOutput[i] != output[i]) {
 			Serial.print("Speed: ");
@@ -65,8 +68,8 @@ void pid_loop() {
 			Serial.print(input[i]);
 			Serial.print("output: ");
 			Serial.print(output[i]);
-			Serial.print("output value: ");
-			Serial.print(value);
+			//Serial.print("output value: ");
+			//Serial.print(value);
 			Serial.print(", setpoint: ");
 			Serial.println(setpoint[i]);
 

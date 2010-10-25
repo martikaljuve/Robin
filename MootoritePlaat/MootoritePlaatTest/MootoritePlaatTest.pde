@@ -39,7 +39,14 @@ void setup() {
   pid_setup(); //Setup PID
   Serial.println("Setup done!");
 
+
+  //setOnePWM(1, 120);
+  
+  delay(2000);
   moveAndTurn(0, 150, 0);
+  
+  delay(1500);
+  stop();
   //setSpeed(150, 150, 0);
   
   //frag2ball(); //Go get them ballz

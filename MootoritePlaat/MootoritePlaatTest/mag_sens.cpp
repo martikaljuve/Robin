@@ -9,6 +9,8 @@ int i = 0;
 int sampleCount[maximum_nr_of_sensors]; //Count the number of positive results from sensors
 float avg[maximum_nr_of_sensors]; //Average of the results from sensors
 
+long last_measure_time[maximum_nr_of_sensors];
+
 //const int calcInterval = 20;
 
 TimedAction angleAction = TimedAction(2, checkAngles); //Timed action for checking angles (requesting results)
@@ -23,6 +25,7 @@ void mag_sens_setup(){
     for(int i = 0; i < maximum_nr_of_sensors; i++){
 		magnetSensor[i] = MLX90316(); 
 		magnetSensor[i].attach(mag_sens_ss[i], SCK, MISO);
+                last_measure_time[i] = millis();
     }
 }
 
@@ -120,8 +123,10 @@ int find_median(int m[], int n){
 void calculateSpeed(int sensor_nr) {
 
 		float rotations = real_result_diff[sensor_nr];
+                long measure_time_diff = millis() - last_measure_time[sensor_nr] ;
+                last_measure_time[sensor_nr] = millis();
 		real_result_diff[sensor_nr] = 0;
-		real_speed[sensor_nr] = (rotations / 20) * (60000 / 3600.0);  //We find rotations per minute
+		real_speed[sensor_nr] = (rotations / measure_time_diff) * (60000 / 3600.0);  //We find rotations per minute
 
 
         //for(int i = 0; i < active_nr_of_sensors; i++){
@@ -133,10 +138,10 @@ void calculateSpeed(int sensor_nr) {
 			
 			
 			
-			/*Serial.print("Motor ");
-			Serial.print(i);
+			Serial.print("Motor ");
+			Serial.print(sensor_nr);
 			Serial.print(" real speed: ");
-			Serial.println(real_speed[i]);*/
+			Serial.println(real_speed[sensor_nr]);
 			
 			/*
 			Serial.println("Set speed");
