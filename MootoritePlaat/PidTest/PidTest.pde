@@ -3,11 +3,12 @@
 #include "pins.h"
 #include <PID_Beta6.h>
 
-const int calcInterval = 50;
+const int calcInterval = 26;
 
 MLX90316 left_sensor = MLX90316();
 TimedAction angleAction = TimedAction(2, checkAngle);
 TimedAction avgAction = TimedAction(calcInterval, calculateSpeed);
+TimedAction pidAction = TimedAction(calcInterval * 4, pid);
 
 float maxRPM = 500; // ~8 rotations per second * 60
 float leftMeasuredSpeed;
@@ -18,10 +19,12 @@ double setpoint;
 double prevOutput;
 unsigned long serialTime;
 
-PID leftPid(&input, &output, &setpoint, 0.408, 0.612, 0.204);
+//PID leftPid(&input, &output, &setpoint, 0.408, 0.612, 0.204);
+PID leftPid(&input, &output, &setpoint, 1.0, 1.5, 0.0);
 
 void setup() {
-	//pinMode();
+	pinMode(LEFT_DIR, OUTPUT);
+	pinMode(LEFT_PWM, OUTPUT);
 
 	left_sensor.attach(SS_LEFT, SCK, MISO);
 
@@ -30,10 +33,10 @@ void setup() {
 	pinMode(MODE, OUTPUT);
 	digitalWrite(MODE, HIGH);
 	
-	input = leftMeasuredSpeed / 2.0;
-	setpoint = 250; // RPM
+	input = map(abs(leftMeasuredSpeed), 0, 500, 0, 255); // RPM to PWM
+	setpoint = 200; // PWM
 	leftPid.SetMode(AUTO);
-	//leftPid.SetOutputLimits(0, 500);
+	//leftPid.SetOutputLimits(0, 255);
 
 	Serial.begin(9600);
 }
@@ -42,9 +45,7 @@ void setup() {
 void loop() {
 	angleAction.check();
 	avgAction.check();
-
-	input = leftMeasuredSpeed;
-	leftPid.Compute();
+	pidAction.check();
 
 	/*if (prevOutput != output) {
 		Serial.print("input: ");
@@ -56,7 +57,7 @@ void loop() {
 	}*/
 
 	//long value = map(output, 0, 500, 0, 255);
-	analogWrite(LEFT_PWM, output);
+	//digitalWrite(LEFT_DIR, output >= 0 ? LOW : HIGH);
 
 	if (millis() > serialTime) {
 		SerialReceive();
@@ -65,6 +66,13 @@ void loop() {
 	}
 
 	//prevOutput = output;
+}
+
+void pid() {
+	input = map(abs(leftMeasuredSpeed), 0, 500, 0, 255); // RPM to PWM
+	leftPid.Compute();
+
+	analogWrite(LEFT_PWM, abs(output));
 }
 
 long prev = 0;
