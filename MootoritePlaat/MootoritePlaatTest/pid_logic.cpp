@@ -41,14 +41,9 @@ void pid_loop() {
 	//Again we cycle through the sensors/wheels/pidInstances
 	for(int i = 0; i < active_nr_of_sensors; i++){
 
-		input[i] = abs(getRealSpeed(i)); //Measured speed for that instance
+		input[i] = getRealSpeed(i)/2; //Measured speed for that instance in pwm
 
-		//We need to do something with that direction thingy
-		int dir = 1;
-		if(getOneSpeed(i) < 0){
-			dir = -1;
-		}
-		setpoint[i] = abs(2*getOneSpeed(i)); // RPM =~ 2*pwm, pwm that we want for that instane
+		setpoint[i] = getOneSpeed(i); // we get the pwm from the motor_logic file
 		pidInstances[i].Compute(); //Compute the new RPM
 
 		//long value = map(output[i], , 500, 0, 255); //Map the RPM to the PWM

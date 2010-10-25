@@ -30,7 +30,7 @@ void setup() {
 
   pinMode(LED, OUTPUT);   //Set the led
   digitalWrite(LED, HIGH);
-  Serial.begin(57600); //For serial output
+  Serial.begin(9600); //For serial output
 
   delay(5000); //Wait 5 sec in the beginning
 
@@ -40,13 +40,15 @@ void setup() {
   Serial.println("Setup done!");
 
 
-  //setOnePWM(1, 120);
+  //setOneSpeed(1, 120);
   
-  delay(2000);
-  moveAndTurn(0, 150, 0);
+  setSpeed(100,100,100);
   
-  delay(1500);
-  stop();
+  //delay(2000);
+  //moveAndTurn(0, 150, 0);
+  
+  //delay(1500);
+  //stop();
   //setSpeed(150, 150, 0);
   
   //frag2ball(); //Go get them ballz

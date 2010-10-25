@@ -134,7 +134,7 @@ void calculateSpeed(int sensor_nr) {
 			/*
 			Serial.print("Rotations: ");
 			Serial.println(rotations);
-			*/
+			
 			
 			
 			
@@ -142,7 +142,7 @@ void calculateSpeed(int sensor_nr) {
 			Serial.print(sensor_nr);
 			Serial.print(" real speed: ");
 			Serial.println(real_speed[sensor_nr]);
-			
+			*/
 			/*
 			Serial.println("Set speed");
 			Serial.println(real_speed[i]);

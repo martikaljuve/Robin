@@ -160,7 +160,7 @@ void setOnePWM(int motor_nr, int pwm){
 		}else{
 			motors_dir_values[motor_nr] = LOW;
 		}
-		//analogWrite(motors_pwm[motor_nr], abs(pwm));
+		analogWrite(motors_pwm[motor_nr], abs(pwm));
 	}
 }
 
