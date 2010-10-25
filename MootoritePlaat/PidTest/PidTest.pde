@@ -18,7 +18,7 @@ double setpoint;
 double prevOutput;
 unsigned long serialTime;
 
-PID leftPid(&input, &output, &setpoint, 0.2, 0.1, 0);
+PID leftPid(&input, &output, &setpoint, 0.408, 0.612, 0.204);
 
 void setup() {
 	//pinMode();
@@ -30,10 +30,10 @@ void setup() {
 	pinMode(MODE, OUTPUT);
 	digitalWrite(MODE, HIGH);
 	
-	input = leftMeasuredSpeed;
-	setpoint = 400; // RPM
+	input = leftMeasuredSpeed / 2.0;
+	setpoint = 250; // RPM
 	leftPid.SetMode(AUTO);
-	leftPid.SetOutputLimits(0, 500);
+	//leftPid.SetOutputLimits(0, 500);
 
 	Serial.begin(9600);
 }
@@ -55,8 +55,8 @@ void loop() {
 		Serial.println(setpoint);
 	}*/
 
-	long value = map(output, 0, 500, 0, 255);
-	analogWrite(LEFT_PWM, value);
+	//long value = map(output, 0, 500, 0, 255);
+	analogWrite(LEFT_PWM, output);
 
 	if (millis() > serialTime) {
 		SerialReceive();
@@ -93,15 +93,22 @@ void checkAngle() {
 	*/
 }
 
+unsigned long previousTime = 0;
+
 // RPM 0 - 500
 // PWM 60 - 255
 void calculateSpeed() {
+	unsigned long currentTime = millis();
+	unsigned int timeDiff = currentTime - previousTime;
+
+	if (timeDiff <= 0) return;
+	
 	float rotations = diff;
-	diff = 0;
-
-	leftMeasuredSpeed = (rotations / calcInterval) * 16.666667; // 60000 ms / 3600.0 degrees
-
+	leftMeasuredSpeed = (rotations / timeDiff) * 16.666667; // 60000 ms / 3600.0 degrees
+	
 	//Serial.println(leftMeasuredSpeed);
+	previousTime = currentTime;
+	diff = 0;
 }
 
 
