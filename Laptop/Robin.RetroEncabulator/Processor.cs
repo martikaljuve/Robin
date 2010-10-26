@@ -63,6 +63,7 @@ namespace Robin.RetroEncabulator
 					break;
 			}
 
+			// HACK: Testime
 			Thread.Sleep(100);
 		}
 

@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Robin.Arduino;
 using Robin.ControlPanel.Properties;
 using Robin.RetroEncabulator;
+using Robin.VideoProcessor;
 
 namespace Robin.ControlPanel
 {
@@ -15,6 +16,7 @@ namespace Robin.ControlPanel
 		private readonly Stopwatch _timer = new Stopwatch();
 		private readonly BackgroundWorker _logicWorker = new BackgroundWorker();
 		private readonly ArduinoSerial _arduinoSerial = new ArduinoSerial();
+		private VideoFeed _feed;
 
 		public static ArduinoSensorData SensorData { get; set; }
 
@@ -69,6 +71,15 @@ namespace Robin.ControlPanel
 			_logicWorker.ProgressChanged += LogicWorkerOnProgressChanged;
 			_logicWorker.WorkerReportsProgress = true;
 			_logicWorker.RunWorkerAsync();
+
+			_feed = new VideoFeed();
+			Application.Idle += ApplicationOnIdle;
+		}
+
+		private void ApplicationOnIdle(object sender, EventArgs eventArgs)
+		{
+			var frame = _feed.CaptureFrame();
+			uxFrame.Image = frame;
 		}
 
 		private void UxPortConnectOnClick(object sender, EventArgs eventArgs)
@@ -111,6 +122,16 @@ namespace Robin.ControlPanel
 		{
 			var fps = (float)progressChangedEventArgs.UserState;
 			uxFps.Text = fps.ToString();
+		}
+
+		private void uxFilenameBrowse_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void uxWebcam_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

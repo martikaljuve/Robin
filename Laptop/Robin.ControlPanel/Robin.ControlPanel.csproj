@@ -33,7 +33,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>robot.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Emgu.CV, Version=2.1.0.793, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
+    <Reference Include="Emgu.CV.UI">
+      <HintPath>..\lib\Emgu.CV.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.Util, Version=2.1.0.793, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=x86" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -94,11 +102,24 @@
       <Project>{EE5171C9-1700-46FF-9A30-3D38C557F0DC}</Project>
       <Name>Robin.RetroEncabulator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Robin.VideoProcessor\Robin.VideoProcessor.csproj">
+      <Project>{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}</Project>
+      <Name>Robin.VideoProcessor</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\robot.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="robot.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>mkdir $(TargetDir)bin
+move /Y $(TargetDir)*.dll $(TargetDir)bin\
+move /Y $(TargetDir)*.xml $(TargetDir)bin\
+move /Y $(TargetDir)*.pdb $(TargetDir)bin\</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

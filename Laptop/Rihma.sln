@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robin.RetroEncabulator", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robin.Arduino", "Robin.Arduino\Robin.Arduino.csproj", "{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robin.VideoProcessor", "Robin.VideoProcessor\Robin.VideoProcessor.csproj", "{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,16 @@ Global
 		{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}.Release|x86.ActiveCfg = Release|Any CPU
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
