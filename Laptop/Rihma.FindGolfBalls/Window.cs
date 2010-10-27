@@ -14,7 +14,8 @@ namespace Rihma.FindGolfBalls
 {
 	public partial class Window : Form
 	{
-		private const string _filename = @"C:\Temp\Rihma-Väljak-01.m4v";
+		//private const string _filename = @"C:\Temp\Rihma-Väljak-01.m4v";
+		private const string _filename = @"C:\Temp\Rihma-01.jpg";
 
 		private readonly Stopwatch _timer = new Stopwatch();
 		private Capture _capture;
@@ -25,9 +26,6 @@ namespace Rihma.FindGolfBalls
 		private long _timerCount;
 		private Gray binaryMaximumValue = new Gray(255);
 		private Gray binaryThreshold = new Gray(100);
-		private Gray cannyThreshold = new Gray(180);
-		private Gray cannyThresholdLinking = new Gray(120);
-		private Gray circleAccumulatorThreshold = new Gray(120);
 
 		public Window()
 		{
@@ -45,41 +43,10 @@ namespace Rihma.FindGolfBalls
 			Application.Idle += ApplicationOnIdle;
 		}
 
-		[ImportMany]
-		public List<IImageProcessor> ImageProcessors { get; set; }
+		[Import]
+		public IImageProcessor ImageProcessor { get; set; }
 
-		public IImageProcessor SelectedProcessor { get; set; }
 		public ImageSource ImageSource { get; set; }
-
-		public int BinaryThreshold
-		{
-			get { return (int) binaryThreshold.Intensity; }
-			set { binaryThreshold = new Gray(value); }
-		}
-
-		public int BinaryMaximumValue
-		{
-			get { return (int) binaryMaximumValue.Intensity; }
-			set { binaryMaximumValue = new Gray(value); }
-		}
-
-		public decimal CannyThreshold
-		{
-			get { return (decimal) cannyThreshold.Intensity; }
-			set { cannyThreshold = new Gray((double) value); }
-		}
-
-		public decimal CannyThresholdLinking
-		{
-			get { return (decimal) cannyThresholdLinking.Intensity; }
-			set { cannyThresholdLinking = new Gray((double) value); }
-		}
-
-		public decimal CannyCircleAccumulatorThreshold
-		{
-			get { return (decimal) circleAccumulatorThreshold.Intensity; }
-			set { circleAccumulatorThreshold = new Gray((double) value); }
-		}
 
 		private void ApplicationOnIdle(object sender, EventArgs eventArgs)
 		{
@@ -110,31 +77,13 @@ namespace Rihma.FindGolfBalls
 
 			var gray = img.Convert<Gray, byte>();
 
-			//gray._Dilate(2);
-			//gray._Erode(2);
-
-			//gray = gray.Canny(cannyThreshold, cannyThresholdLinking);
-
-			Image<Bgr, byte> displayedImage;
-
-			switch (ImageSource)
-			{
-				case ImageSource.Gray:
-					displayedImage = gray.Convert<Bgr, byte>();
-					break;
-				case ImageSource.BlackAndWhite:
-					displayedImage = gray.ThresholdBinary(binaryThreshold, binaryMaximumValue).Convert<Bgr, byte>();
-					break;
-				default:
-					displayedImage = img.Copy();
-					break;
-			}
+			Image<Bgr, byte> displayedImage = img.Copy();
 
 			var size = img.Size;
 			var sum = img.GetSubRect(new Rectangle(20, size.Height - 20, 10, 10)).GetSum();
 
-			if (SelectedProcessor != null)
-				SelectedProcessor.Process(img, ref displayedImage);
+			if (ImageProcessor != null)
+				ImageProcessor.Process(img, ref displayedImage);
 
 			displayedImage.Draw(string.Format("FPS: {0:0}", _fps), ref EmguHelper.NormalFont, new Point(10, 30),
 			                    new Bgr(Color.White));
@@ -151,33 +100,24 @@ namespace Rihma.FindGolfBalls
 			var container = new CompositionContainer(catalog);
 			container.ComposeParts(this);
 		}
-
-		//private static double GetEccentricity(MCvMoments moments) {
-		//    var m1 = moments.GetCentralMoment(2, 0);
-		//    var m2 = moments.GetCentralMoment(0, 2);
-		//    var m11 = m1 - m2;
-		//    var m22 = m1 + m2;
-		//    var m3 = moments.GetCentralMoment(1, 1);
-		//    return ((m11*m11) - 4*(m3*m3)) / (m22 * m22);
-		//}
-
+		
 		private void InitializeControls()
 		{
 			uxTable.SuspendLayout();
-			uxImageProcessor.DataSource = ImageProcessors;
-			uxImageProcessor.DisplayMember = "Name";
-			uxImageProcessor.SelectedIndexChanged +=
-				(sender, args) => SelectedProcessor = ImageProcessors[uxImageProcessor.SelectedIndex];
-			SelectedProcessor = ImageProcessors.First();
+			//uxImageProcessor.DataSource = ImageProcessors;
+			//uxImageProcessor.DisplayMember = "Name";
+			//uxImageProcessor.SelectedIndexChanged +=
+			//    (sender, args) => SelectedProcessor = ImageProcessors[uxImageProcessor.SelectedIndex];
+			//SelectedProcessor = ImageProcessors.First();
 
-			AddSlider("Binary Threshold", this, "BinaryThreshold", 0, 255);
-			AddSlider("Binary Maximum Value", this, "BinaryMaximumValue", 0, 255);
+			//AddSlider("Binary Threshold", this, "BinaryThreshold", 0, 255);
+			//AddSlider("Binary Maximum Value", this, "BinaryMaximumValue", 0, 255);
 
-			AddSlider("Threshold", this, "CannyThreshold", 0, 255);
-			AddSlider("Threshold Linking", this, "CannyThresholdLinking", 0, 255);
-			AddSlider("Circle Accumulator Threshold", this, "CannyCircleAccumulatorThreshold", 0, 255);
+			//AddSlider("Threshold", this, "CannyThreshold", 0, 255);
+			//AddSlider("Threshold Linking", this, "CannyThresholdLinking", 0, 255);
+			//AddSlider("Circle Accumulator Threshold", this, "CannyCircleAccumulatorThreshold", 0, 255);
 
-			AddSelection("Result color", typeof (ImageSource), Enum.GetNames(typeof (ImageSource)), this, "ImageSource");
+			//AddSelection("Result color", typeof (ImageSource), Enum.GetNames(typeof (ImageSource)), this, "ImageSource");
 
 			uxTable.ResumeLayout(true);
 		}

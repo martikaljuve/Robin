@@ -48,7 +48,6 @@
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Trigger.cs" />
-    <Compile Include="VisionData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Robin.Arduino\Robin.Arduino.csproj">
@@ -58,6 +57,10 @@
     <ProjectReference Include="..\Robin.Contracts\Robin.Contracts.csproj">
       <Project>{78C692B6-33F4-4F38-8B6C-360C8F69989C}</Project>
       <Name>Robin.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Robin.VideoProcessor\Robin.VideoProcessor.csproj">
+      <Project>{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}</Project>
+      <Name>Robin.VideoProcessor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

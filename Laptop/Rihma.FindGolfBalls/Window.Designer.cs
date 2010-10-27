@@ -28,7 +28,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.uxImage = new Emgu.CV.UI.ImageBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.uxFilename = new System.Windows.Forms.TextBox();
 			this.uxFilenameLabel = new System.Windows.Forms.Label();
@@ -41,7 +40,7 @@
 			this.uxCannyCheckbox = new System.Windows.Forms.CheckBox();
 			this.uxImageProcessor = new System.Windows.Forms.ComboBox();
 			this.uxImageProcessorLabel = new System.Windows.Forms.Label();
-			((System.ComponentModel.ISupportInitialize)(this.uxImage)).BeginInit();
+			this.uxImage = new Emgu.CV.UI.ImageBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -50,19 +49,8 @@
 			this.uxSidePanel.SuspendLayout();
 			this.uxSidePanelTab1.SuspendLayout();
 			this.uxTable.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.uxImage)).BeginInit();
 			this.SuspendLayout();
-			// 
-			// uxImage
-			// 
-			this.uxImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.tableLayoutPanel1.SetColumnSpan(this.uxImage, 4);
-			this.uxImage.Location = new System.Drawing.Point(3, 32);
-			this.uxImage.Name = "uxImage";
-			this.uxImage.Size = new System.Drawing.Size(416, 340);
-			this.uxImage.TabIndex = 0;
-			this.uxImage.TabStop = false;
 			// 
 			// tableLayoutPanel1
 			// 
@@ -221,6 +209,18 @@
 			this.uxImageProcessorLabel.TabIndex = 2;
 			this.uxImageProcessorLabel.Text = "Processor";
 			// 
+			// uxImage
+			// 
+			this.uxImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.tableLayoutPanel1.SetColumnSpan(this.uxImage, 4);
+			this.uxImage.Location = new System.Drawing.Point(3, 32);
+			this.uxImage.Name = "uxImage";
+			this.uxImage.Size = new System.Drawing.Size(416, 340);
+			this.uxImage.TabIndex = 0;
+			this.uxImage.TabStop = false;
+			// 
 			// Window
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -231,7 +231,6 @@
 			this.MinimumSize = new System.Drawing.Size(200, 100);
 			this.Name = "Window";
 			this.Text = "Finding golf balls";
-			((System.ComponentModel.ISupportInitialize)(this.uxImage)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.splitContainer1.Panel1.ResumeLayout(false);
@@ -243,13 +242,13 @@
 			this.uxSidePanelTab1.ResumeLayout(false);
 			this.uxTable.ResumeLayout(false);
 			this.uxTable.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.uxImage)).EndInit();
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private Emgu.CV.UI.ImageBox uxImage;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.TextBox uxFilename;
 		private System.Windows.Forms.Label uxFilenameLabel;
@@ -262,5 +261,6 @@
 		private System.Windows.Forms.Button uxWebcam;
 		private System.Windows.Forms.ComboBox uxImageProcessor;
 		private System.Windows.Forms.Label uxImageProcessorLabel;
+		private Emgu.CV.UI.ImageBox uxImage;
 	}
 }

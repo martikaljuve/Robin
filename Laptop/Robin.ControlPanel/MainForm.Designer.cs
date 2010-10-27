@@ -45,6 +45,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.uxFrame)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -235,12 +236,13 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(400, 240);
 			this.Name = "MainForm";
-			this.Text = "Form1";
+			this.Text = "Robin Control Panel";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.uxFrame)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

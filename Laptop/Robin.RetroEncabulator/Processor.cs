@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Threading;
 using Robin.Arduino;
+using Robin.VideoProcessor;
 using Stateless;
 using Timer = System.Timers.Timer;
 

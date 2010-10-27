@@ -115,10 +115,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir $(TargetDir)bin
-move /Y $(TargetDir)*.dll $(TargetDir)bin\
-move /Y $(TargetDir)*.xml $(TargetDir)bin\
-move /Y $(TargetDir)*.pdb $(TargetDir)bin\</PostBuildEvent>
+    <PostBuildEvent>REM mkdir $(TargetDir)bin
+REM move /Y $(TargetDir)*.dll $(TargetDir)bin\
+REM move /Y $(TargetDir)*.xml $(TargetDir)bin\
+REM move /Y $(TargetDir)*.pdb $(TargetDir)bin\</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

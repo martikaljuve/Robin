@@ -85,7 +85,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmptyProcessor.cs" />
     <Compile Include="EmguHelper.cs" />
     <Compile Include="GolfBallFinder.cs" />
     <Compile Include="IImageProcessor.cs" />

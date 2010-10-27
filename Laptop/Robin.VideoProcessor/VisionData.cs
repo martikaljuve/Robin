@@ -1,4 +1,4 @@
-﻿namespace Robin.RetroEncabulator
+﻿namespace Robin.VideoProcessor
 {
 	public class VisionData
 	{

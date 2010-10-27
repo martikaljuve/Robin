@@ -2,8 +2,10 @@
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO.Ports;
 using System.Windows.Forms;
+using Emgu.CV.Structure;
 using Robin.Arduino;
 using Robin.ControlPanel.Properties;
 using Robin.RetroEncabulator;
@@ -16,7 +18,12 @@ namespace Robin.ControlPanel
 		private readonly Stopwatch _timer = new Stopwatch();
 		private readonly BackgroundWorker _logicWorker = new BackgroundWorker();
 		private readonly ArduinoSerial _arduinoSerial = new ArduinoSerial();
+
 		private VideoFeed _feed;
+
+		private bool dragging = false;
+		private Point startDrag;
+		private Rectangle dragRectangle;
 
 		public static ArduinoSensorData SensorData { get; set; }
 
@@ -74,11 +81,55 @@ namespace Robin.ControlPanel
 
 			_feed = new VideoFeed();
 			Application.Idle += ApplicationOnIdle;
+
+			uxFrame.MouseDown += UxFrameOnMouseDown;
+			uxFrame.MouseUp += UxFrameOnMouseUp;
+			uxFrame.MouseMove += UxFrameOnMouseMove;
+		}
+
+		private void UxFrameOnMouseDown(object sender, MouseEventArgs args)
+		{
+			if (args.Button != MouseButtons.Left)
+			{
+				dragging = false;
+				return;
+			}
+
+			dragging = true;
+			startDrag = args.Location;
+		}
+
+		private void UxFrameOnMouseUp(object sender, MouseEventArgs args)
+		{
+			if (args.Button != MouseButtons.Left) return;
+			if (!dragging) return;
+			
+			if (dragRectangle.Width != 0 && dragRectangle.Height != 0)
+				_feed.SetRegionOfInterest(dragRectangle);
+
+			dragging = false;
+		}
+
+		private void UxFrameOnMouseMove(object sender, MouseEventArgs args)
+		{
+			if (!dragging) return;
+
+			var end = uxFrame.PointToClient(MousePosition);
+
+			dragRectangle = Rectangle.FromLTRB(
+				Math.Min(startDrag.X, end.X),
+				Math.Min(startDrag.Y, end.Y),
+				Math.Max(startDrag.X, end.X),
+				Math.Max(startDrag.Y, end.Y));
 		}
 
 		private void ApplicationOnIdle(object sender, EventArgs eventArgs)
 		{
 			var frame = _feed.CaptureFrame();
+
+			if (dragging && (dragRectangle.Width != 0 && dragRectangle.Height != 0))
+				frame.Draw(dragRectangle, new Bgr(Color.Red), 2);
+
 			uxFrame.Image = frame;
 		}
 
