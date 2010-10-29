@@ -2,12 +2,14 @@
 
 TimedAction pidAction = TimedAction(100, pidCompute);
 
-Pid pidLeft = Pid(3, 5, 0);
-Pid pidRight = Pid(3, 5, 0);
-Pid pidBack = Pid(3, 5, 0);
+Pid pidLeft;
+Pid pidRight;
+Pid pidBack;
 
 void pids_setup() {
-	
+	pidLeft = Pid(3, 5, 0);
+	pidRight = Pid(3, 5, 0);
+	pidBack = Pid(3, 5, 0);
 }
 
 void pids_loop() {

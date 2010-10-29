@@ -1,6 +1,8 @@
 #include <WProgram.h>
 #include "CWheels.h"
 
+Wheels::Wheels() { }
+
 Wheels::Wheels(Motor left, Motor right, Motor back) {
 	motorLeft = left;
 	motorRight = right;

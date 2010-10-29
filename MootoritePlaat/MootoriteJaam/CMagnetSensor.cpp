@@ -1,6 +1,8 @@
 #include <WProgram.h>
 #include "CMagnetSensor.h"
 
+MagnetSensor::MagnetSensor() { }
+
 MagnetSensor::MagnetSensor(int slaveSelect, int sck, int miso) {
 	pinMode(slaveSelect, OUTPUT);
 	digitalWrite(slaveSelect, LOW);

@@ -14,6 +14,7 @@ public:
 	float speed;
 	int average;
 
+	MagnetSensor();
 	MagnetSensor(int slaveSelect, int sck, int miso);
 	
 	void takeMeasurement();

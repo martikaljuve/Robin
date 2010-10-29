@@ -7,6 +7,7 @@ public:
 	double output;
 	double setpoint;
 	
+	Pid();
 	Pid(double p, double i, double d);
 	
 	void setInput(double newInput);	

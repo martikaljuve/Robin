@@ -1,8 +1,8 @@
 #include "CMagnetSensor.h"
 
-MagnetSensor magnetLeft = MagnetSensor(MAGNET_SS_LEFT, SCK, MISO);
-MagnetSensor magnetRight = MagnetSensor(MAGNET_SS_RIGHT, SCK, MISO);
-MagnetSensor magnetBack = MagnetSensor(MAGNET_SS_BACK, SCK, MISO);
+MagnetSensor magnetLeft;
+MagnetSensor magnetRight;
+MagnetSensor magnetBack;
 
 void magnet_sensors_setup();
 void magnet_sensors_loop();
@@ -14,7 +14,9 @@ const int speedCalcInterval = 10;
 int checkCount = 0;
 
 void magnet_sensors_setup() {
-	
+	magnetLeft = MagnetSensor(MAGNET_SS_LEFT, SCK, MISO);
+	magnetRight = MagnetSensor(MAGNET_SS_RIGHT, SCK, MISO);
+	magnetBack = MagnetSensor(MAGNET_SS_BACK, SCK, MISO);
 }
 
 void magnet_sensors_loop(){
