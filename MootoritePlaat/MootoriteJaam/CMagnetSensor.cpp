@@ -7,6 +7,9 @@ MagnetSensor::MagnetSensor(int slaveSelect, int sck, int miso) {
 
 	sensor = MLX90316();
 	sensor.attach(slaveSelect, sck, miso);
+
+	for (int i = 0; i < NUM_READINGS; i++)
+		readings[i] = 0;
 }
 
 void MagnetSensor::takeMeasurement() {
@@ -26,7 +29,22 @@ float MagnetSensor::calculateSpeed(long currentTime) {
 	timePrev = currentTime;
 	angleDiff = 0;
 
+	averageSpeed();
+
 	return speed;
+}
+
+float MagnetSensor::averageSpeed() {
+	readingTotal = readingTotal - readings[readingIndex];
+	readings[readingIndex] = speed;
+	readingTotal = readingTotal + readings[readingIndex];
+	readingIndex++;
+
+	if (readingIndex >= NUM_READINGS)
+		readingIndex = 0;
+
+	average = readingTotal / NUM_READINGS;
+	return average;
 }
 
 void MagnetSensor::add(int angle) {

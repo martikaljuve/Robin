@@ -7,7 +7,6 @@ class Wheels {
 	Motor motorRight;
 	Motor motorBack;
 public:
-	Wheels();
 	Wheels(Motor left, Motor right, Motor back);
 	void moveAndTurn(int direction, int moveSpeed, int turnSpeed);
 	void stop();

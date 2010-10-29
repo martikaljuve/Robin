@@ -32,7 +32,7 @@ void checkAngles(){
 		
 		long time = millis();
 		magnetLeft.calculateSpeed(time);
-		magnetLeft.calculateSpeed(time);
-		magnetLeft.calculateSpeed(time);
+		magnetRight.calculateSpeed(time);
+		magnetBack.calculateSpeed(time);
 	}
 }
