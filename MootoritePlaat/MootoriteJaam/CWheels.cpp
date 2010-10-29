@@ -1,15 +1,41 @@
 #include <WProgram.h>
 #include "CWheels.h"
+#include "CPid.h"
 
-Wheels::Wheels() { }
-
-Wheels::Wheels(Motor left, Motor right, Motor back) {
-	motorLeft = left;
-	motorRight = right;
-	motorBack = back;
+Wheels::Wheels(Motor& left, Motor& right, Motor& back, Pid& leftPid, Pid& rightPid, Pid& backPid)
+	:
+	motorLeft(left),
+	motorRight(right),
+	motorBack(back),
+	pidLeft(leftPid),
+	pidRight(rightPid),
+	pidBack(backPid) {
 }
 
 void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed) {
+	int left, right, back;
+	
+	moveAndTurn(direction, moveSpeed, turnSpeed, left, right, back);
+
+	setSpeeds(left, right, back);
+	//setSpeeds(round(speed_left * moveSpeed), round(speed_right * moveSpeed), round(speed_back * moveSpeed));
+}
+
+void Wheels::moveAndTurnPid(int direction, int moveSpeed, int turnSpeed) {
+	int left, right, back;
+	
+	moveAndTurn(direction, moveSpeed, turnSpeed, left, right, back);
+
+	setSpeeds(left, right, back);
+
+	pidLeft.setSetpoint(abs(speedLeft));
+	pidRight.setSetpoint(abs(speedRight));
+	pidBack.setSetpoint(abs(back));
+
+	pidDelayEnd = millis() + PID_DELAY;
+}
+
+void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed, int &left, int &right, int &back) {
 	float radians = degreesToRadians(direction);
 	float vel_x = sin(radians);
 	float vel_y = cos(radians);
@@ -53,8 +79,9 @@ void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed) {
 		}
 	}
 
-	//setSpeed(round(speed_left * moveSpeed), round(speed_right * moveSpeed), round(speed_back * moveSpeed));
-	setSpeeds(speed_left * moveSpeed, speed_right * moveSpeed, speed_back * moveSpeed);
+	left = speed_left * moveSpeed;
+	right = speed_right * moveSpeed;
+	back = speed_back * moveSpeed;
 }
 
 void Wheels::stop() {
@@ -71,6 +98,9 @@ void Wheels::setSpeeds(int left, int right, int back) {
 	Serial.print(back);
 	Serial.println();
 #endif
+	speedLeft = left;
+	speedRight = right;
+	speedBack = back;
 
 	motorLeft.setSpeed(left);
 	motorRight.setSpeed(right);

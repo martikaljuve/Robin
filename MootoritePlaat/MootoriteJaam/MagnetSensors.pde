@@ -1,22 +1,14 @@
-#include "CMagnetSensor.h"
-
-MagnetSensor magnetLeft;
-MagnetSensor magnetRight;
-MagnetSensor magnetBack;
-
 void magnet_sensors_setup();
 void magnet_sensors_loop();
 void checkAngles();
 
 TimedAction angleAction = TimedAction(2, checkAngles);
 
-const int speedCalcInterval = 10;
+const int speedCalcInterval = 5;
 int checkCount = 0;
 
 void magnet_sensors_setup() {
-	magnetLeft = MagnetSensor(MAGNET_SS_LEFT, SCK, MISO);
-	magnetRight = MagnetSensor(MAGNET_SS_RIGHT, SCK, MISO);
-	magnetBack = MagnetSensor(MAGNET_SS_BACK, SCK, MISO);
+
 }
 
 void magnet_sensors_loop(){

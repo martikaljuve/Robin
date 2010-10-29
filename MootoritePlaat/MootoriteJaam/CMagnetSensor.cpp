@@ -23,20 +23,19 @@ void MagnetSensor::takeMeasurement() {
 float MagnetSensor::calculateSpeed(long currentTime) {
 	unsigned int timeDiff = currentTime - timePrev;
 	
-	if (timeDiff <= 0) return speed;
-	if (angleDiff <= 0) return speed;
+	if (timeDiff > 0) {
+		speed = (-angleDiff / (float)timeDiff) * 16.666667; // 60000ms / 360.0 (3600) degrees
 	
-	speed = (angleDiff / (float)timeDiff) * 16.666667; // 60000ms / 360.0 (3600) degrees
-	
-	timePrev = currentTime;
-	angleDiff = 0;
+		timePrev = currentTime;
+		angleDiff = 0;
 
-	averageSpeed();
+		averageSpeed();
+	}
 
 	return speed;
 }
 
-float MagnetSensor::averageSpeed() {
+void MagnetSensor::averageSpeed() {
 	readingTotal = readingTotal - readings[readingIndex];
 	readings[readingIndex] = speed;
 	readingTotal = readingTotal + readings[readingIndex];
@@ -46,7 +45,6 @@ float MagnetSensor::averageSpeed() {
 		readingIndex = 0;
 
 	average = readingTotal / NUM_READINGS;
-	return average;
 }
 
 void MagnetSensor::add(int angle) {

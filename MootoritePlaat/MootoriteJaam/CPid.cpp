@@ -1,3 +1,4 @@
+#include <WProgram.h>
 #include <PID_Beta6.h>
 #include "CPid.h"
 
@@ -10,6 +11,10 @@ Pid::Pid(double p, double i, double d) {
 
 void Pid::setInput(double newInput) {
 	input = newInput;
+}
+
+void Pid::setInputRpm(double newRpm) {
+	input = map(abs(newRpm), 0, 500, 0, 255);
 }
 
 void Pid::setSetpoint(double newSetpoint) {

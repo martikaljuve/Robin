@@ -1,3 +1,5 @@
+#pragma once
+
 #include <MLX90316.h>
 
 class MagnetSensor {
@@ -6,7 +8,7 @@ class MagnetSensor {
 	unsigned long timePrev;
 	MLX90316 sensor;
 
-	static const int NUM_READINGS = 6;
+	static const int NUM_READINGS = 12;
 	int readings[NUM_READINGS];
 	int readingIndex;
 	int readingTotal;
@@ -20,6 +22,6 @@ public:
 	void takeMeasurement();
 	float calculateSpeed(long currentTime);
 private:
-	float averageSpeed();
+	void averageSpeed();
 	void add(int angle);
 };

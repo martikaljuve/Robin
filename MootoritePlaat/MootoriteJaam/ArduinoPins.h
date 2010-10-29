@@ -1,5 +1,4 @@
-#ifndef ARDUINOPINS_H
-#define ARDUINOPINS_H
+#pragma once
 
 #define LED 10 // pd2
 
@@ -27,5 +26,3 @@
 #define MAGNET_SS_TOP 1 //PB1
 
 #define SS_GYRO 2 //PB2
-
-#endif

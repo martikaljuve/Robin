@@ -91,37 +91,37 @@ void test_motor_speeds(){
 }
 
 void figureRectangle() {
-  wheels.stop();
-  delay(1000);
-  wheels.moveAndTurn(0, 255, 0);
-  delay(1000);
+	wheels.stop();
+	delay(1000);
+	wheels.moveAndTurn(0, 255, 0);
+	delay(1000);
   
-  wheels.stop();
-  delay(1000);
-  wheels.moveAndTurn(90, 255, 0);  
-  delay(1000);
+	wheels.stop();
+	delay(1000);
+	wheels.moveAndTurn(90, 255, 0);  
+	delay(1000);
   
-  wheels.stop();
-  delay(1000);
-  wheels.moveAndTurn(180, 255, 0);  
-  delay(1000);
+	wheels.stop();
+	delay(1000);
+	wheels.moveAndTurn(180, 255, 0);  
+	delay(1000);
 
-  wheels.stop();
-  delay(1000);
-  wheels.moveAndTurn(270, 255, 0);  
-  delay(1000);
+	wheels.stop();
+	delay(1000);
+	wheels.moveAndTurn(270, 255, 0);  
+	delay(1000);
 
-  wheels.stop();
-  delay(1000);
-  wheels.moveAndTurn(0, 0, 100);
-  delay(1000);
+	wheels.stop();
+	delay(1000);
+	wheels.moveAndTurn(0, 0, 100);
+	delay(1000);
 }
 
 void figureCircle() {
-  for (int i = 0; i < 100; i++) {
-    wheels.stop();
-    delay(1000);
-    wheels.moveAndTurn(0, 255, 10);
-    delay(1000);
-  }
+	for (int i = 0; i < 100; i++) {
+		wheels.stop();
+		delay(1000);
+		wheels.moveAndTurn(0, 255, 10);
+		delay(1000);
+	}
 }

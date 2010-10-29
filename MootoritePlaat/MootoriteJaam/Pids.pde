@@ -1,15 +1,7 @@
-#include "CPid.h"
-
-TimedAction pidAction = TimedAction(100, pidCompute);
-
-Pid pidLeft;
-Pid pidRight;
-Pid pidBack;
+TimedAction pidAction = TimedAction(20, pidCompute);
 
 void pids_setup() {
-	pidLeft = Pid(3, 5, 0);
-	pidRight = Pid(3, 5, 0);
-	pidBack = Pid(3, 5, 0);
+	
 }
 
 void pids_loop() {
@@ -17,15 +9,26 @@ void pids_loop() {
 }
 
 void pidCompute() {
-	pidLeft.setInput(magnetLeft.speed);
-	pidRight.setInput(magnetRight.speed);
-	pidBack.setInput(magnetBack.speed);
-	
+	bool pidDelayOff = millis() > wheels.pidDelayEnd;
+
+	if (pidDelayOff) {
+		pidLeft.setInputRpm(magnetLeft.average);
+		pidRight.setInputRpm(magnetRight.average);
+		pidBack.setInputRpm(magnetBack.average);
+	}
+	else {
+		pidLeft.setInput(pidLeft.output);
+		pidRight.setInput(pidRight.output);
+		pidBack.setInput(pidBack.output);
+	}
+
 	pidLeft.compute();
 	pidRight.compute();
 	pidBack.compute();
 	
-	motorLeft.setSpeed(pidLeft.output);
-	motorRight.setSpeed(pidRight.output);
-	motorBack.setSpeed(pidBack.output);
+	if (pidDelayOff) {
+		motorLeft.setPwm(pidLeft.output);
+		motorRight.setPwm(pidRight.output);
+		motorBack.setPwm(pidBack.output);
+	}
 }

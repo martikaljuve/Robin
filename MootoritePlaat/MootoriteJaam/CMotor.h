@@ -1,16 +1,20 @@
-#ifndef MOTOR_H
-#define MOTOR_H
+#pragma once
 
 class Motor {
-	int pwmPin;
-	int dirPin;
+	byte pwmPin;
+	byte dirPin;
+	byte minPwm;
+	byte maxPwm;
 public:
 	int speed;
+	byte pwm;
+	bool direction;
 
 	Motor();
-	Motor(int speedPin, int directionPin);
+	Motor(byte speedPin, byte directionPin);
 	void setSpeed(int newSpeed);
+	void setPwm(byte newPwm);
+	void setDirection(bool forward);
 	void stop();
+	void setMinMaxPwm(byte min, byte max);
 };
-
-#endif
