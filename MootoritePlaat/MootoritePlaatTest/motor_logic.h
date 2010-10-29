@@ -1,6 +1,7 @@
 #pragma once
 #include "WProgram.h"
 #include "pins.h"
+#include "mag_sens.h"
 
 #define MAX_PWM 255 //Maximum PWM we can send to driver
 #define MIN_PWM 50 //Minimum PWM to turn the motor (Change this, when the motors are attached to robot!!)

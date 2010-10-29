@@ -20,7 +20,7 @@ This code speeds motors up to max speed, then slows down to 0, changes direction
 #include "motor_logic_algorithms.h"
 
 //An action for some extra output
-TimedAction printAction = TimedAction(750, printSpeeds);
+TimedAction printAction = TimedAction(1750, printSpeeds);
 
 //Test of some motor algoritms using timed actions
 TimedAction runAction = TimedAction(3500, runLoop);
@@ -42,7 +42,15 @@ void setup() {
 
   //setOneSpeed(1, 120);
   
-  setSpeed(100,100,100);
+  //setSpeed(100,100,100);
+  //setSpeed(70, -70, 120);
+  
+  setSpeed(0, 0, 220);
+  	
+  /*analogWrite(MOTOR_LEFT_PWM, 255);
+    analogWrite(MOTOR_RIGHT_PWM, 255);
+    analogWrite(MOTOR_BACK_PWM, 255);
+    */
   
   //delay(2000);
   //moveAndTurn(0, 150, 0);
@@ -82,6 +90,8 @@ void printSpeeds(){
 		Serial.print(i);
 		Serial.print(" measured speed: ");
 		Serial.print(getRealSpeed(i));
+                Serial.print("->");
+                Serial.print(getOneSpeed(i));
 		Serial.print("\t");
 	}
 	Serial.println();

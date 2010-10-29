@@ -124,7 +124,7 @@ int getOneSpeed(int motor_nr){
 	Serial.print(motor_nr);
 	Serial.print(" pwm: ");
 	Serial.println(pwm);*/
-	if(motors_dir_values[motor_nr] == 0){
+	if(motors_dir_values[motor_nr] == HIGH){
 		return pwm;
 	}else{
 		return -1*pwm;
@@ -136,13 +136,13 @@ Function that sets the speed of one motor.
 Always use this function to set the speed of a motor (except for PID).
 */
 void setOneSpeed(int motor_nr, int speed){
-	if(speed >= -255 && speed <= 255){
+	if(abs(speed) <= 255){
 		if(speed >= 0){
 			//digitalWrite(motors_dir[motor_nr], LOW);
-			motors_dir_values[motor_nr] = LOW;
+			motors_dir_values[motor_nr] = HIGH;
 		}else{
 			//digitalWrite(motors_dir[motor_nr], HIGH);
-			motors_dir_values[motor_nr] = HIGH;
+			motors_dir_values[motor_nr] = LOW;
 		}
 		//analogWrite(motors_pwm[motor_nr], abs(speed));
 		motors_pwm_values[motor_nr] = abs(speed);
@@ -153,15 +153,15 @@ void setOneSpeed(int motor_nr, int speed){
 Function that sets PWM directly for the given motor.
 PID uses this function as not to mess up the setpoint = motors_pwm_values
 */
+int last_pwm[] = {0,0,0,0};
 void setOnePWM(int motor_nr, int pwm){
-	if(pwm >= -255 && pwm <= 255){
-		if(pwm < 0){
-			motors_dir_values[motor_nr] = HIGH;
-		}else{
-			motors_dir_values[motor_nr] = LOW;
-		}
-		analogWrite(motors_pwm[motor_nr], abs(pwm));
-	}
+    if(motors_dir_values[motor_nr] == HIGH){
+      analogWrite(motors_pwm[motor_nr], pwm);
+      digitalWrite(motors_dir[motor_nr], HIGH);
+    }else{
+      analogWrite(motors_pwm[motor_nr], pwm);
+      digitalWrite(motors_dir[motor_nr], LOW);
+    }
 }
 
 float degreesToRadians(int degrees) {

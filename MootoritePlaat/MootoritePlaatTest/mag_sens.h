@@ -12,7 +12,6 @@ static int real_result[maximum_nr_of_sensors]; //Last result
 static long real_result_diff[maximum_nr_of_sensors]; //Last difference
 
 //static int real_speed[maximum_nr_of_sensors]; //Current measured and calculated motor speeds
-static int real_speed[] = {0,0,0,0}; //Current measured and calculated motor speeds
 
 
 

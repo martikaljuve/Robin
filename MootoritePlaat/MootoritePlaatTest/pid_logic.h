@@ -12,3 +12,4 @@ void pid_loop(); //Pid loop, that calibrates pwm each turn a bit
 //These methods are for PID FrontEnd graph
 void SerialReceive();
 void SerialSend();
+void pidCalc();

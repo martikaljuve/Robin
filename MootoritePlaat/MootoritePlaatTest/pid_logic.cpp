@@ -13,7 +13,7 @@ unsigned long serialTime; //This is for Pid FrontEnd graph
 
 PID pidInstances[maximum_nr_of_sensors]; //We keep each PID instance here
 
-
+TimedAction pidAction = TimedAction(100, pidCalc);
 
 void pid_setup() {
 
@@ -21,59 +21,69 @@ void pid_setup() {
 	for(int i = 0; i < active_nr_of_sensors; i++){
 
 		//This initializes the pidInstance, constants are added here
-		pidInstances[i] = PID(&input[i], &output[i], &setpoint[i], 0.03, 0.17, 0.04); //0.03, 0.17, 0.04 looks okei
+		pidInstances[i] = PID(&input[i], &output[i], &setpoint[i], 3, 5, 0); //0.03, 0.17, 0.04 looks okei, second:  0.75, 0.67, 0.1
 		
 		//Pid only works with positive values, something to keep the dir is needed here
-
-		input[i] = getRealSpeed(i)/2; //We get the input from getRealSpeed in the mag_sens file and convert RPM to PWM with /2
-		setpoint[i] = getOneSpeed(i); // we get the pwm from the motor_logic file
-		
+                /*
+                int input_value = map(getRealSpeed(i), -300, 300, 0, 500);
+                int setpoint_value = map(getRealSpeed(i), -255, 255, 0, 500);
+		input[i] = input_value; //We get the input from getRealSpeed in the mag_sens file and convert RPM to PWM with /2
+		setpoint[i] = setpoint_value; // we get the pwm from the motor_logic file
+		*/
 		//Some more pidInstance parameters
 		pidInstances[i].SetMode(AUTO); 
-		pidInstances[i].SetOutputLimits(-255, 255); //PID is set to work in our PWM range [-255, 255]
+		pidInstances[i].SetOutputLimits(0, 255); //PID is set to work in our PWM range [-255, 255]
 	}
 
 }
 
 
-void pid_loop() {
 
+void pid_loop() {
+  pidAction.check();
+}
+
+void pidCalc(){
+  
 	//Again we cycle through the sensors/wheels/pidInstances
 	for(int i = 0; i < active_nr_of_sensors; i++){
 
-		input[i] = getRealSpeed(i)/2; //Measured speed for that instance in pwm
-
-		setpoint[i] = getOneSpeed(i); // we get the pwm from the motor_logic file
+                int real_speed = abs(getRealSpeed(i));
+                if(real_speed > 255){
+                  real_speed = 255;
+                }
+                int input_value = real_speed;
+                int setpoint_value = abs(getOneSpeed(i));
+		input[i] = input_value; //We get the input from getRealSpeed in the mag_sens file and convert RPM to PWM with /2
+		setpoint[i] = setpoint_value; // we get the pwm from the motor_logic file
 		pidInstances[i].Compute(); //Compute the new RPM
 
-		//long value = map(output[i], , 500, 0, 255); //Map the RPM to the PWM
-                if(abs(output[i]) > 255){
-                  Serial.println("VIGA PID-IS!");
-                }else{
-                  setOnePWM(i, output[i]); //Set the new PWM directly (normally we should use setOneSpeed)
-                }
+                int output_value = output[i];
+                setOnePWM(i, output_value); //Set the new PWM directly (normally we should use setOneSpeed)
                 
 		//Some serials for breakfast
-		if (prevOutput[i] != output[i]) {
+		if (prevOutput[i] != output[i] || !(millis()%1000)) {
 			Serial.print("Speed: ");
 			Serial.print(getRealSpeed(i));
-			Serial.print(" motor: ");
+			Serial.print(", motor: ");
 			Serial.print(i);
 			Serial.print(":  input: ");
-			Serial.print(input[i]);
-			Serial.print("output: ");
+			Serial.print(input_value);
+			Serial.print(", output: ");
 			Serial.print(output[i]);
+			Serial.print(", output pwm: ");
+			Serial.print(output_value);
 			//Serial.print("output value: ");
 			//Serial.print(value);
 			Serial.print(", setpoint: ");
-			Serial.println(setpoint[i]);
+			Serial.println(setpoint_value);
 
 
 			prevOutput[i] = output[i];
 		}
 
 		//This is needed for Pid FrontEnd graph
-		if (millis() > serialTime) {
+		if (millis() > serialTime && i == 2) {
 			SerialReceive();
 			SerialSend();
 			serialTime += 500;
@@ -166,18 +176,18 @@ void SerialReceive()
 void SerialSend()
 {
   Serial.print("PID ");
-  Serial.print(setpoint[0]);   
+  Serial.print(setpoint[2]);   
   Serial.print(" ");
-  Serial.print(input[0]);   
+  Serial.print(input[2]);   
   Serial.print(" ");
-  Serial.print(output[0]);   
+  Serial.print(output[2]);   
   Serial.print(" ");
-  Serial.print(pidInstances[0].GetP_Param());   
+  Serial.print(pidInstances[2].GetP_Param());   
   Serial.print(" ");
-  Serial.print(pidInstances[0].GetI_Param());   
+  Serial.print(pidInstances[2].GetI_Param());   
   Serial.print(" ");
-  Serial.print(pidInstances[0].GetD_Param());   
+  Serial.print(pidInstances[2].GetD_Param());   
   Serial.print(" ");
-  if(pidInstances[0].GetMode()==AUTO) Serial.println("Automatic");
+  if(pidInstances[2].GetMode()==AUTO) Serial.println("Automatic");
   else Serial.println("Manual");  
 }

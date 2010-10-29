@@ -2,6 +2,7 @@
 
 
 int mag_sens_ss[] = {SS_MS_LEFT, SS_MS_RIGHT, SS_MS_BACK, SS_MS_TOP}; //Magnet sensors
+int real_speed[] = {0,0,0,0}; //Current measured and calculated motor speeds
 int result;
 int i = 0;
 
@@ -50,15 +51,18 @@ Saves results in real_result and real_result_diff arrays for each magnet sensor.
 void checkAngles(){
     for(int i = 0; i < active_nr_of_sensors; i++){ //Cycle through all sensors
 		int resultNew = magnetSensor[i].readAngle(); //Read i-th sensor's angle
+                //Serial.print(resultNew);
+                //Serial.print("\t");
 
 		if (resultNew >= 0){ //If angle is fiesable
 		
 			//This code acts somewhat weirdz
 			result_values[i][result_counter[i]] = resultNew; //Save result to array nr_of_saved_results results for each i-th sensor
                 
-			if(result_counter[i]==nr_of_saved_results-1){ //If the i-th sensor has gotten nr_of_saved_results-1 positive readings
+			//if(result_counter[i]==nr_of_saved_results-1){ //If the i-th sensor has gotten nr_of_saved_results-1 positive readings
                 
-				int new_real_result = find_median(result_values[i], nr_of_saved_results); //Find the median of those readings
+				//int new_real_result = find_median(result_values[i], nr_of_saved_results); //Find the median of those readings
+                              int new_real_result = resultNew;
 				int diff = new_real_result - real_result[i];
 				if(diff < -1800){
 					real_result_diff[i] += 3600+diff; 
@@ -69,7 +73,7 @@ void checkAngles(){
 				}
 				real_result[i] = new_real_result; //Write a new result
                     
-			}
+			//}
 			result_counter[i]++;
 
 				   /* 
@@ -90,6 +94,7 @@ void checkAngles(){
 			*/
 		}
     }
+    //Serial.println();
 
     
 }
@@ -126,7 +131,8 @@ void calculateSpeed(int sensor_nr) {
                 long measure_time_diff = millis() - last_measure_time[sensor_nr] ;
                 last_measure_time[sensor_nr] = millis();
 		real_result_diff[sensor_nr] = 0;
-		real_speed[sensor_nr] = (rotations / measure_time_diff) * (60000 / 3600.0);  //We find rotations per minute
+		int rpm = (rotations / measure_time_diff) * (60000 / 3600.0);  //We find rotations per minute
+                real_speed[sensor_nr] = rpm;
 
 
         //for(int i = 0; i < active_nr_of_sensors; i++){
@@ -153,5 +159,5 @@ void calculateSpeed(int sensor_nr) {
 }
 
 int getRealSpeed(int sensor_nr){
-	return real_speed[sensor_nr];
+	return real_speed[sensor_nr]/2;
 }
