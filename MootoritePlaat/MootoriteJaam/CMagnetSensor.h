@@ -10,7 +10,7 @@ public:
 
 	MagnetSensor(int slaveSelect, int sck, int miso);
 	
-	void check();
+	void takeMeasurement();
 	float calculateSpeed(long currentTime);
 	
 private:

@@ -22,9 +22,9 @@ void magnet_sensors_loop(){
 }
 
 void checkAngles(){
-	magnetLeft.check();
-	magnetRight.check();
-	magnetBack.check();
+	magnetLeft.takeMeasurement();
+	magnetRight.takeMeasurement();
+	magnetBack.takeMeasurement();
 	
 	checkCount++;
 	if (checkCount == speedCalcInterval) {

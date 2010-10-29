@@ -9,7 +9,7 @@ MagnetSensor::MagnetSensor(int slaveSelect, int sck, int miso) {
 	sensor.attach(slaveSelect, sck, miso);
 }
 
-void MagnetSensor::check() {
+void MagnetSensor::takeMeasurement() {
 	int result = sensor.readAngle();
 	
 	add(result);
