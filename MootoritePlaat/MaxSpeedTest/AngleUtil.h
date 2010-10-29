@@ -29,6 +29,7 @@ public:
 		unsigned int timeDiff = currentTime - previousTime;
 		
 		if (timeDiff <= 0) return;
+		if (diff <= 0) return;
 		
 		speed = (diff / (float)timeDiff) * 16.666667; // 60000ms / 360.0 (3600) degrees
 		

@@ -3,13 +3,18 @@ using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Windows.Forms;
+using AForge.Video;
+using AForge.Video.DirectShow;
+using Emgu.CV;
 using Emgu.CV.Structure;
 using Robin.Arduino;
 using Robin.ControlPanel.Properties;
 using Robin.RetroEncabulator;
 using Robin.VideoProcessor;
+using System.Linq;
 
 namespace Robin.ControlPanel
 {
@@ -79,12 +84,33 @@ namespace Robin.ControlPanel
 			_logicWorker.WorkerReportsProgress = true;
 			_logicWorker.RunWorkerAsync();
 
+			//_feed = new VideoFeed(VideoFeed.Sample2);
 			_feed = new VideoFeed();
-			Application.Idle += ApplicationOnIdle;
+			_feed.FrameProcessed +=FeedOnFrameProcessed;
 
 			uxFrame.MouseDown += UxFrameOnMouseDown;
 			uxFrame.MouseUp += UxFrameOnMouseUp;
 			uxFrame.MouseMove += UxFrameOnMouseMove;
+			KeyPress += OnKeyPress;
+
+			Application.ApplicationExit += (o1, args1) => _feed.Stop();
+		}
+
+		private void FeedOnFrameProcessed(object sender, FrameEventArgs frameEventArgs)
+		{
+			var frame = frameEventArgs.Frame;
+
+			if (dragging && (dragRectangle.Width != 0 && dragRectangle.Height != 0))
+				frame.Draw(dragRectangle, new Bgr(Color.Red), 2);
+
+			uxFrame.Image = frame;
+		}
+
+		private void OnKeyPress(object sender, KeyPressEventArgs keyPressEventArgs)
+		{
+			if (_feed != null)
+				_feed.ProcessKeyCommand(keyPressEventArgs.KeyChar);
+			VisionExperiments.ProcessKey(keyPressEventArgs.KeyChar);
 		}
 
 		private void UxFrameOnMouseDown(object sender, MouseEventArgs args)
@@ -122,17 +148,7 @@ namespace Robin.ControlPanel
 				Math.Max(startDrag.X, end.X),
 				Math.Max(startDrag.Y, end.Y));
 		}
-
-		private void ApplicationOnIdle(object sender, EventArgs eventArgs)
-		{
-			var frame = _feed.CaptureFrame();
-
-			if (dragging && (dragRectangle.Width != 0 && dragRectangle.Height != 0))
-				frame.Draw(dragRectangle, new Bgr(Color.Red), 2);
-
-			uxFrame.Image = frame;
-		}
-
+		
 		private void UxPortConnectOnClick(object sender, EventArgs eventArgs)
 		{
 			_arduinoSerial.Open(uxPorts.SelectedText);

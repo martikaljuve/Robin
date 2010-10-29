@@ -234,6 +234,7 @@
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.DoubleBuffered = true;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.KeyPreview = true;
 			this.MinimumSize = new System.Drawing.Size(400, 240);
 			this.Name = "MainForm";
 			this.Text = "Robin Control Panel";

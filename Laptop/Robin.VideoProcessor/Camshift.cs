@@ -1,6 +1,8 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using System.Linq;
 
 namespace Robin.VideoProcessor
 {
@@ -10,28 +12,24 @@ namespace Robin.VideoProcessor
 
 		private Image<Gray, byte> backProjection;
 
-		private Rectangle rectangle;
 		private Rectangle trackWindow;
 		private MCvConnectedComp trackComp;
 		private MCvBox2D trackBox;
 
 		private Hsv maskLower = new Hsv(0, 0, 200);
 		private Hsv maskHigher = new Hsv(360, 360, 360);
-		private readonly Size frameSize = new Size(640, 480);
-		
-		public Camshift()
-		{
-			//trackWindow = new Rectangle(295, 90, 25, 25);
-			//trackWindow = new Rectangle(262, 90, 25, 25);
+		private Size frameSize;
 
-			backProjection = new Image<Gray, byte>(frameSize);
-		}
+		private bool showMask;
+		private bool showHelp;
 
 		public void CalculateHistogram(Image<Bgr, byte> frame, Rectangle rect)
 		{
 			histogram = new DenseHistogram(16, new RangeF(0, 180));
 			trackWindow = rect;
-			rectangle = rect;
+
+			frameSize = frame.Size;
+			backProjection = new Image<Gray, byte>(frameSize);
 
 			using (var ball = frame.GetSubRect(rect)) { 
 				var hsv = ball.Convert<Hsv, byte>();
@@ -65,9 +63,12 @@ namespace Robin.VideoProcessor
 
 		public Image<Bgr, byte> Track(Image<Bgr, byte> frame)
 		{
+			var displayFrame = frame.Copy();
+
 			if (histogram == null) {
-				frame.Draw("Not tracking", ref VisionExperiments.Font, new Point(30, 20), new Bgr(Color.Yellow));
-				return frame;
+				displayFrame.Draw("Not tracking", ref VisionExperiments.Font, new Point(30, 20), new Bgr(Color.Yellow));
+				DrawHelp(displayFrame);
+				return displayFrame;
 			}
 			 
 			var hsv = frame.Convert<Hsv, byte>();
@@ -83,20 +84,92 @@ namespace Robin.VideoProcessor
 			//var grayFrame = frame.Convert<Gray, byte>();
 			//grayFrame._EqualizeHist();
 
-			if (trackWindow.Width == 0) trackWindow.Width = 10;
-			if (trackWindow.Height == 0) trackWindow.Height = 10;
+			if (trackWindow.Width == 0) trackWindow.Width = RobinVideoConstants480P.MinBallEdgeLength;
+			if (trackWindow.Height == 0) trackWindow.Height = RobinVideoConstants480P.MinBallEdgeLength;
 
-			CvInvoke.cvCamShift(backProjection.Ptr, trackWindow, new MCvTermCriteria(10, 0.1), out trackComp, out trackBox);
+			CvInvoke.cvCamShift(backProjection.Ptr, trackWindow, new MCvTermCriteria(5, 0.1), out trackComp, out trackBox);
 			trackWindow = trackComp.rect;
 
-			//frame = mask.Convert<Bgr, byte>();
+			var ballCenter = trackWindow.Center();
+			var maxEdgeLength = RobinVideoConstants480P.GetMaxBallEdgeLengthByFrameY(ballCenter.Y);
+			if (trackWindow.Width > maxEdgeLength) trackWindow.Width = maxEdgeLength;
+			if (trackWindow.Height > maxEdgeLength) trackWindow.Height = maxEdgeLength;
+
+			if (showMask)
+				displayFrame = mask.Convert<Bgr, byte>();
 			//frame = backProjection.Convert<Bgr, byte>();
 
-			frame.Draw(rectangle, new Bgr(Color.DarkCyan), 2);
-			frame.Draw("Tracking", ref VisionExperiments.Font, new Point(60, 50), new Bgr(Color.Yellow));
-			frame.Draw(trackWindow, new Bgr(Color.Red), 3);
+			//frame.Draw(rectangle, new Bgr(Color.DarkCyan), 2);
+			var searchWindowString = string.Format("Search window max size: {0}", maxEdgeLength);
 
-			return frame;
+			displayFrame.Draw("Tracking", ref VisionExperiments.Font, new Point(60, 50), new Bgr(Color.Yellow));
+			displayFrame.Draw(trackWindow, new Bgr(Color.Red), 3);
+			displayFrame.Draw(searchWindowString, ref VisionExperiments.Font, new Point(60, 100), new Bgr(Color.Fuchsia));
+
+			DrawHelp(displayFrame);
+
+			return displayFrame;
+		}
+
+		private void DrawHelp(Image<Bgr, byte> frame)
+		{
+			var help = showHelp ?
+				new[]
+				{
+					"H - hide help",
+					"M - show mask",
+					"P - pause/play",
+					"Drag & Drop to set tracking window"
+				}
+				:
+				new[] {"H - show help"};
+
+			for (var i = 0; i < help.Length; i++)
+			{
+				var str = help[i];
+				frame.Draw(str, ref VisionExperiments.Font, new Point(30, (frame.Height - 30) - (30 * i)), new Bgr(Color.Turquoise));
+			}
+		}
+
+		public void SendKeyCommand(char key)
+		{
+			switch (char.ToLower(key))
+			{
+				case 'm':
+					showMask = !showMask;
+					break;
+				case 'h':
+					showHelp = !showHelp;
+					break;
+			}
+		}
+	}
+
+	public static class DrawingExtensions
+	{
+		public static Point Center(this Rectangle rect)
+		{
+			return new Point((rect.Left + rect.Right) / 2, (rect.Top + rect.Bottom) / 2);
+		}
+	}
+
+	public static class RobinVideoConstants480P
+	{
+		public const int MinBallEdgeLength = 10;
+
+		private static readonly SortedDictionary<int, int> BallSizes =
+			new SortedDictionary<int, int>
+				{
+					{ 100, 25 },
+					{ 200, 40 },
+					{ 300, 60 },
+					{ 400, 80 },
+					{ 500, 100 }
+				};
+
+		public static int GetMaxBallEdgeLengthByFrameY(int y)
+		{
+			return BallSizes.First(s => s.Key >= y).Value;
 		}
 	}
 }

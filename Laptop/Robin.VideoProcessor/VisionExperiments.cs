@@ -1,13 +1,15 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
 namespace Robin.VideoProcessor
 {
-	public class VisionExperiments
+	public static class VisionExperiments
 	{
 		public static MCvFont Font;
+		private static readonly Dictionary<char,bool> Keys = new Dictionary<char, bool>();
 
 		static VisionExperiments()
 		{
@@ -59,6 +61,54 @@ namespace Robin.VideoProcessor
 			return result.Convert<Bgr, byte>();
 
 			//return frame;
+		}
+
+		private static double min = 150;
+		public static Image<Bgr, byte> CannyEdges(Image<Bgr, byte> frame)
+		{
+			Image<Bgr, byte> result;
+
+			if (CheckKey('u'))
+				min += 10;
+			if (CheckKey('j'))
+				min -= 10;
+
+			if (CheckKey('t'))
+				result = frame;
+			else
+			{
+				result = frame.ThresholdBinary(new Bgr(min, min, min), new Bgr(255, 255, 255));
+			}
+
+			var gray = result.Convert<Gray, byte>();
+			//var circles = gray.HoughCircles(new Gray(210), new Gray(255), 5.0, 50.0, 1, 50)[0];
+			result = gray.Convert<Bgr, byte>();
+			//foreach (var circle in circles)
+				//result.Draw(circle, new Bgr(Color.DeepPink), 2);
+
+			//var result = hsv.Canny(new Gray(100), new Gray(360));))
+			return result.Convert<Bgr, byte>();
+		}
+
+		public static void ProcessKey(char key)
+		{
+			if (!Keys.ContainsKey(key))
+				Keys.Add(key, false);
+
+			Keys[key] = !Keys[key];
+		}
+
+		private static bool CheckKey(char key)
+		{
+			if (!Keys.ContainsKey(key))
+				Keys.Add(key, false);
+
+			if (Keys[key]) {
+				Keys[key] = false;
+				return true;
+			}
+
+			return false;
 		}
 	}
 }
