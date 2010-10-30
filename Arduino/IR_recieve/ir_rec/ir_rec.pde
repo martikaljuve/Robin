@@ -1,8 +1,9 @@
 #define DEBUG
 #include <IRremote.h>
+#include <TimedAction.h>
 
-int RECV_PIN_L = 12;
-int RECV_PIN_R = 8;
+int RECV_PIN_L = 2;
+int RECV_PIN_R = 3;
 IRrecv irrecv_left(RECV_PIN_L);
 IRrecv irrecv_right(RECV_PIN_R);
 decode_results results_left;
@@ -14,16 +15,9 @@ void setup()
   Serial.begin(9600);
   irrecv_left.enableIRIn(); // Start the receiver
   irrecv_right.enableIRIn();
+
 }
-/*
-void loop() {
- if (irrecv.decode(&results)) {
- Serial.println(results.value, HEX);
- irrecv.resume(); // Receive the next value
- }
- delay(100);
- }
- */
+
 
 
 // Dumps out the decode_results structure.
@@ -63,23 +57,38 @@ void dump(decode_results *results) {
 
 
 void loop() {
-  if (irrecv_left.decode(&results_left)) {
-    Serial.println("LEFT");
+  
+  bool left = irrecv_left.decode(&results_left);
+  if (left) {
+    results_left.value &= 0b011111111111;
+    Serial.print("LEFT");
     Serial.print("val: ");
-    Serial.println(results_left.value, BIN);
-    Serial.print("bin: ");
-    Serial.println(results_left.bits, BIN);
-    dump(&results_left);
+    Serial.print(results_left.value, BIN);
+   // Serial.print("bin: ");
+    //Serial.print(results_left.bits, BIN);
+    //dump(&results_left);
     irrecv_left.resume(); // Receive the next value
+    irrecv_right.resume();
   }
 
-  if (irrecv_right.decode(&results_right)) {
-    Serial.println("RIGHT");
+
+  bool right = irrecv_right.decode(&results_right);
+  //bool right = false;
+  if (right) {
+    results_right.value &= 0b011111111111;
+    Serial.print("RIGHT");
     Serial.print("val: ");
-    Serial.println(results_right.value, BIN);
-    Serial.print("bin: ");
-    Serial.println(results_right.bits, BIN);
-    dump(&results_right);
+    Serial.print(results_right.value, BIN);
+    //Serial.print("bin: ");
+    //Serial.print(results_right.bits, BIN);
+    //dump(&results_right);
     irrecv_right.resume(); // Receive the next value
+     irrecv_left.resume();
+     
   }
+  
+  if(left || right){
+    Serial.println();
+  }
+ 
 }
