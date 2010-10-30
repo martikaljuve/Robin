@@ -1,95 +1,168 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics;
-using System.Threading;
+using System.Text;
 using Robin.Arduino;
 using Robin.VideoProcessor;
 using Stateless;
-using Timer = System.Timers.Timer;
+using System.Timers;
 
 namespace Robin.RetroEncabulator
 {
 	[Export(typeof(IProcessor))]
 	public class Processor : IProcessor
 	{
-		private readonly StateMachine<State, Trigger> _stateMachine;
-		private readonly Timer _timer;
+		private readonly StateMachine<State, Trigger> stateMachine;
+		private readonly Timer timer;
 		
-		private VisionData _visionData = new VisionData();
-
 		public Processor()
 		{
-			_timer = new Timer();
+			timer = new Timer();
 
-			_stateMachine = new StateMachine<State, Trigger>(State.LookingForBall);
+			stateMachine = new StateMachine<State, Trigger>(State.LookingForBall);
 
-			_stateMachine.Configure(State.LookingForBall)
-				.Permit(Trigger.BallFound, State.ClosingInOnBall)
-				.Permit(Trigger.BallCollected, State.FindingGoal);
+			stateMachine.Configure(State.LookingForBall)
+				.Permit(Trigger.CameraLockedOnBall, State.ClosingInOnBall)
+				.Permit(Trigger.BallCaught, State.FindingGoal);
 
-			_stateMachine.Configure(State.ClosingInOnBall)
-				.Permit(Trigger.BallLost, State.LookingForBall)
-				.Permit(Trigger.BallCollected, State.FindingGoal);
+			stateMachine.Configure(State.ClosingInOnBall)
+				.Permit(Trigger.CameraLostBall, State.LookingForBall)
+				.Permit(Trigger.BallCaught, State.FindingGoal)
+				.Permit(Trigger.Timeout, State.LookingForBall)
+				.OnEntry(() => StartTimer(10000, Trigger.Timeout))
+				.OnExit(StopTimer);
 
-			_stateMachine.Configure(State.FindingGoal)
-				.Permit(Trigger.BallLaunched, State.LookingForBall)
+			stateMachine.Configure(State.FindingGoal)
+				.Permit(Trigger.CoilgunLaunched, State.LookingForBall)
 				.Permit(Trigger.BallLost, State.LookingForBall)
 				.Permit(Trigger.Timeout, State.LookingForBall)
-				.OnEntry(() => ResetTimerTo(5000, LaunchBall))
-				.OnExit(() => _timer.Stop());
+				.OnEntry(() => StartTimer(5000, Trigger.Timeout))
+				.OnExit(StopTimer);
 		}
 
-		private void ResetTimerTo(double milliseconds, Action action)
+		private readonly Dictionary<State, State> sources = new Dictionary<State, State>();
+		public string ToDebugString()
 		{
-			_timer.Stop();
-			_timer.Interval = milliseconds;
-			_timer.Start();
-			_timer.Elapsed += (sender, args) => action();
+			//return stateMachine.ToString();
+			var str = new StringBuilder();
+
+			stateMachine.Configure(State.LookingForBall)
+				.OnEntry(StoreSourceState)
+				.PermitDynamic(Trigger.DebugBack, () => GetSource(State.LookingForBall))
+				.Permit(Trigger.DebugForward, State.ClosingInOnBall)
+				.OnEntry(() => { });
+			stateMachine.Configure(State.ClosingInOnBall)
+				.OnEntry(StoreSourceState)
+				.PermitDynamic(Trigger.DebugBack, () => GetSource(State.ClosingInOnBall))
+				.Permit(Trigger.DebugForward, State.FindingGoal)
+				.OnEntry(() => { });
+			stateMachine.Configure(State.FindingGoal)
+				.OnEntry(StoreSourceState)
+				.PermitDynamic(Trigger.DebugBack, () => GetSource(State.FindingGoal))
+				.Permit(Trigger.DebugForward, State.LookingForBall)
+				.OnEntry(() => { });
+
+			var allStates = Enum.GetValues(typeof(State));
+			var allTriggers = Enum.GetValues(typeof(Trigger));
+			for (int i = 0; i < allStates.Length; i++)
+			{
+				var state = stateMachine.State;
+
+				foreach (Trigger trigger in allTriggers)
+				{
+					if (trigger == Trigger.DebugBack || trigger == Trigger.DebugForward) continue;
+					if (!stateMachine.CanFire(trigger)) continue;
+
+					stateMachine.Fire(trigger);
+					str.AppendFormat("[{0}]-{1}->[{2}]", state, trigger, stateMachine.State);
+					str.AppendLine();
+					stateMachine.Fire(Trigger.DebugBack);
+				}
+
+				stateMachine.Fire(Trigger.DebugForward);
+			}
+			return str.ToString();
+		}
+
+		private void StoreSourceState(StateMachine<State, Trigger>.Transition transition)
+		{
+			if (!sources.ContainsKey(transition.Destination))
+				sources.Add(transition.Destination, transition.Source);
+			else
+				sources[transition.Destination] = transition.Source;
+		}
+
+		private State GetSource(State destination)
+		{
+			var source = sources[destination];
+			return source;
+		}
+
+		private void StartTimer(double milliseconds, Action action)
+		{
+			timer.Stop();
+			timer.Interval = milliseconds;
+			timer.Start();
+			timer.Elapsed += (sender, args) => action();
+		}
+
+		private void StartTimer(double milliseconds, Trigger trigger)
+		{
+			StartTimer(milliseconds, () => stateMachine.Fire(trigger));
+		}
+
+		private void StopTimer()
+		{
+			timer.Stop();
 		}
 
 		public ArduinoCommander Commander { get; set; }
 
-		public void Update(ArduinoSensorData data)
+		public void Update()
 		{
-			switch (_stateMachine.State)
+			switch (stateMachine.State)
 			{
 				case State.LookingForBall:
-					LookingForBall(data);
+					LookingForBall();
 					break;
 				case State.ClosingInOnBall:
-					ClosingInOnBall(data);
+					ClosingInOnBall();
 					break;
 				case State.FindingGoal:
-					FindingGoal(data, _visionData);
+					FindingGoal();
 					break;
 			}
 
 			// HACK: Testime
-			Thread.Sleep(100);
+			System.Threading.Thread.Sleep(100);
 		}
 
-		private void LookingForBall(ArduinoSensorData data)
+		private void LookingForBall()
 		{
-			if (data.BallInDribbler)
-				_stateMachine.Fire(Trigger.BallCollected);
+			if (ArduinoData.BallInDribbler)
+				stateMachine.Fire(Trigger.BallCaught);
 		}
 
-		private void ClosingInOnBall(ArduinoSensorData data)
+		private void ClosingInOnBall()
 		{
-			if (data.BallInDribbler)
-				_stateMachine.Fire(Trigger.BallCollected);
+			if (ArduinoData.BallInDribbler)
+				stateMachine.Fire(Trigger.BallCaught);
 		}
 
-		private void FindingGoal(ArduinoSensorData arduinoData, VisionData visionData)
+		private void FindingGoal()
 		{
-			if (arduinoData.GyroDirection == 0 && visionData.OpponentGoalInFront)
+			if (ArduinoData.GyroDirection == 0 && VisionData.OpponentGoalInFront)
 				Commander.FireCoilgun();
 		}
 
 		private void LaunchBall()
 		{
 			Commander.FireCoilgun();
-			_stateMachine.Fire(Trigger.BallLaunched);
+			stateMachine.Fire(Trigger.CoilgunLaunched);
 		}
+
+		public VisionData VisionData { get; set; }
+
+		public ArduinoSensorData ArduinoData { get; set; }
 	}
 }

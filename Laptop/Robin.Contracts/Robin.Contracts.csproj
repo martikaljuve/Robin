@@ -48,6 +48,10 @@
       <Project>{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}</Project>
       <Name>Robin.Arduino</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Robin.VideoProcessor\Robin.VideoProcessor.csproj">
+      <Project>{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}</Project>
+      <Name>Robin.VideoProcessor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

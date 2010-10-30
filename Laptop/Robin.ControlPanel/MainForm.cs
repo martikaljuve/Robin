@@ -30,7 +30,8 @@ namespace Robin.ControlPanel
 		private Point startDrag;
 		private Rectangle dragRectangle;
 
-		public static ArduinoSensorData SensorData { get; set; }
+		private static ArduinoSensorData SensorData { get; set; }
+		private static VisionData VisionData { get; set; }
 
 		[Import]
 		public IProcessor Processor { get; set; }
@@ -46,6 +47,9 @@ namespace Robin.ControlPanel
 
 			Processor = new Processor();
 			Processor.Commander = new ArduinoCommander(_arduinoSerial);
+
+			using (var file = File.CreateText("stateMachine.txt"))
+				file.WriteLine(Processor.ToDebugString());
 
 			InitializeUserControls();
 		}
@@ -85,15 +89,14 @@ namespace Robin.ControlPanel
 			_logicWorker.RunWorkerAsync();
 
 			//_feed = new VideoFeed(VideoFeed.Sample2);
-			_feed = new VideoFeed();
-			_feed.FrameProcessed +=FeedOnFrameProcessed;
+			//_feed = new VideoFeed();
+			//_feed.FrameProcessed +=FeedOnFrameProcessed;
+			//Application.ApplicationExit += (o1, args1) => _feed.Stop();
 
 			uxFrame.MouseDown += UxFrameOnMouseDown;
 			uxFrame.MouseUp += UxFrameOnMouseUp;
 			uxFrame.MouseMove += UxFrameOnMouseMove;
 			KeyPress += OnKeyPress;
-
-			Application.ApplicationExit += (o1, args1) => _feed.Stop();
 		}
 
 		private void FeedOnFrameProcessed(object sender, FrameEventArgs frameEventArgs)
@@ -180,7 +183,9 @@ namespace Robin.ControlPanel
 					}
 				}
 
-				Processor.Update(SensorData);
+				Processor.ArduinoData = SensorData;
+				Processor.VisionData = VisionData;
+				Processor.Update();
 				_logicWorker.ReportProgress(0, fps);
 			}
 		}
@@ -191,12 +196,12 @@ namespace Robin.ControlPanel
 			uxFps.Text = fps.ToString();
 		}
 
-		private void uxFilenameBrowse_Click(object sender, EventArgs e)
+		private static void UxFilenameBrowseClick(object sender, EventArgs e)
 		{
 
 		}
 
-		private void uxWebcam_Click(object sender, EventArgs e)
+		private static void UxWebcamClick(object sender, EventArgs e)
 		{
 
 		}

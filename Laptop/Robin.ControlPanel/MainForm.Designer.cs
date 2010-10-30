@@ -197,7 +197,7 @@
 			this.uxFilenameBrowse.TabIndex = 4;
 			this.uxFilenameBrowse.Text = "&Browse";
 			this.uxFilenameBrowse.UseVisualStyleBackColor = true;
-			this.uxFilenameBrowse.Click += new System.EventHandler(this.uxFilenameBrowse_Click);
+			this.uxFilenameBrowse.Click += new System.EventHandler(UxFilenameBrowseClick);
 			// 
 			// uxWebcam
 			// 
@@ -209,7 +209,7 @@
 			this.uxWebcam.TabIndex = 5;
 			this.uxWebcam.Text = "&Webcam";
 			this.uxWebcam.UseVisualStyleBackColor = true;
-			this.uxWebcam.Click += new System.EventHandler(this.uxWebcam_Click);
+			this.uxWebcam.Click += new System.EventHandler(UxWebcamClick);
 			// 
 			// uxFrame
 			// 
