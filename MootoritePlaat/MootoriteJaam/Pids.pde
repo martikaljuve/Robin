@@ -1,7 +1,11 @@
-TimedAction pidAction = TimedAction(20, pidCompute);
+TimedAction pidAction = TimedAction(200, pidCompute);
+
+long timePrevious = 0;
 
 void pids_setup() {
-	
+	//pidLeft.setOutputLimits(-255, 255);
+	//pidRight.setOutputLimits(-255, 255);
+	//pidBack.setOutputLimits(-255, 255);
 }
 
 void pids_loop() {
@@ -9,26 +13,19 @@ void pids_loop() {
 }
 
 void pidCompute() {
-	bool pidDelayOff = millis() > wheels.pidDelayEnd;
+	long now = millis();
+	long dt = now - timePrevious;
+	timePrevious = now;
 
-	if (pidDelayOff) {
-		pidLeft.setInputRpm(magnetLeft.average);
-		pidRight.setInputRpm(magnetRight.average);
-		pidBack.setInputRpm(magnetBack.average);
-	}
-	else {
-		pidLeft.setInput(pidLeft.output);
-		pidRight.setInput(pidRight.output);
-		pidBack.setInput(pidBack.output);
-	}
+	pidLeft.setInput(magnetLeft.average);
+	pidRight.setInput(magnetRight.average);
+	pidBack.setInput(magnetBack.average);
 
-	pidLeft.compute();
-	pidRight.compute();
-	pidBack.compute();
+	pidLeft.compute(dt / 1000.0);
+	pidRight.compute(dt / 1000.0);
+	pidBack.compute(dt / 1000.0);
 	
-	if (pidDelayOff) {
-		motorLeft.setPwm(pidLeft.output);
-		motorRight.setPwm(pidRight.output);
-		motorBack.setPwm(pidBack.output);
-	}
+	motorLeft.setSpeedWithDirection(pidLeft.output);
+	motorRight.setSpeedWithDirection(pidRight.output);
+	motorBack.setSpeedWithDirection(pidBack.output);
 }

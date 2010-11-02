@@ -8,10 +8,7 @@ void pid_debug_setup() {
 
 void pid_debug_loop() {
 	if (millis() > serialTime) {
-		SerialReceive(pidRight);
-		SerialSend(pidRight);
-		//SerialReceive(pidLeft);
-		//SerialSend(pidLeft);
+		SerialSend(pidLeft);
 		serialTime += 500;
 	}
 }

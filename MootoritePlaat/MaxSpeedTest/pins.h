@@ -1,3 +1,5 @@
+#pragma once
+
 #define LED 10 // pd2
 
 #define LEFT_PWM 3 //PB3 
@@ -18,8 +20,8 @@
 #define MOSI 5 // B5
 #define MISO 6 // B6
 
-#define SS_LEFT 30 // A1
-#define SS_RIGHT 31 // A0
+#define SS_LEFT 30 // A1/CS_L
+#define SS_RIGHT 31 // A0/CS_R
 #define SS_BACK 0 // B0
 #define SS_FRONT 1 // B1
 #define SS_GYRO 2 // B2

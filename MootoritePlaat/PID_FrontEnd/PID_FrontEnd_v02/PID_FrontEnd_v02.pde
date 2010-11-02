@@ -27,9 +27,9 @@ import controlP5.*;
 int windowWidth = 900;      // set the size of the 
 int windowHeight = 600;     // form
 
-float InScaleMin = 0;       // set the Y-Axis Min
-float InScaleMax = 255;    // and Max for both
-float OutScaleMin = 0;      // the top and 
+float InScaleMin = -500;       // set the Y-Axis Min
+float InScaleMax = 500;    // and Max for both
+float OutScaleMin = -255;      // the top and 
 float OutScaleMax = 255;    // bottom trends
 
 
@@ -91,7 +91,7 @@ void setup()
   size(windowWidth , windowHeight);
 
   println(Serial.list());                                           // * Initialize Serial
-  myPort = new Serial(this, Serial.list()[1], 9600);                //   Communication with
+  myPort = new Serial(this, Serial.list()[2], 9600);                //   Communication with
   myPort.bufferUntil(10);                                           //   the Arduino
 
   controlP5 = new ControlP5(this);                                  // * Initialize the various

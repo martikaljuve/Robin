@@ -1,19 +1,26 @@
 #pragma once
 
-#include <PID_Beta6.h>
-
 class Pid {
+	double errorPrevious;
+	double integral;
+	int inputMin;
+	int inputMax;
+	int outputMin;
+	int outputMax;
 public:
-	PID pid;
-	double input;
-	double output;
-	double setpoint;
-	
-	Pid();
+	int input;
+	int output;
+	int setpoint;
+
+	double kp;
+	double ki;
+	double kd;
+
 	Pid(double p, double i, double d);
 	
-	void setInput(double newInput);	
-	void setInputRpm(double newRpm);
-	void setSetpoint(double newSetpoint);
-	double compute();
+	void setInputLimits(int min, int max);
+	void setOutputLimits(int min, int max);
+	void setInput(int newInput);
+	void setSetpoint(int newSetpoint);
+	void compute(double dt);
 };

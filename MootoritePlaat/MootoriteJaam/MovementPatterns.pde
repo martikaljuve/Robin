@@ -16,7 +16,7 @@ void frag1ball(){
 	delay(10);
 	dribbler.stop();
 	delay(10);
-	dribbler.setSpeed(255); //We start turning the tribbler in the opposite direction
+	dribbler.setSpeedWithDirection(255); //We start turning the tribbler in the opposite direction
 
 	delay(2000); 
 	wheels.moveAndTurn(350, 255, 0);
@@ -32,14 +32,14 @@ void frag2ball(){
 
 	wheels.moveAndTurn(285, 255, 0); //Try to move left. Because of the inbalances, 285 was used instead
 	delay(1130); //Wait some time
-	//setSpeed(0,0,-170); //Because out moving to 285 (~270) degrees was fucked up, we need to balance things out
+	//setSpeedWithDirection(0,0,-170); //Because out moving to 285 (~270) degrees was fucked up, we need to balance things out
 	//delay(240); //For 250 ms
 	wheels.stop(); //Stop everything, robot is in front of the gate
 	delay(200); //Wait a bit
 
 	dribbler.stop();
 	delay(10); 
-	dribbler.setSpeed(255);
+	dribbler.setSpeedWithDirection(255);
 
 	wheels.moveAndTurn(0, 255, 0); //We move in a straight line towards the enemy gate. This works suprisingly well.
 
@@ -69,9 +69,9 @@ void test_motor_speeds(){
 			change_dir = true;
 		}
 
-		motorLeft.setSpeed(i);
-		motorRight.setSpeed(i);
-		motorBack.setSpeed(i);    
+		motorLeft.setSpeedWithDirection(i);
+		motorRight.setSpeedWithDirection(i);
+		motorBack.setSpeedWithDirection(i);    
 
 		//If we nee to change direction      
 		if(change_dir){

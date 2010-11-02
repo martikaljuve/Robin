@@ -9,9 +9,9 @@
 #define CCW 1
 #define CW 0
 
-Pid pidLeft = Pid(0.8, 0.4, 0.2);
-Pid pidRight = Pid(0.8, 0.4, 0.2);
-Pid pidBack = Pid(0.8, 0.4, 0.2);
+Pid pidLeft = Pid(0.5, 0.0, 0.0);
+Pid pidRight = Pid(0.5, 0.0, 0.0);
+Pid pidBack = Pid(0.5, 0.0, 0.0);
 
 Motor motorLeft = Motor(MOTOR_LEFT_PWM, MOTOR_LEFT_DIR);
 Motor motorRight = Motor(MOTOR_RIGHT_PWM, MOTOR_RIGHT_DIR);

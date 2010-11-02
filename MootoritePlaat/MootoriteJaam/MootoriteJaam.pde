@@ -1,6 +1,5 @@
 #include <TimedAction.h>
 #include <MLX90316.h>
-#include <PID_Beta6.h>
 
 #include "ArduinoPins.h"
 #include "Definitions.h"
@@ -16,13 +15,13 @@ void setup() {
 	pids_setup();
 	pid_debug_setup();
 	// END SETUP
-
-	//delay(4000);
 	
-	//wheels.moveAndTurnPid(270, 150, 0);
+	// HACK: Testing is easier with a delay.
+	delay(4000);
 
-	//pidRight.setSetpoint(100);
-	//pidLeft.setSetpoint(100);
+	//wheels.moveAndTurn(270, 150, 0);
+	pidBack.setSetpoint(200);
+	//pidLeft.setSetpoint(200);
 }
 
 unsigned long elapsedTime;

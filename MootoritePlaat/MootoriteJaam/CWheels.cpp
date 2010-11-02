@@ -15,27 +15,22 @@ Wheels::Wheels(Motor& left, Motor& right, Motor& back, Pid& leftPid, Pid& rightP
 void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed) {
 	int left, right, back;
 	
-	moveAndTurn(direction, moveSpeed, turnSpeed, left, right, back);
+	moveAndTurnCalculate(direction, moveSpeed, turnSpeed, left, right, back);
 
-	setSpeeds(left, right, back);
-	//setSpeeds(round(speed_left * moveSpeed), round(speed_right * moveSpeed), round(speed_back * moveSpeed));
+	pidLeft.setSetpoint(left);
+	pidRight.setSetpoint(right);
+	pidBack.setSetpoint(back);
 }
 
-void Wheels::moveAndTurnPid(int direction, int moveSpeed, int turnSpeed) {
+void Wheels::moveAndTurnWithoutPid(int direction, int moveSpeed, int turnSpeed) {
 	int left, right, back;
 	
-	moveAndTurn(direction, moveSpeed, turnSpeed, left, right, back);
+	moveAndTurnCalculate(direction, moveSpeed, turnSpeed, left, right, back);
 
-	setSpeeds(left, right, back);
-
-	pidLeft.setSetpoint(abs(speedLeft));
-	pidRight.setSetpoint(abs(speedRight));
-	pidBack.setSetpoint(abs(back));
-
-	pidDelayEnd = millis() + PID_DELAY;
+	setSpeedsWithoutPid(left, right, back);
 }
 
-void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed, int &left, int &right, int &back) {
+void Wheels::moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, int &left, int &right, int &back) {
 	float radians = degreesToRadians(direction);
 	float vel_x = sin(radians);
 	float vel_y = cos(radians);
@@ -79,32 +74,23 @@ void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed, int &left,
 		}
 	}
 
-	left = speed_left * moveSpeed;
-	right = speed_right * moveSpeed;
-	back = speed_back * moveSpeed;
+	left = speed_left * moveSpeed; //round(speed_left * moveSpeed);
+	right = speed_right * moveSpeed; //round(speed_right * moveSpeed);
+	back = speed_back * moveSpeed; //round(speed_back * moveSpeed));
 }
 
 void Wheels::stop() {
-  setSpeeds(0, 0, 0);
+	pidLeft.setSetpoint(0);
+	pidRight.setSetpoint(0);
+	pidBack.setSetpoint(0);
+
+	setSpeedsWithoutPid(0, 0, 0);
 }
 
-void Wheels::setSpeeds(int left, int right, int back) {
-#ifdef DEBUG
-	Serial.print("L");
-	Serial.print(left);
-	Serial.print(", R");
-	Serial.print(right);
-	Serial.print(", B");
-	Serial.print(back);
-	Serial.println();
-#endif
-	speedLeft = left;
-	speedRight = right;
-	speedBack = back;
-
-	motorLeft.setSpeed(left);
-	motorRight.setSpeed(right);
-	motorBack.setSpeed(back);
+void Wheels::setSpeedsWithoutPid(int left, int right, int back) {
+	motorLeft.setSpeedWithDirection(left);
+	motorRight.setSpeedWithDirection(right);
+	motorBack.setSpeedWithDirection(back);
 }
 
 float Wheels::degreesToRadians(int degrees) {

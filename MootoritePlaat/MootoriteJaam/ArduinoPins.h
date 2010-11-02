@@ -20,9 +20,9 @@
 #define MOSI 5 //PB5
 #define MISO 6 //PB6
 
-#define MAGNET_SS_LEFT 30 //PA1   30
-#define MAGNET_SS_RIGHT 31 //PA0
-#define MAGNET_SS_BACK 0 //PB0
-#define MAGNET_SS_TOP 1 //PB1
+#define MAGNET_SS_LEFT 30 //PA1 "CS_L"
+#define MAGNET_SS_RIGHT 31 //PA0 "CS_R"
+#define MAGNET_SS_BACK 0 //PB0 "CS_U"
+#define MAGNET_SS_TOP 1 //PB1 "CS_B"
 
 #define SS_GYRO 2 //PB2

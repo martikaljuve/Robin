@@ -1,12 +1,10 @@
 #include "WProgram.h"
 #include "CMotor.h"
 
-Motor::Motor() {
+Motor::Motor(byte speedPin, byte directionPin) {
 	minPwm = 0;
 	maxPwm = 255;
-}
 
-Motor::Motor(byte speedPin, byte directionPin) {
 	pwmPin = speedPin;
 	dirPin = directionPin;
 	
@@ -15,8 +13,17 @@ Motor::Motor(byte speedPin, byte directionPin) {
 }
 
 // speed - -255..255
-void Motor::setSpeed(int newSpeed) {
+void Motor::setSpeedWithDirection(int newSpeed) {
+	// HACK: Let's not allow negative speed at the moment.
+	if (newSpeed < 0) {
+		newSpeed = 0;
+		Serial.println("Negative speed not allowed at the moment.");
+	}
+
 	speed = newSpeed;
+
+	if (speed < -255) speed = -255;
+	if (speed > 255) speed = 255;
 
 	setPwm(abs(speed));
 	setDirection(speed >= 0);
