@@ -51,13 +51,17 @@ namespace Robin.VideoProcessor
 
 		private void VideoSourceOnNewFrame(object sender, NewFrameEventArgs eventArgs)
 		{
-			frame = new Image<Bgr, byte>(eventArgs.Frame);
+			frame = VisionExperiments.HoughCircles(eventArgs.Frame);
+
+			var result = frame;
+
+			//frame = new Image<Bgr, byte>(eventArgs.Frame);
 			
 			//var result = VisionExperiments.GetAverageForSubRectangle(frame);
 			//var result = VisionExperiments.FilterByColor(frame);
 			//var result = VisionExperiments.CannyEdges(frame);
 
-			var result = camshift.Track(frame);
+			//var result = camshift.Track(frame);
 
 			// Draw fps
 			result.Draw(framesPerSecond.ToString(), ref VisionExperiments.Font, new Point(frame.Width - 50, 20), new Bgr(Color.YellowGreen));

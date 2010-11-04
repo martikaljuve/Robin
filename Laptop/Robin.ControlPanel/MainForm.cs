@@ -48,8 +48,8 @@ namespace Robin.ControlPanel
 			Processor = new Processor();
 			Processor.Commander = new ArduinoCommander(_arduinoSerial);
 
-			using (var file = File.CreateText("stateMachine.txt"))
-				file.WriteLine(Processor.ToDebugString());
+			//using (var file = File.CreateText("stateMachine.txt"))
+				//file.WriteLine(Processor.ToDebugString());
 
 			InitializeUserControls();
 		}
@@ -88,10 +88,10 @@ namespace Robin.ControlPanel
 			_logicWorker.WorkerReportsProgress = true;
 			_logicWorker.RunWorkerAsync();
 
-			//_feed = new VideoFeed(VideoFeed.Sample2);
+			_feed = new VideoFeed(VideoFeed.Sample2);
 			//_feed = new VideoFeed();
-			//_feed.FrameProcessed +=FeedOnFrameProcessed;
-			//Application.ApplicationExit += (o1, args1) => _feed.Stop();
+			_feed.FrameProcessed +=FeedOnFrameProcessed;
+			Application.ApplicationExit += (o1, args1) => _feed.Stop();
 
 			uxFrame.MouseDown += UxFrameOnMouseDown;
 			uxFrame.MouseUp += UxFrameOnMouseUp;

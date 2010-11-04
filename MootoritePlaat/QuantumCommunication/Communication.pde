@@ -33,7 +33,7 @@ void parseCommand(struct CommandData &cmd) {
 }
 
 void dataReceived(int numBytes) {
-	for(int i = 0; i < 5; i++) {
+	for(int i = 0; i < min(5, numBytes); i++) {
 		byte tmp = Wire.available() ? Wire.receive() : 0;
 		cmdUnion.bytes[i] = tmp;
 	}
