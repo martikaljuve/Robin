@@ -1,21 +1,27 @@
+#include "CMotorBoard.h"
+
 void setup(){
 	Serial.begin(57600);
 	//Serial.begin(9600);
 
 	//stateMachineSetup();
-	gyroSetup();
+	//gyroSetup();
 	//sonarSetup();
 	//sharpIrSetup();
-
-	delay(100);
+	serialReceiverSetup();
+	serialSenderSetup();
+	wireSenderSetup();
 }
 
 void loop(){
 
 	//stateMachineLoop();
-	gyroLoop();
+	//gyroLoop();
 	//sonarLoop();
 	//sharpIrLoop();
-		
+	serialReceiverLoop();
+	serialSenderLoop();
+	wireSenderLoop();
+
 	//delay(100);
 }

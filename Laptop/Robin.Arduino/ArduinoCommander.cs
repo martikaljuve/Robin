@@ -11,34 +11,39 @@ namespace Robin.Arduino
 			_arduino = arduino;
 		}
 
-		public void FireCoilgun()
+		public void FireCoilgun(byte power)
 		{
-			_arduino.Command(ArduinoPrefix.CoilgunFire);
+			_arduino.Command(ArduinoPrefix.CoilgunFire, power);
 		}
 
-		public void FireCoilgunHalf()
-		{
-			_arduino.Command(ArduinoPrefix.CoilgunFireHalf);
-		}
-
-		public void Move(float direction, int speed)
+		public void Move(int direction, int speed)
 		{
 			_arduino.Command(ArduinoPrefix.Move, direction, speed);
 		}
 
-		public void MoveDistance(float direction, int speed, float distance)
+		public void Turn(int speed)
 		{
-			_arduino.Command(ArduinoPrefix.MoveDistance, direction, speed, distance);
+			_arduino.Command(ArduinoPrefix.Turn, speed);
 		}
-
-		public void Turn(float degrees, int speed)
-		{
-			_arduino.Command(ArduinoPrefix.Turn, degrees, speed);
-		}
-
+		
 		public void Stop()
 		{
 			_arduino.Command(ArduinoPrefix.Stop);
+		}
+
+		public void SetDribbler(bool enabled)
+		{
+			_arduino.Command(ArduinoPrefix.SetDribbler, enabled);
+		}
+
+		public void MoveAndTurn(int direction, int moveSpeed, int turnSpeed)
+		{
+			_arduino.Command(ArduinoPrefix.MoveAndTurn, direction, moveSpeed, turnSpeed);
+		}
+
+		public void SetIrChannel(byte channel)
+		{
+			_arduino.Command(ArduinoPrefix.SetIrChannel, channel);
 		}
 	}
 }

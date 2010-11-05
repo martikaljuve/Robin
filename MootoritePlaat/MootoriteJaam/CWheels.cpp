@@ -12,6 +12,16 @@ Wheels::Wheels(Motor& left, Motor& right, Motor& back, Pid& leftPid, Pid& rightP
 	pidBack(backPid) {
 }
 
+void Wheels::move(int direction, int speed) {
+	moveAndTurn(direction, speed, 0);
+}
+
+void Wheels::turn(int speed) {
+	pidLeft.setSetpoint(speed);
+	pidRight.setSetpoint(speed);
+	pidBack.setSetpoint(speed);
+}
+
 void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed) {
 	int left, right, back;
 	

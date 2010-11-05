@@ -1,18 +1,18 @@
+using System;
+
 namespace Robin.Arduino
 {
 	public class ArduinoSensorData
 	{
-		public bool CoilgunCharged { get; set; }
-
 		public bool BallInDribbler { get; set; }
 
 		public bool BeaconIrLeftInView { get; set; }
 
 		public bool BeaconIrRightInView { get; set; }
 
-		public float? BeaconServoDirection { get; set; }
+		public int BeaconServoDirection { get; set; }
 
-		public float? GyroDirection { get; set; }
+		public int GyroDirection { get; set; }
 
 		public bool OpponentBeaconFound
 		{
@@ -21,52 +21,23 @@ namespace Robin.Arduino
 
 		public void UpdateFromSerialData(string data)
 		{
-			var commands = data.Split('\n');
-
-			foreach (var command in commands)
-				ParseCommand(command);
+			if (string.IsNullOrEmpty(data)) return;
+			if (data[0] != 'D') return;
+			
+			ParseMessage(data);
 		}
 
-		private void ParseCommand(string data)
+		private void ParseMessage(string data)
 		{
-			var tokens = data.Split(' ');
-			if (tokens.Length == 0) return;
+			if (data.Length < 6) return;
 
-			string first = null;
-			if (tokens.Length >= 2) first = tokens[1];
+			var firstByte = (byte) data[1];
 
-			//string second;
-			//if (tokens.Length >= 3) second = tokens[2];
-
-			switch (tokens[0])
-			{
-				case ArduinoPrefix.CoilgunChargeStatus:
-					CoilgunCharged = first != "0";
-					break;
-				case ArduinoPrefix.TripSensorStatus:
-					BallInDribbler = first != "0";
-					break;
-				case ArduinoPrefix.GyroDirection:
-					float gyroDirection;
-					if (float.TryParse(first, out gyroDirection))
-						GyroDirection = gyroDirection;
-					else
-						GyroDirection = null;
-					break;
-				case ArduinoPrefix.BeaconIrLeftInView:
-					BeaconIrLeftInView = first != "0";
-					break;
-				case ArduinoPrefix.BeaconIrRightInView:
-					BeaconIrRightInView = first != "0";
-					break;
-				case ArduinoPrefix.BeaconServoDirection:
-					float servoDirection;
-					if (float.TryParse(first, out servoDirection))
-						BeaconServoDirection = servoDirection;
-					else
-						BeaconServoDirection = null;
-					break;
-			}
+			BallInDribbler = (1 & firstByte) == 1;
+			BeaconIrLeftInView = (2 & firstByte) == 2;
+			BeaconIrRightInView = (4 & firstByte) == 4;
+			GyroDirection = BitConverter.ToInt16(new[] { (byte)data[2], (byte)data[3] }, 0);
+			BeaconServoDirection = BitConverter.ToInt16(new[] { (byte)data[4], (byte)data[5] }, 0);
 		}
 	}
 }

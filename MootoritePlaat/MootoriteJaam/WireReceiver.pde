@@ -6,14 +6,14 @@
 CommandData command;
 union CommandUnion cmdUnion;
 
-void communication_setup() {
+void wireReceiverSetup() {
 	setupTemp();
 
 	Wire.begin(1);
 	Wire.onReceive(dataReceived);
 }
 
-void communication_loop() {
+void wireReceiverLoop() {
 
 }
 
@@ -23,17 +23,29 @@ void setupTemp() {
 
 void parseCommand(struct CommandData &cmd) {
 	switch(cmd.command) {
+		case 'S':
+			wheels.stop();
+			break;
+		case 'M':
+			wheels.move(cmd.first, cmd.second);
+			break;
+		case 'T':
+			wheels.turn(cmd.first);
+			break;
+		case 'G':
+			wheels.moveAndTurn(cmd.first, cmd.second, cmd.third);
+			break;
 		case 'D':
-			digitalWrite(LED, HIGH);
+			dribbler.setSpeedWithDirection(255);
 			break;
 		case 'd':
-			digitalWrite(LED, LOW);
+			dribbler.stop();
 			break;
 	}
 }
 
 void dataReceived(int numBytes) {
-	for(int i = 0; i < min(5, numBytes); i++) {
+	for(int i = 0; i < min(6, numBytes); i++) {
 		byte tmp = Wire.available() ? Wire.receive() : 0;
 		cmdUnion.bytes[i] = tmp;
 	}

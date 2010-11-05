@@ -151,13 +151,13 @@ namespace Robin.RetroEncabulator
 
 		private void FindingGoal()
 		{
-			if (ArduinoData.GyroDirection == 0 && VisionData.OpponentGoalInFront)
-				Commander.FireCoilgun();
+			if (ArduinoData.BeaconServoDirection == 0 && VisionData.OpponentGoalInFront)
+				LaunchBall();
 		}
 
 		private void LaunchBall()
 		{
-			Commander.FireCoilgun();
+			Commander.FireCoilgun(50);
 			stateMachine.Fire(Trigger.CoilgunLaunched);
 		}
 

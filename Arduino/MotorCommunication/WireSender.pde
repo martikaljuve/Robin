@@ -5,19 +5,12 @@
 CommandData cmdData;
 union CommandUnion cmdUnion;
 
-void communication_setup() {
+void wireSenderSetup() {
 	Wire.begin();
 }
 
-void communication_loop() {
-	loopTemp();
-}
+void wireSenderLoop() {
 
-void loopTemp() {
-	sendCommand('D');
-	delay(1000);
-	sendCommand('d');
-	delay(1000);
 }
 
 void sendCommand(struct CommandData &cmd, int byteCount) {

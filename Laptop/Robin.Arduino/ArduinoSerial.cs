@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using System.Text;
 
 namespace Robin.Arduino
 {
@@ -80,8 +82,22 @@ namespace Robin.Arduino
 
 		public void Command(string command, params object[] parameters)
 		{
-			var data = string.Join(" ", new[] { command }.Concat(parameters));
-			Command(data);
+			var cmdBytes = Encoding.ASCII.GetBytes(command);
+
+			var byteList = new List<byte>();
+			byteList.AddRange(cmdBytes);
+
+			foreach (var parameter in parameters)
+			{
+				if (parameter.GetType() == typeof(int))
+					byteList.AddRange(BitConverter.GetBytes((int)parameter));
+				else if (parameter.GetType() == typeof(bool))
+					byteList.AddRange(BitConverter.GetBytes((bool)parameter));
+				else if (parameter.GetType() == typeof(byte))
+					byteList.Add((byte)parameter);
+			}
+
+			_port.Write(byteList.ToArray(), 0, byteList.Count);
 		}
 
 		public void Command(string data)

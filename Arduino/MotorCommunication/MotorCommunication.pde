@@ -1,7 +1,7 @@
 void setup() {
-	communication_setup();
+	wireSenderSetup();
 }
 
 void loop() {
-	communication_loop();
+	wireSenderLoop();
 }

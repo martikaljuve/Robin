@@ -15,6 +15,8 @@ class Wheels {
 public:
 
 	Wheels(Motor& left, Motor& right, Motor& back, Pid& leftPid, Pid& rightPid, Pid& backPid);
+	void move(int direction, int speed);
+	void turn(int speed);
 	void moveAndTurn(int direction, int moveSpeed, int turnSpeed);
 	void moveAndTurnWithoutPid(int direction, int moveSpeed, int turnSpeed);
 	void stop();
