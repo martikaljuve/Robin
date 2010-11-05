@@ -8,6 +8,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Image = AForge.Imaging.Image;
+using System.Linq;
 
 namespace Robin.VideoProcessor
 {
@@ -145,7 +146,10 @@ namespace Robin.VideoProcessor
 
 			pictureBox2.Image = c.ToBitmap();*/
 
-			var blueFrame = new Image<Bgr, byte>(source)[0].PyrDown().PyrUp();
+			//var hls = new Image<Hls, byte>(source);
+			//var blueFrame = hls[1].PyrDown().PyrUp();
+
+			var blueFrame = new Image<Bgr, byte>(source)[2].PyrDown().PyrUp();
 			
 			//return blueFrame.Convert<Bgr, byte>();
 
@@ -161,15 +165,23 @@ namespace Robin.VideoProcessor
 			//Func<int, int, int> radiusFunc = (x, y) => (int) Math.Pow(y, 0.55);
 			Func<int, int, int> radiusFunc = (x, y) => (int)(36.9633 - (0.0714 * (480-y)));
 			var circleTransform = new HoughCircleTransformation(radiusFunc);
+			circleTransform.MinIntensityFunc =
+				(x, y) =>
+					{
+						//e^(1.40733703025 + 0.0036315044155 * x)
+						return (int)(2.64636615605 + 0.0474890367351 * y);
+					};
 			circleTransform.ProcessImage(canny.Bitmap);
 			var houghCircleImage = circleTransform.ToBitmap();
 			//circleTransform.MaxIntensity;//0..255
 			//100 / 255
 
-			const int minIntensity = 19;
+			const int minIntensity = 20;
 
-			var circles = circleTransform.GetCirclesByRelativeIntensity((double) minIntensity/circleTransform.MaxIntensity);
-			//var circles = circleTransform.GetMostIntensiveCircles(9);
+			//var circles = circleTransform.GetCirclesByRelativeIntensity((double) minIntensity/circleTransform.MaxIntensity);
+			var circles = circleTransform.GetMostIntensiveCircles(9);
+			circles = circles.Where(x => x.Intensity > (minIntensity / circleTransform.MaxIntensity)).ToArray();
+
 			circleList.AddRange(circles);
 
 			//return new Image<Bgr, byte>(houghCircleImage);
@@ -178,8 +190,30 @@ namespace Robin.VideoProcessor
 			
 			var result = new Image<Gray, byte>(houghCircleImage);
 			//var result = canny;
-			//foreach (var circle in circleList)
-			//	result.Draw(new CircleF(new PointF(circle.X, circle.Y), circle.Radius), new Gray(170), 2);
+			foreach (var circle in circleList)
+			{
+				/*hls.ROI = Rectangle.Empty;
+
+				var left = Math.Max(0, circle.X - circle.Radius);
+				var right = Math.Min(hls.Width, circle.X + circle.Radius);
+				var top = Math.Max(0, circle.Y - circle.Radius);
+				var bottom = Math.Min(hls.Height, circle.Y + circle.Radius);
+				
+				hls.ROI = new Rectangle(
+					left,
+					top,
+					(int) Math.Min(10, (right - left) * 0.66),
+					(int) Math.Min(10, (bottom - top) * 0.66)
+				);
+
+				var avg = hls.GetAverage();
+				if (avg.Lightness < 200) continue;*/
+
+				//var distance = -0.6405 + (81.275 * Math.Log(480 - circle.Y));
+				var distance = Math.Pow(Math.E, 0.0272 + 0.01225 * (480 - circle.Y));
+				result.Draw(new CircleF(new PointF(circle.X, circle.Y), circle.Radius), new Gray(170), 2);
+				result.Draw(distance.ToString("0.00"), ref Font, new Point(circle.X, circle.Y), new Gray(200));
+			}
 
 			return result.Convert<Bgr, byte>();
 		}
