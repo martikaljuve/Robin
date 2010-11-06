@@ -1,16 +1,15 @@
 ﻿using System;
-using Emgu.CV;
-using Emgu.CV.Structure;
+using System.Drawing;
 
 namespace Robin.VideoProcessor
 {
 	public class FrameEventArgs : EventArgs
 	{
-		public FrameEventArgs(Image<Bgr, byte> frame)
+		public FrameEventArgs(Bitmap frame)
 		{
 			Frame = frame;
 		}
 
-		public Image<Bgr, byte> Frame { get; set; }
+		public Bitmap Frame { get; set; }
 	}
 }

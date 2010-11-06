@@ -37,6 +37,9 @@
     <ApplicationIcon>robot.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge.Controls">
+      <HintPath>..\lib\AForge.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="AForge.Video">
       <HintPath>..\lib\AForge.Video.dll</HintPath>
     </Reference>

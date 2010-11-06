@@ -1,4 +1,6 @@
-﻿namespace Robin.ControlPanel
+﻿using System.Windows.Forms;
+
+namespace Robin.ControlPanel
 {
 	partial class MainForm
 	{
@@ -36,11 +38,19 @@
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.uxFps = new System.Windows.Forms.Label();
-			this.uxFrame = new Emgu.CV.UI.ImageBox();
 			this.uxSerialData = new System.Windows.Forms.TextBox();
+			this.uxPlayer = new AForge.Controls.PictureBox();
+			this.uxIrChannel1 = new System.Windows.Forms.RadioButton();
+			this.uxIrChannel3 = new System.Windows.Forms.RadioButton();
+			this.uxIrChannel2 = new System.Windows.Forms.RadioButton();
+			this.uxIrChannel4 = new System.Windows.Forms.RadioButton();
+			this.uxIrChannelLabel = new System.Windows.Forms.Label();
+			this.uxIrChannelNone = new System.Windows.Forms.RadioButton();
+			this.uxIrChannelPanel = new System.Windows.Forms.FlowLayoutPanel();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.uxFrame)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.uxPlayer)).BeginInit();
+			this.uxIrChannelPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -143,16 +153,6 @@
 			this.uxFps.TabIndex = 6;
 			this.uxFps.Text = "fps";
 			// 
-			// uxFrame
-			// 
-			this.uxFrame.BackColor = System.Drawing.Color.Transparent;
-			this.uxFrame.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
-			this.uxFrame.Location = new System.Drawing.Point(12, 95);
-			this.uxFrame.Name = "uxFrame";
-			this.uxFrame.Size = new System.Drawing.Size(640, 480);
-			this.uxFrame.TabIndex = 0;
-			this.uxFrame.TabStop = false;
-			// 
 			// uxSerialData
 			// 
 			this.uxSerialData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -170,14 +170,124 @@
 			this.uxSerialData.TabIndex = 6;
 			this.uxSerialData.WordWrap = false;
 			// 
+			// uxPlayer
+			// 
+			this.uxPlayer.BackColor = System.Drawing.Color.Transparent;
+			this.uxPlayer.Image = null;
+			this.uxPlayer.Location = new System.Drawing.Point(12, 95);
+			this.uxPlayer.Name = "uxPlayer";
+			this.uxPlayer.Size = new System.Drawing.Size(640, 480);
+			this.uxPlayer.TabIndex = 7;
+			this.uxPlayer.TabStop = false;
+			// 
+			// uxIrChannel1
+			// 
+			this.uxIrChannel1.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.uxIrChannel1.Appearance = System.Windows.Forms.Appearance.Button;
+			this.uxIrChannel1.AutoSize = true;
+			this.uxIrChannel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxIrChannel1.Location = new System.Drawing.Point(197, 3);
+			this.uxIrChannel1.Name = "uxIrChannel1";
+			this.uxIrChannel1.Padding = new System.Windows.Forms.Padding(10);
+			this.uxIrChannel1.Size = new System.Drawing.Size(48, 50);
+			this.uxIrChannel1.TabIndex = 8;
+			this.uxIrChannel1.Text = "1";
+			this.uxIrChannel1.UseVisualStyleBackColor = true;
+			// 
+			// uxIrChannel3
+			// 
+			this.uxIrChannel3.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.uxIrChannel3.Appearance = System.Windows.Forms.Appearance.Button;
+			this.uxIrChannel3.AutoSize = true;
+			this.uxIrChannel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxIrChannel3.Location = new System.Drawing.Point(305, 3);
+			this.uxIrChannel3.Name = "uxIrChannel3";
+			this.uxIrChannel3.Padding = new System.Windows.Forms.Padding(10);
+			this.uxIrChannel3.Size = new System.Drawing.Size(48, 50);
+			this.uxIrChannel3.TabIndex = 9;
+			this.uxIrChannel3.Text = "3";
+			this.uxIrChannel3.UseVisualStyleBackColor = true;
+			// 
+			// uxIrChannel2
+			// 
+			this.uxIrChannel2.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.uxIrChannel2.Appearance = System.Windows.Forms.Appearance.Button;
+			this.uxIrChannel2.AutoSize = true;
+			this.uxIrChannel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxIrChannel2.Location = new System.Drawing.Point(251, 3);
+			this.uxIrChannel2.Name = "uxIrChannel2";
+			this.uxIrChannel2.Padding = new System.Windows.Forms.Padding(10);
+			this.uxIrChannel2.Size = new System.Drawing.Size(48, 50);
+			this.uxIrChannel2.TabIndex = 9;
+			this.uxIrChannel2.Text = "2";
+			this.uxIrChannel2.UseVisualStyleBackColor = true;
+			// 
+			// uxIrChannel4
+			// 
+			this.uxIrChannel4.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.uxIrChannel4.Appearance = System.Windows.Forms.Appearance.Button;
+			this.uxIrChannel4.AutoSize = true;
+			this.uxIrChannel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxIrChannel4.Location = new System.Drawing.Point(359, 3);
+			this.uxIrChannel4.Name = "uxIrChannel4";
+			this.uxIrChannel4.Padding = new System.Windows.Forms.Padding(10);
+			this.uxIrChannel4.Size = new System.Drawing.Size(48, 50);
+			this.uxIrChannel4.TabIndex = 10;
+			this.uxIrChannel4.Text = "4";
+			this.uxIrChannel4.UseVisualStyleBackColor = true;
+			// 
+			// uxIrChannelLabel
+			// 
+			this.uxIrChannelLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.uxIrChannelLabel.AutoSize = true;
+			this.uxIrChannelLabel.BackColor = System.Drawing.Color.Transparent;
+			this.uxIrChannelLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxIrChannelLabel.Location = new System.Drawing.Point(44, 18);
+			this.uxIrChannelLabel.Name = "uxIrChannelLabel";
+			this.uxIrChannelLabel.Size = new System.Drawing.Size(93, 20);
+			this.uxIrChannelLabel.TabIndex = 11;
+			this.uxIrChannelLabel.Text = "IR Channel:";
+			// 
+			// uxIrChannelNone
+			// 
+			this.uxIrChannelNone.Appearance = System.Windows.Forms.Appearance.Button;
+			this.uxIrChannelNone.AutoSize = true;
+			this.uxIrChannelNone.Checked = true;
+			this.uxIrChannelNone.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxIrChannelNone.Location = new System.Drawing.Point(143, 3);
+			this.uxIrChannelNone.Name = "uxIrChannelNone";
+			this.uxIrChannelNone.Padding = new System.Windows.Forms.Padding(10);
+			this.uxIrChannelNone.Size = new System.Drawing.Size(48, 50);
+			this.uxIrChannelNone.TabIndex = 12;
+			this.uxIrChannelNone.TabStop = true;
+			this.uxIrChannelNone.Text = "0";
+			this.uxIrChannelNone.UseVisualStyleBackColor = true;
+			// 
+			// uxIrChannelPanel
+			// 
+			this.uxIrChannelPanel.AutoSize = true;
+			this.uxIrChannelPanel.BackColor = System.Drawing.Color.Transparent;
+			this.uxIrChannelPanel.Controls.Add(this.uxIrChannel4);
+			this.uxIrChannelPanel.Controls.Add(this.uxIrChannel3);
+			this.uxIrChannelPanel.Controls.Add(this.uxIrChannel2);
+			this.uxIrChannelPanel.Controls.Add(this.uxIrChannel1);
+			this.uxIrChannelPanel.Controls.Add(this.uxIrChannelNone);
+			this.uxIrChannelPanel.Controls.Add(this.uxIrChannelLabel);
+			this.uxIrChannelPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+			this.uxIrChannelPanel.Location = new System.Drawing.Point(514, 581);
+			this.uxIrChannelPanel.Name = "uxIrChannelPanel";
+			this.uxIrChannelPanel.Size = new System.Drawing.Size(410, 56);
+			this.uxIrChannelPanel.TabIndex = 13;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-			this.ClientSize = new System.Drawing.Size(936, 624);
+			this.ClientSize = new System.Drawing.Size(936, 681);
+			this.Controls.Add(this.uxIrChannelPanel);
+			this.Controls.Add(this.uxPlayer);
 			this.Controls.Add(this.uxSerialData);
-			this.Controls.Add(this.uxFrame);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.DoubleBuffered = true;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -188,7 +298,9 @@
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.uxFrame)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.uxPlayer)).EndInit();
+			this.uxIrChannelPanel.ResumeLayout(false);
+			this.uxIrChannelPanel.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -203,8 +315,15 @@
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label uxFps;
-		private Emgu.CV.UI.ImageBox uxFrame;
 		private System.Windows.Forms.TextBox uxSerialData;
+		private AForge.Controls.PictureBox uxPlayer;
+		private RadioButton uxIrChannel1;
+		private RadioButton uxIrChannel3;
+		private RadioButton uxIrChannel2;
+		private RadioButton uxIrChannel4;
+		private Label uxIrChannelLabel;
+		private RadioButton uxIrChannelNone;
+		private FlowLayoutPanel uxIrChannelPanel;
 	}
 }
 

@@ -4,8 +4,8 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
+using System.Threading;
 using System.Windows.Forms;
-using Emgu.CV.Structure;
 using Robin.Arduino;
 using Robin.ControlPanel.Properties;
 using Robin.RetroEncabulator;
@@ -54,12 +54,12 @@ namespace Robin.ControlPanel
 		{
 			_feed = new VideoFeed(VideoFeed.Sample2);
 			//_feed = new VideoFeed();
-			_feed.FrameProcessed +=FeedOnFrameProcessed;
+			_feed.FrameProcessed += FeedOnFrameProcessed;
 			Application.ApplicationExit += (o1, args1) => _feed.Stop();
-
-			uxFrame.MouseDown += UxFrameOnMouseDown;
-			uxFrame.MouseUp += UxFrameOnMouseUp;
-			uxFrame.MouseMove += UxFrameOnMouseMove;
+			
+			uxPlayer.MouseDown += UxFrameOnMouseDown;
+			uxPlayer.MouseUp += UxFrameOnMouseUp;
+			uxPlayer.MouseMove += UxFrameOnMouseMove;
 			KeyPress += OnKeyPress;
 		}
 
@@ -90,6 +90,8 @@ namespace Robin.ControlPanel
 			uxPortConnect.DataBindings.Add("Enabled", connectCommand, "Enabled");
 			uxPortConnect.Click += (sender, args) => connectCommand.Execute();
 
+			uxIrChannelPanel.DataBindings.Add("Enabled", _arduinoSerial, "IsOpen");
+
 			var ports = SerialPort.GetPortNames();
 			Array.Sort(ports);
 
@@ -114,10 +116,10 @@ namespace Robin.ControlPanel
 		{
 			var frame = frameEventArgs.Frame;
 
-			if (dragging && (dragRectangle.Width != 0 && dragRectangle.Height != 0))
-				frame.Draw(dragRectangle, new Bgr(Color.Red), 2);
+			//if (dragging && (dragRectangle.Width != 0 && dragRectangle.Height != 0))
+			//	frame.Draw(dragRectangle, new Bgr(Color.Red), 2);
 
-			uxFrame.Image = frame;
+			uxPlayer.Image = frame;
 		}
 
 		private void OnKeyPress(object sender, KeyPressEventArgs keyPressEventArgs)
@@ -125,6 +127,9 @@ namespace Robin.ControlPanel
 			if (_feed != null)
 				_feed.ProcessKeyCommand(keyPressEventArgs.KeyChar);
 			VisionExperiments.ProcessKey(keyPressEventArgs.KeyChar);
+
+			if (keyPressEventArgs.KeyChar == 'p')
+				_feed.Restart();
 		}
 
 		private void UxFrameOnMouseDown(object sender, MouseEventArgs args)
@@ -154,7 +159,7 @@ namespace Robin.ControlPanel
 		{
 			if (!dragging) return;
 
-			var end = uxFrame.PointToClient(MousePosition);
+			var end = uxPlayer.PointToClient(MousePosition);
 
 			dragRectangle = Rectangle.FromLTRB(
 				Math.Min(startDrag.X, end.X),

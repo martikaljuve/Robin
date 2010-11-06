@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 
 namespace Robin.Arduino
 {
-	public class ArduinoSerial
+	public class ArduinoSerial : INotifyPropertyChanged
 	{
 		private const int BaudRate = 57600;
 		private readonly SerialPort _port = new SerialPort();
@@ -45,8 +46,10 @@ namespace Robin.Arduino
 
 		public void Close()
 		{
-			if (_port != null && _port.IsOpen)
+			if (_port != null && _port.IsOpen) { 
 				_port.Close();
+				OnPropertyChanged(new PropertyChangedEventArgs("IsOpen"));
+			}
 		}
 
 		private bool TryOpenPort(string name)
@@ -60,6 +63,7 @@ namespace Robin.Arduino
 				_port.ReadTimeout = 2000;
 				_port.WriteTimeout = 2000;
 				_port.Open();
+				OnPropertyChanged(new PropertyChangedEventArgs("IsOpen"));
 				return _port.IsOpen;
 			}
 			catch (Exception)
@@ -111,6 +115,14 @@ namespace Robin.Arduino
 			var temp = DataReceived;
 			if (temp != null)
 				temp(this, eventArgs);
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected void OnPropertyChanged(PropertyChangedEventArgs e)
+		{
+			var handler = PropertyChanged;
+			if (handler != null) handler(this, e);
 		}
 	}
 }

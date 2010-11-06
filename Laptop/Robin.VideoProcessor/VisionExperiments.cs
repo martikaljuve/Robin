@@ -73,6 +73,7 @@ namespace Robin.VideoProcessor
 		private static Gray cannyThreshold = new Gray(150);
 		private static Gray accumulatorThreshold = new Gray(100);
 		private static bool toggleFrame;
+		private static int channel;
 
 		public static Image<Bgr, byte> CannyEdges(Image<Bgr, byte> frame)
 		{
@@ -94,10 +95,6 @@ namespace Robin.VideoProcessor
 				accumulatorThreshold.Intensity -= 10;
 
 			if (CheckKey('t')) toggleFrame = !toggleFrame;
-
-
-			
-
 			
 			result = toggleFrame ? frame[0].ThresholdBinary(new Gray(240), new Gray(360)).Convert<Bgr, byte>() : frame.Copy();
 
@@ -123,29 +120,74 @@ namespace Robin.VideoProcessor
 			
 		}
 
+		public static int Threshold = 300;
+		public static int ThresholdLinking = 500;
+		public static IEnumerable<HoughCircle> Circles;
+		public static Bitmap FindGolfBallsWithHoughAndColorFilter(Bitmap source)
+		{
+			// HACK: Testing
+			if (CheckKey('1'))
+				channel = 1;
+			if (CheckKey('2'))
+				channel = 2;
+			if (CheckKey('3'))
+				channel = 3;
+			if (CheckKey('4'))
+				channel = 4;
+
+			if (CheckKey('u'))
+				Threshold += 100;
+			if (CheckKey('j'))
+				Threshold -= 100;
+
+			if (CheckKey('i'))
+				ThresholdLinking += 100;
+			if (CheckKey('k'))
+				ThresholdLinking -= 100;
+			// HACK: END
+
+			//return source;
+
+			var display = new Image<Bgr, byte>(source);
+			var blue = display[0];//.ThresholdBinary(new Gray(220), new Gray(255));
+
+			// HACK: Testing
+			//return blue.Convert<Bgr, byte>().Bitmap;
+
+			var canny = blue.Canny(new Gray(Threshold), new Gray(ThresholdLinking));
+
+			Func<int, int, int> radiusFunc = (x, y) => (int)(36.9633 - (0.0714 * (480-y)));
+			var houghTransformation = new HoughCircleTransformation(radiusFunc);
+
+			houghTransformation.MinIntensityFunc =
+				(x, y) => { return (int)(2.64636615605 + 0.0474890367351 * y); };
+
+			houghTransformation.ProcessImage(canny.Bitmap);
+
+			Circles = houghTransformation.GetMostIntensiveCircles(9);
+
+			// HACK: Testing));)
+			switch (channel)
+			{
+				default:
+				case 1:
+					return display.Bitmap;
+				case 2:
+					return blue.Convert<Bgr, byte>().Bitmap;
+				case 3:
+					return canny.Convert<Bgr, byte>().Bitmap;
+				case 4:
+					return new Image<Bgr, byte>(houghTransformation.ToBitmap()).Bitmap;
+			}
+			
+			// HACK: Testing
+			//return canny.Convert<Bgr, byte>().Bitmap;
+
+			return display.Bitmap;
+		}
+
 		public static Image<Bgr, byte> HoughCircles(Bitmap source)
 		{
-			/*var colorFilter = new ExtractChannel(RGB.B);
-			var blue = colorFilter.Apply(source);
-
-			var filter = new Threshold(230);
-			filter.ApplyInPlace(blue);
-
-			//return blue;
-
-			var cannyDetector = new CannyEdgeDetector();
-			cannyDetector.ApplyInPlace(blue);*/
-			/*
-			Bitmap b = new Bitmap((int)f.Width, (int)f.Height);
-			Graphics g = Graphics.FromImage(b);
-			g.DrawImage(pictureBox1.Image,
-		   new Rectangle(0, 0, (int)f.Width, (int)f.Height), (float)f.Left, (float)f.Top, (float)f.Width, (float)f.Height, GraphicsUnit.Pixel);
-
-			_i2.ROI = new Rectangle<double>(f.Left, f.Right, f.Top, f.Bottom);
-			c = _i2.Clone();
-
-			pictureBox2.Image = c.ToBitmap();*/
-
 			//var hls = new Image<Hls, byte>(source);
 			//var blueFrame = hls[1].PyrDown().PyrUp();
 
@@ -187,8 +229,9 @@ namespace Robin.VideoProcessor
 			//return new Image<Bgr, byte>(houghCircleImage);
 
 			canny.ROI = Rectangle.Empty;
-			
-			var result = new Image<Gray, byte>(houghCircleImage);
+
+			var result = new Image<Bgr, byte>(source);
+			//var result = new Image<Gray, byte>(houghCircleImage);
 			//var result = canny;
 			foreach (var circle in circleList)
 			{
@@ -211,8 +254,8 @@ namespace Robin.VideoProcessor
 
 				//var distance = -0.6405 + (81.275 * Math.Log(480 - circle.Y));
 				var distance = Math.Pow(Math.E, 0.0272 + 0.01225 * (480 - circle.Y));
-				result.Draw(new CircleF(new PointF(circle.X, circle.Y), circle.Radius), new Gray(170), 2);
-				result.Draw(distance.ToString("0.00"), ref Font, new Point(circle.X, circle.Y), new Gray(200));
+				result.Draw(new CircleF(new PointF(circle.X, circle.Y), circle.Radius), new Bgr(Color.Yellow), 2);
+				result.Draw(distance.ToString("0.00"), ref Font, new Point(circle.X, circle.Y), new Bgr(Color.Orange));
 			}
 
 			return result.Convert<Bgr, byte>();

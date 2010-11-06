@@ -16,30 +16,21 @@ namespace Robin.VideoProcessor
 		public const string Sample3 = @"C:\Temp\Rihma-Proov-01.m4v";
 
 		private readonly Camshift camshift = new Camshift();
-		private Image<Bgr, byte> frame;
-		private readonly VideoCaptureDevice videoSource;
-		private readonly FileVideoSource fileSource;
+		private readonly IVideoSource videoSource;
 
 		private int framesPerSecond;
 
 		public VideoFeed(string filename)
-		{
-			fileSource = new FileVideoSource(filename);
-			fileSource.NewFrame += VideoSourceOnNewFrame;
-			fileSource.Start();
-
-			var timer = new Timer(1000);
-			timer.Elapsed += (sender, args) => framesPerSecond = fileSource.FramesReceived;
-			timer.Start();
-		}
+			: this(new FileVideoSource(filename)) { }
 
 		public VideoFeed(int camIndex = 0)
-		{
-			var videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-			videoSource = new VideoCaptureDevice(videoDevices[camIndex].MonikerString);
+			: this(new VideoCaptureDevice(new FilterInfoCollection(FilterCategory.VideoInputDevice)[camIndex].MonikerString)) { }
 
+		private VideoFeed(IVideoSource source)
+		{
+			videoSource = source;
 			//videoSource.DesiredFrameRate = 60;
-			//videoSource.DesiredFrameSize = new Size(320, 240);
+			//videoSource.DesiredFrameSize = new Size(640, 480);
 
 			videoSource.NewFrame += VideoSourceOnNewFrame;
 			videoSource.Start();
@@ -51,23 +42,35 @@ namespace Robin.VideoProcessor
 
 		private void VideoSourceOnNewFrame(object sender, NewFrameEventArgs eventArgs)
 		{
-			frame = VisionExperiments.HoughCircles(eventArgs.Frame);
+			//frame = VisionExperiments.HoughCircles(eventArgs.Frame);
+			var result = VisionExperiments.FindGolfBallsWithHoughAndColorFilter(eventArgs.Frame);
 
-			var result = frame;
-
-			//frame = new Image<Bgr, byte>(eventArgs.Frame);
-			
 			//var result = VisionExperiments.GetAverageForSubRectangle(frame);
 			//var result = VisionExperiments.FilterByColor(frame);
 			//var result = VisionExperiments.CannyEdges(frame);
-
 			//var result = camshift.Track(frame);
+			
+			using (var g = Graphics.FromImage(result))
+			{
+				var fps = string.Format("FPS: {0}", framesPerSecond);
+				g.DrawString(fps, SystemFonts.DefaultFont, Brushes.YellowGreen, new Point(result.Width - 50, 10));
 
-			// Draw fps
-			result.Draw(framesPerSecond.ToString(), ref VisionExperiments.Font, new Point(frame.Width - 50, 20), new Bgr(Color.YellowGreen));
+				g.FillRectangle(Brushes.White, 5, 5, 100, 50);
+				g.DrawString("Threshold: " + VisionExperiments.Threshold, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 10));
+				g.DrawString("Linking: " + VisionExperiments.ThresholdLinking, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 30));
+
+				if (showCircles)
+					foreach (var circle in VisionExperiments.Circles)
+					{
+						g.DrawEllipse(ellipsePen, circle.X - circle.Radius, circle.Y - circle.Radius, circle.Radius*2, circle.Radius*2);
+						g.DrawString(circle.Intensity.ToString(), SystemFonts.DefaultFont, Brushes.Orange, circle.X, circle.Y);
+					}
+			}
 
 			OnFrameProcessed(new FrameEventArgs(result));
 		}
+
+		private Pen ellipsePen = new Pen(Color.Fuchsia, 2);
 
 		public event EventHandler<FrameEventArgs> FrameProcessed;
 
@@ -80,26 +83,32 @@ namespace Robin.VideoProcessor
 
 		public void SetRegionOfInterest(Rectangle rect)
 		{
-			camshift.CalculateHistogram(frame, rect);
+			//camshift.CalculateHistogram(frame, rect);
 		}
 
+		private static bool showCircles;
 		public void ProcessKeyCommand(char key)
 		{
+			if (key == 'c')
+				showCircles = !showCircles;
+
 			camshift.SendKeyCommand(key);
 		}
 
 		public void Stop()
 		{
-			if (videoSource != null) {
-				videoSource.SignalToStop();
-				videoSource.WaitForStop();
-			}
+			if (videoSource == null) return;
 
-			if (fileSource != null)
-			{
-				fileSource.SignalToStop();
-				fileSource.WaitForStop();
-			}
+			videoSource.SignalToStop();
+			videoSource.WaitForStop();
+		}
+
+		public void Restart()
+		{
+			if (videoSource == null) return;
+			videoSource.SignalToStop();
+			videoSource.WaitForStop();
+			videoSource.Start();
 		}
 	}
 }
