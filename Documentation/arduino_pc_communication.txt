@@ -3,39 +3,74 @@ Kasutame arvatavasti Messenger teeki.
 ------------------------------------
 Arduino -> PC
 ------------------------------------
-c [0,1] - coilgun charge status
-o [0,1] - trip sensor status
-g [float] - gyro direction
-l [0,1] - left beacon ir receiver has contact
-r [0,1] - right beacon ir receiver has contact
-d [float] - servo direction
+[0,1] - trip sensor status
+[int] - gyro direction
+[0,1] - left beacon ir receiver has contact
+[0,1] - right beacon ir receiver has contact
+[int] - servo direction
 
-example:
-c 0
-o 1
-g 20.0
-l 1
-r 0
-d 120.0
+D[byte][int][int] - (first byte), gyro direction, servo direction
+
+first byte:
+  0 0 0 0 0 0 0 0
+            | | |_ trip sensor
+            | |___ left beacon
+            |_____ right beacon
 
 ------------------------------------
 PC -> Arduino
 ------------------------------------
-F - fire coilgun
-H - fire coilgun half
-M [float] [int] - move(direction, speed)
-G [float] [int] [float] - moveDistance(direction, speed, distance)
-T [float] [int] - turn(degrees, speed)
-S - stop()
-D [0,1] - toggleDribbler(toggle)
-Z [float] [int] [float] [float] - moveAndTurnDistance(moveDirection, moveSpeed, distance, endDegrees)
+F [0..100] - fire coilgun (0-100%)
+F 100
 
-example:
-F
-H
-M 100.0 100
-G 359.0 100 500.0
-T 359.0 50
+M [0..359] [-500..500] - move(direction in degrees, speed in RPM)
+M 270 400
+
+T [int] - turn(speed in RPM)
+T 400
+
+S - stop()
 S
+
+D [0,1] - setDribbler(enabled)
 D 1
-Z 100.0 25 1000.0 350.0
+
+G [0..359] [-500..500] [-500..500] - moveAndTurn(moveDirection in degrees, moveSpeed in RPM, turnSpeed in RPM)
+G 270 -300 50
+
+C [1..4] - setIrChannel(channel)
+C 2
+
+
+
+=======================
+Arduino->MootoritePlaat I2C
+=======================
+
+[char] - 1byte
+[int] - 2byte
+
+M[int][byte] - 1byte|2byte|1byte - move(direction 0..360, speed 0..255)
+T[int] - 1byte|2byte - turn(speed -255..255)
+G[int][byte][byte] - 1byte|2byte|1byte|1byte - moveAndTurn(degrees 0..360, moveSpeed 0..255, turnSpeed -255..255)
+
+S - 1byte - stop()
+
+D - 1byte - setDribbler(1)
+d - 1byte - setDribbler(0)
+
+struct CommandData {
+	char command;
+	int first;
+	byte second;
+	int third;
+};
+
+union CommandBytes {
+	byte bytes[6];
+	CommandData data;
+};
+
+======================
+MootoritePlaat->Arduino I2C
+======================

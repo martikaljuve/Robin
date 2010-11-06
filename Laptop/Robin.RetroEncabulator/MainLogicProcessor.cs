@@ -10,12 +10,12 @@ using System.Timers;
 namespace Robin.RetroEncabulator
 {
 	[Export(typeof(IProcessor))]
-	public class Processor : IProcessor
+	public class MainLogicProcessor : IProcessor
 	{
 		private readonly StateMachine<State, Trigger> stateMachine;
 		private readonly Timer timer;
 		
-		public Processor()
+		public MainLogicProcessor()
 		{
 			timer = new Timer();
 

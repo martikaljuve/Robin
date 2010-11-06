@@ -8,7 +8,7 @@ namespace Robin.Arduino
 {
 	public class ArduinoSerial
 	{
-		private const int BaudRate = 56600;
+		private const int BaudRate = 57600;
 		private readonly SerialPort _port = new SerialPort();
 		private string _portName;
 		private readonly int _baudRate;
@@ -68,18 +68,6 @@ namespace Robin.Arduino
 			}
 		}
 
-		public string Query(string command, params  object[] parameters)
-		{
-			var data = string.Join(" ", new[] { command }.Concat(parameters));
-			return Query(data);
-		}
-
-		public string Query(string data)
-		{
-			Write(data);
-			return Read();
-		}
-
 		public void Command(string command, params object[] parameters)
 		{
 			var cmdBytes = Encoding.ASCII.GetBytes(command);
@@ -118,30 +106,11 @@ namespace Robin.Arduino
 			}
 		}
 
-		private string Read()
-		{
-			try
-			{
-				return _port.ReadLine();
-			}
-			catch (TimeoutException)
-			{
-				return null;
-			}
-		}
-
-		public void OnDataReceived(ArduinoDataReceivedEventArgs eventArgs)
+		protected void OnDataReceived(ArduinoDataReceivedEventArgs eventArgs)
 		{
 			var temp = DataReceived;
 			if (temp != null)
 				temp(this, eventArgs);
-		}
-
-		public static ArduinoSerial Open(string portName, int baudRate)
-		{
-			var arduino = new ArduinoSerial(portName, baudRate);
-			arduino.Open();
-			return arduino;
 		}
 	}
 }

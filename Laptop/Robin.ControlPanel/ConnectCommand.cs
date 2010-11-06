@@ -20,9 +20,11 @@ namespace Robin.ControlPanel
 			}
 			else
 			{
-				_serial.Open();
+				_serial.Open(PortName);
 				DisplayName = "Disconnect";
 			}
 		}
+
+		public string PortName { get; set; }
 	}
 }

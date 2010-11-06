@@ -3,30 +3,25 @@ using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.IO.Ports;
 using System.Windows.Forms;
-using AForge.Video;
-using AForge.Video.DirectShow;
-using Emgu.CV;
 using Emgu.CV.Structure;
 using Robin.Arduino;
 using Robin.ControlPanel.Properties;
 using Robin.RetroEncabulator;
 using Robin.VideoProcessor;
-using System.Linq;
 
 namespace Robin.ControlPanel
 {
 	public partial class MainForm : Form
 	{
 		private readonly Stopwatch _timer = new Stopwatch();
-		private readonly BackgroundWorker _logicWorker = new BackgroundWorker();
+		private readonly BackgroundWorker _mainLogicWorker = new BackgroundWorker();
 		private readonly ArduinoSerial _arduinoSerial = new ArduinoSerial();
 
 		private VideoFeed _feed;
 
-		private bool dragging = false;
+		private bool dragging;
 		private Point startDrag;
 		private Rectangle dragRectangle;
 
@@ -34,7 +29,7 @@ namespace Robin.ControlPanel
 		private static VisionData VisionData { get; set; }
 
 		[Import]
-		public IProcessor Processor { get; set; }
+		public IProcessor MainLogicProcessor { get; set; }
 
 		static MainForm()
 		{
@@ -45,18 +40,52 @@ namespace Robin.ControlPanel
 		{
 			InitializeComponent();
 
-			Processor = new Processor();
-			Processor.Commander = new ArduinoCommander(_arduinoSerial);
+			InitializeSerialPortControls();
+			InitializeMainLogicControls();
+			InitializeVisionControls();
+
+			_timer.Start();
 
 			//using (var file = File.CreateText("stateMachine.txt"))
-				//file.WriteLine(Processor.ToDebugString());
+			//    file.WriteLine(MainLogicProcessor.ToDebugString());
+		}
+		
+		private void InitializeVisionControls()
+		{
+			_feed = new VideoFeed(VideoFeed.Sample2);
+			//_feed = new VideoFeed();
+			_feed.FrameProcessed +=FeedOnFrameProcessed;
+			Application.ApplicationExit += (o1, args1) => _feed.Stop();
 
-			InitializeUserControls();
+			uxFrame.MouseDown += UxFrameOnMouseDown;
+			uxFrame.MouseUp += UxFrameOnMouseUp;
+			uxFrame.MouseMove += UxFrameOnMouseMove;
+			KeyPress += OnKeyPress;
 		}
 
-		private void InitializeUserControls()
+		private void InitializeMainLogicControls()
 		{
-			var connectCommand = new ConnectCommand(new ArduinoSerial());
+			MainLogicProcessor = new MainLogicProcessor();
+			MainLogicProcessor.Commander = new ArduinoCommander(_arduinoSerial);
+
+			_mainLogicWorker.DoWork += MainLogicWorkerOnDoWork;
+			_mainLogicWorker.ProgressChanged += MainLogicWorkerOnProgressChanged;
+			_mainLogicWorker.WorkerReportsProgress = true;
+			_mainLogicWorker.RunWorkerAsync();
+		}
+
+		private void InitializeSerialPortControls()
+		{
+			_arduinoSerial.DataReceived +=
+				(o, args) =>
+				{
+					var data = ArduinoSensorData.FromSerialData(args.Data);
+					Action appendAction = () => uxSerialData.AppendText(data + Environment.NewLine);
+					uxSerialData.Invoke(appendAction);
+					SensorData.UpdateFromSerialData(args.Data);
+				};
+
+			var connectCommand = new ConnectCommand(_arduinoSerial);
 			uxPortConnect.DataBindings.Add("Text", connectCommand, "DisplayName");
 			uxPortConnect.DataBindings.Add("Enabled", connectCommand, "Enabled");
 			uxPortConnect.Click += (sender, args) => connectCommand.Execute();
@@ -68,35 +97,17 @@ namespace Robin.ControlPanel
 			foreach (var portName in ports)
 				uxPorts.Items.Add(portName);
 
-			uxPorts.Items.Add(Settings.Default.ArduinoSerialPort);
-			uxPorts.SelectedText = Settings.Default.ArduinoSerialPort;
-
 			uxPorts.SelectedIndexChanged +=
 				(o, eventArgs) =>
-				{
-					connectCommand.Enabled = (uxPorts.SelectedIndex != 0);
-					Settings.Default.ArduinoSerialPort = uxPorts.SelectedText;
-					Settings.Default.Save();
-				};
+					{
+						connectCommand.Enabled = (uxPorts.SelectedIndex != 0);
+						connectCommand.PortName = uxPorts.SelectedItem.ToString();
+						Settings.Default.ArduinoSerialPort = uxPorts.SelectedItem.ToString();
+						Settings.Default.Save();
+					};
 
-			uxPortConnect.Click += UxPortConnectOnClick;
-
-			_timer.Start();
-
-			_logicWorker.DoWork += LogicWorkerOnDoWork;
-			_logicWorker.ProgressChanged += LogicWorkerOnProgressChanged;
-			_logicWorker.WorkerReportsProgress = true;
-			_logicWorker.RunWorkerAsync();
-
-			_feed = new VideoFeed(VideoFeed.Sample2);
-			//_feed = new VideoFeed();
-			_feed.FrameProcessed +=FeedOnFrameProcessed;
-			Application.ApplicationExit += (o1, args1) => _feed.Stop();
-
-			uxFrame.MouseDown += UxFrameOnMouseDown;
-			uxFrame.MouseUp += UxFrameOnMouseUp;
-			uxFrame.MouseMove += UxFrameOnMouseMove;
-			KeyPress += OnKeyPress;
+			if (uxPorts.Items.Contains(Settings.Default.ArduinoSerialPort))
+				uxPorts.SelectedItem = Settings.Default.ArduinoSerialPort;
 		}
 
 		private void FeedOnFrameProcessed(object sender, FrameEventArgs frameEventArgs)
@@ -152,13 +163,7 @@ namespace Robin.ControlPanel
 				Math.Max(startDrag.Y, end.Y));
 		}
 		
-		private void UxPortConnectOnClick(object sender, EventArgs eventArgs)
-		{
-			_arduinoSerial.Open(uxPorts.SelectedText);
-			_arduinoSerial.DataReceived += (o, args) => SensorData.UpdateFromSerialData(args.Data);
-		}
-		
-		private void LogicWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
+		private void MainLogicWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
 		{
 			float fps = 0;
 			long timeElapsed = 0;
@@ -183,27 +188,17 @@ namespace Robin.ControlPanel
 					}
 				}
 
-				Processor.ArduinoData = SensorData;
-				Processor.VisionData = VisionData;
-				Processor.Update();
-				_logicWorker.ReportProgress(0, fps);
+				MainLogicProcessor.ArduinoData = SensorData;
+				MainLogicProcessor.VisionData = VisionData;
+				MainLogicProcessor.Update();
+				_mainLogicWorker.ReportProgress(0, fps);
 			}
 		}
 
-		private void LogicWorkerOnProgressChanged(object sender, ProgressChangedEventArgs progressChangedEventArgs)
+		private void MainLogicWorkerOnProgressChanged(object sender, ProgressChangedEventArgs progressChangedEventArgs)
 		{
 			var fps = (float)progressChangedEventArgs.UserState;
 			uxFps.Text = fps.ToString();
-		}
-
-		private static void UxFilenameBrowseClick(object sender, EventArgs e)
-		{
-
-		}
-
-		private static void UxWebcamClick(object sender, EventArgs e)
-		{
-
 		}
 	}
 }

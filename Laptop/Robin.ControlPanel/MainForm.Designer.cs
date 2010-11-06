@@ -36,15 +36,10 @@
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.uxFps = new System.Windows.Forms.Label();
-			this.uxFilenameLabel = new System.Windows.Forms.Label();
-			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.uxFilename = new System.Windows.Forms.TextBox();
-			this.uxFilenameBrowse = new System.Windows.Forms.Button();
-			this.uxWebcam = new System.Windows.Forms.Button();
 			this.uxFrame = new Emgu.CV.UI.ImageBox();
+			this.uxSerialData = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.uxFrame)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -74,7 +69,7 @@
 			this.label2.Margin = new System.Windows.Forms.Padding(0);
 			this.label2.Name = "label2";
 			this.label2.Padding = new System.Windows.Forms.Padding(5);
-			this.label2.Size = new System.Drawing.Size(567, 27);
+			this.label2.Size = new System.Drawing.Size(936, 27);
 			this.label2.TabIndex = 2;
 			this.label2.Text = "Control Panel";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -84,7 +79,7 @@
 			this.uxPorts.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.uxPorts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.uxPorts.FormattingEnabled = true;
-			this.uxPorts.Location = new System.Drawing.Point(380, 20);
+			this.uxPorts.Location = new System.Drawing.Point(749, 20);
 			this.uxPorts.Name = "uxPorts";
 			this.uxPorts.Size = new System.Drawing.Size(121, 21);
 			this.uxPorts.TabIndex = 2;
@@ -93,7 +88,7 @@
 			// 
 			this.uxPortConnect.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.uxPortConnect.AutoSize = true;
-			this.uxPortConnect.Location = new System.Drawing.Point(507, 19);
+			this.uxPortConnect.Location = new System.Drawing.Point(876, 19);
 			this.uxPortConnect.Name = "uxPortConnect";
 			this.uxPortConnect.Size = new System.Drawing.Size(57, 23);
 			this.uxPortConnect.TabIndex = 3;
@@ -134,7 +129,7 @@
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(567, 89);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(936, 89);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
 			// uxFps
@@ -148,88 +143,40 @@
 			this.uxFps.TabIndex = 6;
 			this.uxFps.Text = "fps";
 			// 
-			// uxFilenameLabel
-			// 
-			this.uxFilenameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.uxFilenameLabel.AutoSize = true;
-			this.uxFilenameLabel.Location = new System.Drawing.Point(3, 8);
-			this.uxFilenameLabel.Name = "uxFilenameLabel";
-			this.uxFilenameLabel.Size = new System.Drawing.Size(26, 13);
-			this.uxFilenameLabel.TabIndex = 3;
-			this.uxFilenameLabel.Text = "File:";
-			// 
-			// tableLayoutPanel2
-			// 
-			this.tableLayoutPanel2.AutoSize = true;
-			this.tableLayoutPanel2.ColumnCount = 4;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel2.Controls.Add(this.uxFilename, 1, 0);
-			this.tableLayoutPanel2.Controls.Add(this.uxFilenameLabel, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.uxFilenameBrowse, 2, 0);
-			this.tableLayoutPanel2.Controls.Add(this.uxWebcam, 3, 0);
-			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 2;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(422, 375);
-			this.tableLayoutPanel2.TabIndex = 1;
-			// 
-			// uxFilename
-			// 
-			this.uxFilename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.uxFilename.Location = new System.Drawing.Point(35, 4);
-			this.uxFilename.Name = "uxFilename";
-			this.uxFilename.Size = new System.Drawing.Size(260, 20);
-			this.uxFilename.TabIndex = 2;
-			// 
-			// uxFilenameBrowse
-			// 
-			this.uxFilenameBrowse.AutoSize = true;
-			this.uxFilenameBrowse.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.uxFilenameBrowse.Location = new System.Drawing.Point(301, 3);
-			this.uxFilenameBrowse.Name = "uxFilenameBrowse";
-			this.uxFilenameBrowse.Size = new System.Drawing.Size(52, 23);
-			this.uxFilenameBrowse.TabIndex = 4;
-			this.uxFilenameBrowse.Text = "&Browse";
-			this.uxFilenameBrowse.UseVisualStyleBackColor = true;
-			this.uxFilenameBrowse.Click += new System.EventHandler(UxFilenameBrowseClick);
-			// 
-			// uxWebcam
-			// 
-			this.uxWebcam.AutoSize = true;
-			this.uxWebcam.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.uxWebcam.Location = new System.Drawing.Point(359, 3);
-			this.uxWebcam.Name = "uxWebcam";
-			this.uxWebcam.Size = new System.Drawing.Size(60, 23);
-			this.uxWebcam.TabIndex = 5;
-			this.uxWebcam.Text = "&Webcam";
-			this.uxWebcam.UseVisualStyleBackColor = true;
-			this.uxWebcam.Click += new System.EventHandler(UxWebcamClick);
-			// 
 			// uxFrame
 			// 
-			this.uxFrame.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
 			this.uxFrame.BackColor = System.Drawing.Color.Transparent;
 			this.uxFrame.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.Minimum;
 			this.uxFrame.Location = new System.Drawing.Point(12, 95);
 			this.uxFrame.Name = "uxFrame";
-			this.uxFrame.Size = new System.Drawing.Size(543, 449);
+			this.uxFrame.Size = new System.Drawing.Size(640, 480);
 			this.uxFrame.TabIndex = 0;
 			this.uxFrame.TabStop = false;
+			// 
+			// uxSerialData
+			// 
+			this.uxSerialData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.uxSerialData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.uxSerialData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.uxSerialData.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxSerialData.ForeColor = System.Drawing.Color.White;
+			this.uxSerialData.Location = new System.Drawing.Point(658, 95);
+			this.uxSerialData.Multiline = true;
+			this.uxSerialData.Name = "uxSerialData";
+			this.uxSerialData.ReadOnly = true;
+			this.uxSerialData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.uxSerialData.Size = new System.Drawing.Size(266, 480);
+			this.uxSerialData.TabIndex = 6;
+			this.uxSerialData.WordWrap = false;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-			this.ClientSize = new System.Drawing.Size(567, 556);
+			this.ClientSize = new System.Drawing.Size(936, 624);
+			this.Controls.Add(this.uxSerialData);
 			this.Controls.Add(this.uxFrame);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.DoubleBuffered = true;
@@ -241,8 +188,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			this.tableLayoutPanel2.ResumeLayout(false);
-			this.tableLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.uxFrame)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -258,12 +203,8 @@
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label uxFps;
-		private System.Windows.Forms.Label uxFilenameLabel;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-		private System.Windows.Forms.TextBox uxFilename;
-		private System.Windows.Forms.Button uxFilenameBrowse;
-		private System.Windows.Forms.Button uxWebcam;
 		private Emgu.CV.UI.ImageBox uxFrame;
+		private System.Windows.Forms.TextBox uxSerialData;
 	}
 }
 

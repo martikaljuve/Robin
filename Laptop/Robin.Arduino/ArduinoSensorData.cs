@@ -23,21 +23,38 @@ namespace Robin.Arduino
 		{
 			if (string.IsNullOrEmpty(data)) return;
 			if (data[0] != 'D') return;
-			
-			ParseMessage(data);
+
+			UpdateFromSerialData(this, data);
 		}
 
-		private void ParseMessage(string data)
+		private static void UpdateFromSerialData(ArduinoSensorData sensorData, string data)
 		{
 			if (data.Length < 6) return;
 
 			var firstByte = (byte) data[1];
 
-			BallInDribbler = (1 & firstByte) == 1;
-			BeaconIrLeftInView = (2 & firstByte) == 2;
-			BeaconIrRightInView = (4 & firstByte) == 4;
-			GyroDirection = BitConverter.ToInt16(new[] { (byte)data[2], (byte)data[3] }, 0);
-			BeaconServoDirection = BitConverter.ToInt16(new[] { (byte)data[4], (byte)data[5] }, 0);
+			sensorData.BallInDribbler = (1 & firstByte) == 1;
+			sensorData.BeaconIrLeftInView = (2 & firstByte) == 2;
+			sensorData.BeaconIrRightInView = (4 & firstByte) == 4;
+			sensorData.GyroDirection = BitConverter.ToInt16(new[] { (byte)data[2], (byte)data[3] }, 0);
+			sensorData.BeaconServoDirection = BitConverter.ToInt16(new[] { (byte)data[4], (byte)data[5] }, 0);
+		}
+
+		public static ArduinoSensorData FromSerialData(string data)
+		{
+			var sensorData = new ArduinoSensorData();
+			sensorData.UpdateFromSerialData(data);
+			return sensorData;
+		}
+
+		public override string ToString()
+		{
+			return string.Format("Drb:{0}, IrL:{1}, IrR:{2}, Srv:{3}, Gyr:{4}",
+				BallInDribbler,
+				BeaconIrLeftInView,
+				BeaconIrRightInView,
+				BeaconServoDirection,
+				GyroDirection);
 		}
 	}
 }
