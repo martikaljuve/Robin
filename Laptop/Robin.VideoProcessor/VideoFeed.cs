@@ -45,19 +45,16 @@ namespace Robin.VideoProcessor
 
 		private void VideoSourceOnNewFrame(object sender, NewFrameEventArgs eventArgs)
 		{
-			//frame = VisionExperiments.HoughCircles(eventArgs.Frame);
-			var result = VisionExperiments.FindGolfBallsWithHoughAndColorFilter(eventArgs.Frame);
+			var result = VisionExperiments.FindCirclesAndLinesWithHough(eventArgs.Frame);
 
 			//var result = VisionExperiments.GetAverageForSubRectangle(frame);
-			//var result = VisionExperiments.FilterByColor(frame);
-			//var result = VisionExperiments.CannyEdges(frame);
 			//var result = camshift.Track(frame);
 			
 			using (var g = Graphics.FromImage(result))
 			{
 				g.FillRectangle(Brushes.White, 5, 5, 100, 50);
-				g.DrawString("Threshold: " + VisionExperiments.Threshold, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 10));
-				g.DrawString("Linking: " + VisionExperiments.ThresholdLinking, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 30));
+				g.DrawString("Threshold: " + HoughTransform.CannyThreshold, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 10));
+				g.DrawString("Linking: " + HoughTransform.CannyThresholdLinking, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 30));
 
 				if (showCircles)
 					foreach (var circle in VisionExperiments.Circles)
