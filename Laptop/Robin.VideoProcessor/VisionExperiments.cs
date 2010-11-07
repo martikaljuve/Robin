@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using AForge.Imaging;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using Image = System.Drawing.Image;
+using System.Linq;
 
 namespace Robin.VideoProcessor
 {
@@ -47,34 +50,39 @@ namespace Robin.VideoProcessor
 
 			return fr.Convert<Bgr, byte>();
 		}
-
-		public static Image<Bgr, byte> FilterByColor(Image<Bgr, byte> frame)
-		{
-			var hls = frame.Convert<Hls, byte>();
-			var result = hls.InRange(new Hls(0.0, 200.0, 0.0), new Hls(360.0, 360.0, 360.0));
-
-			return result.Convert<Bgr, byte>();
-		}
-
+		
 		private static int channel;
-		public static int Threshold = 100;
-		public static int ThresholdLinking = 100;
 		public static IEnumerable<HoughCircle> Circles;
 		public static IEnumerable<LineSegment2D> Lines;
+		private static readonly Image<Gray, byte> RobotMask = new Image<Gray, byte>(@"Resources\RobotMask.bmp");
 
-		public static Bitmap FindGolfBallsWithHoughAndColorFilter(Bitmap source)
+		public static Bitmap FindCirclesAndLinesWithHough(Bitmap source)
 		{
-			//return source;
 			var display = new Image<Bgr, byte>(source);
-			var blue = display.Convert<Gray, byte>().PyrDown().Dilate(2).Erode(2).PyrUp();//.ThresholdBinary(new Gray(220), new Gray(255));
-			//var blue = display[0];//.ThresholdBinary(new Gray(220), new Gray(255));
-			//var blue = display.PyrDown().Dilate(1).Erode(1).InRange(new Bgr(100, 100, 100), new Bgr(360, 360, 360)).PyrUp();//.ThresholdBinary(new Gray(220), new Gray(255));
 
+			var blue = display[0]
+				.PyrDown()
+				.Dilate(2)
+				.Erode(2)
+				.ThresholdBinary(new Gray(130), new Gray(500))
+				.PyrUp();
+			
 			var canny = HoughTransform.GetCanny(blue);
-			Circles = HoughTransform.GetCircles(canny.Bitmap);
-			Lines = HoughTransform.GetLines(canny);
+			canny.SetValue(new Gray(0), RobotMask);
 
-			// HACK: Testing));)
+			var lines = HoughTransform.GetLines(canny);
+			//Lines = lines;
+			Lines = HoughTransform.FilterLines(lines);
+			Circles = HoughTransform.GetCircles(canny.Bitmap);
+
+			//var points = EdgeFinder.GetTopArea(blue, lines);
+			//canny.FillConvexPoly(points.ToArray(), new Gray(155));
+
+			//var contours = EdgeFinder.GetContours(canny);
+			//foreach (var contour in contours)
+			//	canny.FillConvexPoly(contour.ToArray(), new Gray(150));
+
+			// HACK: Testing)
 			switch (channel)
 			{
 				default:
@@ -86,6 +94,8 @@ namespace Robin.VideoProcessor
 					return canny.Convert<Bgr, byte>().Bitmap;
 				case 4:
 					return new Image<Bgr, byte>(HoughTransform.CircleTransformation.ToBitmap()).Bitmap;
+				case 5:
+					return display.CopyBlank().Bitmap;
 			}
 		}
 
@@ -103,14 +113,14 @@ namespace Robin.VideoProcessor
 				channel = 5;
 
 			if (CheckKey('u'))
-				Threshold += 10;
+				HoughTransform.CannyThreshold += 10;
 			if (CheckKey('j'))
-				Threshold -= 10;
+				HoughTransform.CannyThreshold -= 10;
 
 			if (CheckKey('i'))
-				ThresholdLinking += 10;
+				HoughTransform.CannyThresholdLinking += 10;
 			if (CheckKey('k'))
-				ThresholdLinking -= 10;
+				HoughTransform.CannyThresholdLinking -= 10;
 		}
 
 		public static void ProcessKey(char key)
