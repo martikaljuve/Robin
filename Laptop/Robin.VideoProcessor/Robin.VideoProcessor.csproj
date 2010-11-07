@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Camshift.cs" />
     <Compile Include="FrameEventArgs.cs" />
+    <Compile Include="HoughTransform.cs" />
     <Compile Include="VideoFeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VisionData.cs" />

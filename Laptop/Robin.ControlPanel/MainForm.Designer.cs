@@ -37,7 +37,7 @@ namespace Robin.ControlPanel
 			this.uxPortConnect = new System.Windows.Forms.Button();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.uxFps = new System.Windows.Forms.Label();
+			this.uxLogicFps = new System.Windows.Forms.Label();
 			this.uxSerialData = new System.Windows.Forms.TextBox();
 			this.uxPlayer = new AForge.Controls.PictureBox();
 			this.uxIrChannel1 = new System.Windows.Forms.RadioButton();
@@ -47,6 +47,7 @@ namespace Robin.ControlPanel
 			this.uxIrChannelLabel = new System.Windows.Forms.Label();
 			this.uxIrChannelNone = new System.Windows.Forms.RadioButton();
 			this.uxIrChannelPanel = new System.Windows.Forms.FlowLayoutPanel();
+			this.uxVisionFps = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.uxPlayer)).BeginInit();
@@ -71,7 +72,7 @@ namespace Robin.ControlPanel
 			// 
 			this.label2.AutoSize = true;
 			this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-			this.tableLayoutPanel1.SetColumnSpan(this.label2, 5);
+			this.tableLayoutPanel1.SetColumnSpan(this.label2, 6);
 			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
 			this.label2.ForeColor = System.Drawing.Color.White;
@@ -121,18 +122,20 @@ namespace Robin.ControlPanel
 			// 
 			this.tableLayoutPanel1.AutoSize = true;
 			this.tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(89)))), ((int)(((byte)(89)))), ((int)(((byte)(89)))));
-			this.tableLayoutPanel1.ColumnCount = 5;
+			this.tableLayoutPanel1.ColumnCount = 6;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.Controls.Add(this.uxFps, 2, 0);
-			this.tableLayoutPanel1.Controls.Add(this.uxPorts, 3, 0);
+			this.tableLayoutPanel1.Controls.Add(this.uxLogicFps, 2, 0);
+			this.tableLayoutPanel1.Controls.Add(this.uxPorts, 4, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.uxPortConnect, 4, 0);
+			this.tableLayoutPanel1.Controls.Add(this.uxPortConnect, 5, 0);
 			this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.uxVisionFps, 3, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -142,16 +145,16 @@ namespace Robin.ControlPanel
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(668, 89);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
-			// uxFps
+			// uxLogicFps
 			// 
-			this.uxFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.uxFps.AutoSize = true;
-			this.uxFps.BackColor = System.Drawing.Color.Transparent;
-			this.uxFps.Location = new System.Drawing.Point(188, 24);
-			this.uxFps.Name = "uxFps";
-			this.uxFps.Size = new System.Drawing.Size(21, 13);
-			this.uxFps.TabIndex = 6;
-			this.uxFps.Text = "fps";
+			this.uxLogicFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.uxLogicFps.AutoSize = true;
+			this.uxLogicFps.BackColor = System.Drawing.Color.Transparent;
+			this.uxLogicFps.Location = new System.Drawing.Point(188, 24);
+			this.uxLogicFps.Name = "uxLogicFps";
+			this.uxLogicFps.Size = new System.Drawing.Size(21, 13);
+			this.uxLogicFps.TabIndex = 6;
+			this.uxLogicFps.Text = "fps";
 			// 
 			// uxSerialData
 			// 
@@ -280,6 +283,17 @@ namespace Robin.ControlPanel
 			this.uxIrChannelPanel.Size = new System.Drawing.Size(410, 56);
 			this.uxIrChannelPanel.TabIndex = 13;
 			// 
+			// uxVisionFps
+			// 
+			this.uxVisionFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.uxVisionFps.AutoSize = true;
+			this.uxVisionFps.BackColor = System.Drawing.Color.Transparent;
+			this.uxVisionFps.Location = new System.Drawing.Point(215, 24);
+			this.uxVisionFps.Name = "uxVisionFps";
+			this.uxVisionFps.Size = new System.Drawing.Size(21, 13);
+			this.uxVisionFps.TabIndex = 6;
+			this.uxVisionFps.Text = "fps";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -315,7 +329,7 @@ namespace Robin.ControlPanel
 		private System.Windows.Forms.Button uxPortConnect;
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.Label uxFps;
+		private System.Windows.Forms.Label uxLogicFps;
 		private System.Windows.Forms.TextBox uxSerialData;
 		private AForge.Controls.PictureBox uxPlayer;
 		private RadioButton uxIrChannel1;
@@ -325,6 +339,7 @@ namespace Robin.ControlPanel
 		private Label uxIrChannelLabel;
 		private RadioButton uxIrChannelNone;
 		private FlowLayoutPanel uxIrChannelPanel;
+		private Label uxVisionFps;
 	}
 }
 

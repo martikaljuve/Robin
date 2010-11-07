@@ -21,7 +21,7 @@ namespace Robin.VideoProcessor
 		private readonly Camshift camshift = new Camshift();
 		private readonly IVideoSource videoSource;
 
-		private int framesPerSecond;
+		public int FramesPerSecond;
 
 		public VideoFeed(string filename)
 			: this(new FileVideoSource(filename)) { }
@@ -39,7 +39,7 @@ namespace Robin.VideoProcessor
 			videoSource.Start();
 
 			var timer = new Timer(1000);
-			timer.Elapsed += (sender, args) => framesPerSecond = videoSource.FramesReceived;
+			timer.Elapsed += (sender, args) => FramesPerSecond = videoSource.FramesReceived;
 			timer.Start();
 		}
 
@@ -55,9 +55,6 @@ namespace Robin.VideoProcessor
 			
 			using (var g = Graphics.FromImage(result))
 			{
-				var fps = string.Format("FPS: {0}", framesPerSecond);
-				g.DrawString(fps, SystemFonts.DefaultFont, Brushes.YellowGreen, new Point(result.Width - 50, 10));
-
 				g.FillRectangle(Brushes.White, 5, 5, 100, 50);
 				g.DrawString("Threshold: " + VisionExperiments.Threshold, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 10));
 				g.DrawString("Linking: " + VisionExperiments.ThresholdLinking, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 30));
@@ -68,12 +65,17 @@ namespace Robin.VideoProcessor
 						g.DrawEllipse(ellipsePen, circle.X - circle.Radius, circle.Y - circle.Radius, circle.Radius*2, circle.Radius*2);
 						g.DrawString(circle.Intensity.ToString(), SystemFonts.DefaultFont, Brushes.Orange, circle.X, circle.Y);
 					}
+
+				if (showLines)
+					foreach (var line in VisionExperiments.Lines)
+						g.DrawLine(linePen, line.P1, line.P2);
 			}
 
 			OnFrameProcessed(new FrameEventArgs(result));
 		}
 
 		private Pen ellipsePen = new Pen(Color.Fuchsia, 2);
+		private Pen linePen = new Pen(Color.Gold, 2);
 
 		public event EventHandler<FrameEventArgs> FrameProcessed;
 
@@ -90,10 +92,13 @@ namespace Robin.VideoProcessor
 		}
 
 		private static bool showCircles;
+		private static bool showLines;
 		public void ProcessKeyCommand(char key)
 		{
 			if (key == 'c')
 				showCircles = !showCircles;
+			if (key == 'l')
+				showLines = !showLines;
 
 			camshift.SendKeyCommand(key);
 		}

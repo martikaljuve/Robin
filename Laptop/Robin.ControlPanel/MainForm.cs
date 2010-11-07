@@ -52,7 +52,7 @@ namespace Robin.ControlPanel
 		
 		private void InitializeVisionControls()
 		{
-			_feed = new VideoFeed(VideoFeed.Sample4);
+			_feed = new VideoFeed(VideoFeed.Sample6);
 			//_feed = new VideoFeed(VideoFeed.Sample2);
 			//_feed = new VideoFeed();
 			_feed.FrameProcessed += FeedOnFrameProcessed;
@@ -204,7 +204,8 @@ namespace Robin.ControlPanel
 		private void MainLogicWorkerOnProgressChanged(object sender, ProgressChangedEventArgs progressChangedEventArgs)
 		{
 			var fps = (float)progressChangedEventArgs.UserState;
-			uxFps.Text = fps.ToString();
+			uxLogicFps.Text = string.Format("Main Logic: {0}fps", fps);
+			uxVisionFps.Text = string.Format("Vision: {0}fps", _feed.FramesPerSecond);
 		}
 	}
 }
