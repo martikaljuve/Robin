@@ -43,14 +43,14 @@ void increaseSpeed(){
     }
 }
 
-void setup(){
+void servoAndIRsetup(){
     Serial.begin(57600);
-    ir_setup();
+    irSetup();
     servoSetup();
 }
 
-void loop(){
-    ir_loop();
+void servoAndIRloop(){
+    irLoop();
     servoAction.check();
     //outputAction.check();
 }
@@ -68,4 +68,7 @@ void outputIR(){
    Serial.println();
 }
 
+int getServoAngle(){ //Returns the probable servo angle, servo might not be in that position yet
+  return currentAngle;
+}
 
