@@ -14,6 +14,9 @@ namespace Robin.VideoProcessor
 		public const string Sample1 = @"C:\Temp\capture2-16.avi";
 		public const string Sample2 = @"C:\Temp\RobinFieldTest.avi";
 		public const string Sample3 = @"C:\Temp\Rihma-Proov-01.m4v";
+		public const string Sample4 = @"C:\Temp\robin-2010-11-06-01.avi";
+		public const string Sample5 = @"C:\Temp\robin-2010-11-06-02.avi";
+		public const string Sample6 = @"C:\Temp\robin-2010-11-06-03.avi";
 
 		private readonly Camshift camshift = new Camshift();
 		private readonly IVideoSource videoSource;

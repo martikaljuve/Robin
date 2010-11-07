@@ -52,7 +52,8 @@ namespace Robin.ControlPanel
 		
 		private void InitializeVisionControls()
 		{
-			_feed = new VideoFeed(VideoFeed.Sample2);
+			_feed = new VideoFeed(VideoFeed.Sample4);
+			//_feed = new VideoFeed(VideoFeed.Sample2);
 			//_feed = new VideoFeed();
 			_feed.FrameProcessed += FeedOnFrameProcessed;
 			Application.ApplicationExit += (o1, args1) => _feed.Stop();

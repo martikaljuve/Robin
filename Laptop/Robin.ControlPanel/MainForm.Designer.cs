@@ -79,7 +79,7 @@ namespace Robin.ControlPanel
 			this.label2.Margin = new System.Windows.Forms.Padding(0);
 			this.label2.Name = "label2";
 			this.label2.Padding = new System.Windows.Forms.Padding(5);
-			this.label2.Size = new System.Drawing.Size(936, 27);
+			this.label2.Size = new System.Drawing.Size(668, 27);
 			this.label2.TabIndex = 2;
 			this.label2.Text = "Control Panel";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -89,7 +89,7 @@ namespace Robin.ControlPanel
 			this.uxPorts.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.uxPorts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.uxPorts.FormattingEnabled = true;
-			this.uxPorts.Location = new System.Drawing.Point(749, 20);
+			this.uxPorts.Location = new System.Drawing.Point(481, 20);
 			this.uxPorts.Name = "uxPorts";
 			this.uxPorts.Size = new System.Drawing.Size(121, 21);
 			this.uxPorts.TabIndex = 2;
@@ -98,7 +98,7 @@ namespace Robin.ControlPanel
 			// 
 			this.uxPortConnect.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.uxPortConnect.AutoSize = true;
-			this.uxPortConnect.Location = new System.Drawing.Point(876, 19);
+			this.uxPortConnect.Location = new System.Drawing.Point(608, 19);
 			this.uxPortConnect.Name = "uxPortConnect";
 			this.uxPortConnect.Size = new System.Drawing.Size(57, 23);
 			this.uxPortConnect.TabIndex = 3;
@@ -139,7 +139,7 @@ namespace Robin.ControlPanel
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(936, 89);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(668, 89);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
 			// uxFps
@@ -161,12 +161,12 @@ namespace Robin.ControlPanel
 			this.uxSerialData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.uxSerialData.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
 			this.uxSerialData.ForeColor = System.Drawing.Color.White;
-			this.uxSerialData.Location = new System.Drawing.Point(658, 95);
+			this.uxSerialData.Location = new System.Drawing.Point(12, 157);
 			this.uxSerialData.Multiline = true;
 			this.uxSerialData.Name = "uxSerialData";
 			this.uxSerialData.ReadOnly = true;
 			this.uxSerialData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.uxSerialData.Size = new System.Drawing.Size(266, 480);
+			this.uxSerialData.Size = new System.Drawing.Size(640, 74);
 			this.uxSerialData.TabIndex = 6;
 			this.uxSerialData.WordWrap = false;
 			// 
@@ -174,7 +174,7 @@ namespace Robin.ControlPanel
 			// 
 			this.uxPlayer.BackColor = System.Drawing.Color.Transparent;
 			this.uxPlayer.Image = null;
-			this.uxPlayer.Location = new System.Drawing.Point(12, 95);
+			this.uxPlayer.Location = new System.Drawing.Point(12, 237);
 			this.uxPlayer.Name = "uxPlayer";
 			this.uxPlayer.Size = new System.Drawing.Size(640, 480);
 			this.uxPlayer.TabIndex = 7;
@@ -265,6 +265,7 @@ namespace Robin.ControlPanel
 			// 
 			// uxIrChannelPanel
 			// 
+			this.uxIrChannelPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.uxIrChannelPanel.AutoSize = true;
 			this.uxIrChannelPanel.BackColor = System.Drawing.Color.Transparent;
 			this.uxIrChannelPanel.Controls.Add(this.uxIrChannel4);
@@ -274,7 +275,7 @@ namespace Robin.ControlPanel
 			this.uxIrChannelPanel.Controls.Add(this.uxIrChannelNone);
 			this.uxIrChannelPanel.Controls.Add(this.uxIrChannelLabel);
 			this.uxIrChannelPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.uxIrChannelPanel.Location = new System.Drawing.Point(514, 581);
+			this.uxIrChannelPanel.Location = new System.Drawing.Point(242, 95);
 			this.uxIrChannelPanel.Name = "uxIrChannelPanel";
 			this.uxIrChannelPanel.Size = new System.Drawing.Size(410, 56);
 			this.uxIrChannelPanel.TabIndex = 13;
@@ -284,7 +285,7 @@ namespace Robin.ControlPanel
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-			this.ClientSize = new System.Drawing.Size(936, 681);
+			this.ClientSize = new System.Drawing.Size(668, 729);
 			this.Controls.Add(this.uxIrChannelPanel);
 			this.Controls.Add(this.uxPlayer);
 			this.Controls.Add(this.uxSerialData);
