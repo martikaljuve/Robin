@@ -1,0 +1,50 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".h" #>
+#include <avr/pgmspace.h>
+
+// left, right, back
+const prog_int8_t wheelSpeeds[] PROGMEM = {
+<#
+	PushIndent("\t");
+	for(var i = 0; i < 360; i++) {
+		var radians = Math.PI * i / 180;
+		var velX = Math.Sin(radians);
+		var velY = Math.Cos(radians);
+		var tmp1 = -0.5 * velX;
+		var tmp2 = 0.866 * velY;
+		const int max = 255;
+		double speedLeft = (int)((tmp1 - tmp2) * max);
+		double speedRight = (int)((tmp1 + tmp2) * max);
+		double speedBack = (int)(velX * max);
+		
+		if (Math.Abs(speedLeft) >= Math.Abs(speedRight) && Math.Abs(speedLeft) >= Math.Abs(speedBack)) {
+			speedRight = speedRight/Math.Abs(speedLeft) * max;
+			speedBack = speedBack/Math.Abs(speedLeft) * max;
+			speedLeft = speedLeft < 0 ? -max : max;
+		}
+		else if (Math.Abs(speedRight) >= Math.Abs(speedLeft) && Math.Abs(speedRight) >= Math.Abs(speedBack)) {
+			speedLeft = speedLeft/Math.Abs(speedRight) * max;
+			speedBack = speedBack/Math.Abs(speedRight) * max;
+			speedRight = speedRight < 0 ? -max : max;
+		}
+		else if (Math.Abs(speedBack) >= Math.Abs(speedLeft) && Math.Abs(speedBack) >= Math.Abs(speedRight)) {
+			speedLeft = speedLeft/Math.Abs(speedBack) * max;
+			speedRight = speedRight/Math.Abs(speedBack) * max;
+			speedBack = speedBack < 0 ? -max : max;
+		}
+		
+		WriteLine((int)Math.Round(-speedLeft) + ", " + (int)Math.Round(-speedRight) + ", " + (int)Math.Round(-speedBack) + ", // " + i);
+	}
+	PopIndent();
+#>
+};
+
+class WheelSpeedTable {	
+public:
+	static void fromDirection(int direction, int8_t &left, int8_t &right, int8_t &back) {
+		const prog_int8_t* pointer = &wheelSpeeds[direction * 3];
+		left = pgm_read_byte(pointer);
+		right = pgm_read_byte(pointer+1);
+		back = pgm_read_byte(pointer+2);
+	}
+};

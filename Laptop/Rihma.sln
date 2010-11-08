@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robin.Arduino", "Robin.Ardu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robin.VideoProcessor", "Robin.VideoProcessor\Robin.VideoProcessor.csproj", "{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rihma.Templates", "Rihma.Templates\Rihma.Templates.csproj", "{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,16 @@ Global
 		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|x86.ActiveCfg = Release|Any CPU
+		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
