@@ -2,7 +2,7 @@ using System;
 
 namespace Robin.Arduino
 {
-	public class ArduinoSensorData
+	public class SensorData
 	{
 		public bool BallInDribbler { get; set; }
 
@@ -27,7 +27,7 @@ namespace Robin.Arduino
 			UpdateFromSerialData(this, data);
 		}
 
-		private static void UpdateFromSerialData(ArduinoSensorData sensorData, string data)
+		private static void UpdateFromSerialData(SensorData sensorData, string data)
 		{
 			if (data.Length < 6) return;
 
@@ -40,9 +40,9 @@ namespace Robin.Arduino
 			sensorData.BeaconServoDirection = BitConverter.ToInt16(new[] { (byte)data[4], (byte)data[5] }, 0);
 		}
 
-		public static ArduinoSensorData FromSerialData(string data)
+		public static SensorData FromSerialData(string data)
 		{
-			var sensorData = new ArduinoSensorData();
+			var sensorData = new SensorData();
 			sensorData.UpdateFromSerialData(data);
 			return sensorData;
 		}

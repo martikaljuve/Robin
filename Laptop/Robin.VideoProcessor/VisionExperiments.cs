@@ -16,6 +16,58 @@ namespace Robin.VideoProcessor
 		{
 			Font = new MCvFont(FONT.CV_FONT_HERSHEY_COMPLEX_SMALL, 1.0, 1.0);
 		}
+		
+		private static int channel;
+		public static IEnumerable<HoughCircle> Circles;
+		public static IEnumerable<LineSegment2D> Lines;
+		private static readonly Image<Gray, byte> RobotMask = new Image<Gray, byte>(@"Resources\RobotMask.bmp");
+
+		private static Image<Bgr, byte> frameBgr;
+		private static Image<Gray, byte> frameGray;
+		private static Image<Gray, byte> frameCanny;
+
+		public static Bitmap FindCirclesAndLinesWithHough(Bitmap source)
+		{
+			frameBgr = new Image<Bgr, byte>(source);
+
+			frameGray = frameBgr[0]
+				.PyrDown()
+				.Dilate(2)
+				.Erode(2)
+				.ThresholdBinary(new Gray(130), new Gray(500))
+				.PyrUp();
+			
+			frameCanny = HoughTransform.GetCanny(frameGray);
+			frameCanny.SetValue(new Gray(0), RobotMask);
+
+			//var lines = HoughTransform.GetLines(frameCanny);
+			//Lines = lines;
+			//Lines = HoughTransform.FilterLines(lines);
+			Circles = HoughTransform.GetCircles(frameCanny.Bitmap);
+
+			//var points = EdgeFinder.GetTopArea(blue, lines);
+			//canny.FillConvexPoly(points.ToArray(), new Gray(155));
+
+			//var contours = EdgeFinder.GetContours(canny);
+			//foreach (var contour in contours)
+			//	canny.FillConvexPoly(contour.ToArray(), new Gray(150));
+
+			// HACK: Testing)
+			switch (channel)
+			{
+				default:
+				case 1:
+					return frameBgr.Bitmap;
+				case 2:
+					return frameGray.Convert<Bgr, byte>().Bitmap;
+				case 3:
+					return frameCanny.Convert<Bgr, byte>().Bitmap;
+				case 4:
+					return new Image<Bgr, byte>(HoughTransform.CircleTransformation.ToBitmap()).Bitmap;
+				case 5:
+					return frameBgr.CopyBlank().Bitmap;
+			}
+		}
 
 		public static Image<Bgr, byte> GetAverageForSubRectangle(Image<Bgr, byte> frame)
 		{
@@ -28,7 +80,7 @@ namespace Robin.VideoProcessor
 
 				fr.ROI = new Rectangle(0, 0, 90, 90);
 				CvInvoke.cvAddWeighted(tempRect.Ptr, 1.0, fr.Ptr, 0.0, 0, fr.Ptr);
-				
+
 				var sum = tempRect.GetAverage();
 
 				tempRect2.Draw(new Rectangle(0, 0, 90, 90), sum, 0);
@@ -46,54 +98,6 @@ namespace Robin.VideoProcessor
 			fr.ROI = Rectangle.Empty;
 
 			return fr.Convert<Bgr, byte>();
-		}
-		
-		private static int channel;
-		public static IEnumerable<HoughCircle> Circles;
-		public static IEnumerable<LineSegment2D> Lines;
-		private static readonly Image<Gray, byte> RobotMask = new Image<Gray, byte>(@"Resources\RobotMask.bmp");
-
-		public static Bitmap FindCirclesAndLinesWithHough(Bitmap source)
-		{
-			var display = new Image<Bgr, byte>(source);
-
-			var blue = display[0]
-				.PyrDown()
-				.Dilate(2)
-				.Erode(2)
-				.ThresholdBinary(new Gray(130), new Gray(500))
-				.PyrUp();
-			
-			var canny = HoughTransform.GetCanny(blue);
-			canny.SetValue(new Gray(0), RobotMask);
-
-			var lines = HoughTransform.GetLines(canny);
-			//Lines = lines;
-			Lines = HoughTransform.FilterLines(lines);
-			Circles = HoughTransform.GetCircles(canny.Bitmap);
-
-			//var points = EdgeFinder.GetTopArea(blue, lines);
-			//canny.FillConvexPoly(points.ToArray(), new Gray(155));
-
-			//var contours = EdgeFinder.GetContours(canny);
-			//foreach (var contour in contours)
-			//	canny.FillConvexPoly(contour.ToArray(), new Gray(150));
-
-			// HACK: Testing)
-			switch (channel)
-			{
-				default:
-				case 1:
-					return display.Bitmap;
-				case 2:
-					return blue.Convert<Bgr, byte>().Bitmap;
-				case 3:
-					return canny.Convert<Bgr, byte>().Bitmap;
-				case 4:
-					return new Image<Bgr, byte>(HoughTransform.CircleTransformation.ToBitmap()).Bitmap;
-				case 5:
-					return display.CopyBlank().Bitmap;
-			}
 		}
 
 		private static void ToggleKeys()
@@ -141,6 +145,21 @@ namespace Robin.VideoProcessor
 			}
 
 			return false;
+		}
+
+		public static Image<Bgr, byte> FrameBgr
+		{
+			get { return frameBgr; }
+		}
+
+		public static Image<Gray, byte> FrameGray
+		{
+			get { return frameGray; }
+		}
+
+		public static Image<Gray, byte> FrameCanny
+		{
+			get { return frameCanny; }
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Text;
 using Robin.Arduino;
 using Robin.VideoProcessor;
@@ -9,14 +8,16 @@ using System.Timers;
 
 namespace Robin.RetroEncabulator
 {
-	[Export(typeof(IProcessor))]
-	public class MainLogicProcessor : IProcessor
+	public class MainLogicProcessor
 	{
 		private readonly StateMachine<State, Trigger> stateMachine;
 		private readonly Timer timer;
 		
 		public MainLogicProcessor()
 		{
+			VisionData = new VisionData();
+			SensorData = new SensorData();
+
 			timer = new Timer();
 
 			stateMachine = new StateMachine<State, Trigger>(State.LookingForBall);
@@ -38,6 +39,78 @@ namespace Robin.RetroEncabulator
 				.Permit(Trigger.Timeout, State.LookingForBall)
 				.OnEntry(() => StartTimer(5000, Trigger.Timeout))
 				.OnExit(StopTimer);
+		}
+
+		public VisionData VisionData { get; set; }
+
+		public SensorData SensorData { get; set; }
+
+		public ArduinoCommander Commander { get; set; }
+
+		private void StartTimer(double milliseconds, Action action)
+		{
+			timer.Stop();
+			timer.Interval = milliseconds;
+			timer.Start();
+			timer.Elapsed += (sender, args) => action();
+		}
+
+		private void StartTimer(double milliseconds, Trigger trigger)
+		{
+			StartTimer(milliseconds, () => stateMachine.Fire(trigger));
+		}
+
+		private void StopTimer()
+		{
+			timer.Stop();
+		}
+
+		public void Update()
+		{
+			switch (stateMachine.State)
+			{
+				case State.LookingForBall:
+					LookingForBall();
+					break;
+				case State.ClosingInOnBall:
+					ClosingInOnBall();
+					break;
+				case State.FindingGoal:
+					FindingGoal();
+					break;
+			}
+
+			// HACK: Testime
+			System.Threading.Thread.Sleep(100);
+		}
+
+		private void LookingForBall()
+		{
+			if (SensorData.BallInDribbler)
+				stateMachine.Fire(Trigger.BallCaught);
+		}
+
+		private void ClosingInOnBall()
+		{
+			if (SensorData.BallInDribbler)
+				stateMachine.Fire(Trigger.BallCaught);
+
+			MovementHelper.MoveToVisionLocation(Commander, VisionData.TrackedBallLocation);
+		}
+
+		private void FindingGoal()
+		{
+			var beaconInFront = SensorData.OpponentBeaconFound && Math.Abs(SensorData.BeaconServoDirection) < 10;
+			if (beaconInFront && !VisionData.FrontBallPathObstructed)
+				LaunchBall();
+
+			Commander.MoveAndTurn(0, 0, SensorData.BeaconServoDirection < 0 ? -100 : 100);
+		}
+
+		private void LaunchBall()
+		{
+			Commander.FireCoilgun(50);
+			stateMachine.Fire(Trigger.CoilgunLaunched);
 		}
 
 		private readonly Dictionary<State, State> sources = new Dictionary<State, State>();
@@ -97,72 +170,5 @@ namespace Robin.RetroEncabulator
 			var source = sources[destination];
 			return source;
 		}
-
-		private void StartTimer(double milliseconds, Action action)
-		{
-			timer.Stop();
-			timer.Interval = milliseconds;
-			timer.Start();
-			timer.Elapsed += (sender, args) => action();
-		}
-
-		private void StartTimer(double milliseconds, Trigger trigger)
-		{
-			StartTimer(milliseconds, () => stateMachine.Fire(trigger));
-		}
-
-		private void StopTimer()
-		{
-			timer.Stop();
-		}
-
-		public ArduinoCommander Commander { get; set; }
-
-		public void Update()
-		{
-			switch (stateMachine.State)
-			{
-				case State.LookingForBall:
-					LookingForBall();
-					break;
-				case State.ClosingInOnBall:
-					ClosingInOnBall();
-					break;
-				case State.FindingGoal:
-					FindingGoal();
-					break;
-			}
-
-			// HACK: Testime
-			System.Threading.Thread.Sleep(100);
-		}
-
-		private void LookingForBall()
-		{
-			if (ArduinoData.BallInDribbler)
-				stateMachine.Fire(Trigger.BallCaught);
-		}
-
-		private void ClosingInOnBall()
-		{
-			if (ArduinoData.BallInDribbler)
-				stateMachine.Fire(Trigger.BallCaught);
-		}
-
-		private void FindingGoal()
-		{
-			if (ArduinoData.BeaconServoDirection == 0 && VisionData.OpponentGoalInFront)
-				LaunchBall();
-		}
-
-		private void LaunchBall()
-		{
-			Commander.FireCoilgun(50);
-			stateMachine.Fire(Trigger.CoilgunLaunched);
-		}
-
-		public VisionData VisionData { get; set; }
-
-		public ArduinoSensorData ArduinoData { get; set; }
 	}
 }

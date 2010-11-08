@@ -72,12 +72,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camshift.cs" />
+    <Compile Include="GeometryExtensions.cs" />
+    <Compile Include="EdgeFinder.cs" />
     <Compile Include="FrameEventArgs.cs" />
     <Compile Include="HoughTransform.cs" />
+    <Compile Include="RobinVideoConstants.cs" />
     <Compile Include="VideoFeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MainVideoProcessor.cs" />
     <Compile Include="VisionData.cs" />
     <Compile Include="VisionExperiments.cs" />
+    <Compile Include="VisionResults.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Resources\RobotMask.bmp">

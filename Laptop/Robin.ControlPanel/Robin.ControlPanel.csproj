@@ -40,6 +40,9 @@
     <Reference Include="AForge.Controls">
       <HintPath>..\lib\AForge.Controls.dll</HintPath>
     </Reference>
+    <Reference Include="AForge.Imaging, Version=2.1.4.0, Culture=neutral, PublicKeyToken=ba8ddea9676ca48b, processorArchitecture=MSIL">
+      <HintPath>..\lib\AForge.Imaging.dll</HintPath>
+    </Reference>
     <Reference Include="AForge.Video">
       <HintPath>..\lib\AForge.Video.dll</HintPath>
     </Reference>
@@ -55,16 +58,13 @@
     </Reference>
     <Reference Include="Emgu.Util, Version=2.1.0.793, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=x86" />
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
@@ -105,10 +105,6 @@
     <ProjectReference Include="..\Robin.Arduino\Robin.Arduino.csproj">
       <Project>{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}</Project>
       <Name>Robin.Arduino</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Robin.Contracts\Robin.Contracts.csproj">
-      <Project>{78C692B6-33F4-4F38-8B6C-360C8F69989C}</Project>
-      <Name>Robin.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Robin.RetroEncabulator\Robin.RetroEncabulator.csproj">
       <Project>{EE5171C9-1700-46FF-9A30-3D38C557F0DC}</Project>

@@ -43,7 +43,7 @@
     <Compile Include="ArduinoCommander.cs" />
     <Compile Include="ArduinoDataReceivedEventArgs.cs" />
     <Compile Include="ArduinoPrefix.cs" />
-    <Compile Include="ArduinoSensorData.cs" />
+    <Compile Include="SensorData.cs" />
     <Compile Include="ArduinoSerial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

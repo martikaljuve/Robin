@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
-using System.Threading;
 using System.Windows.Forms;
 using Robin.Arduino;
 using Robin.ControlPanel.Properties;
@@ -19,23 +17,9 @@ namespace Robin.ControlPanel
 		private readonly BackgroundWorker _mainLogicWorker = new BackgroundWorker();
 		private readonly ArduinoSerial _arduinoSerial = new ArduinoSerial();
 
-		private VideoFeed _feed;
-
-		private bool dragging;
-		private Point startDrag;
-		private Rectangle dragRectangle;
-
-		private static ArduinoSensorData SensorData { get; set; }
-		private static VisionData VisionData { get; set; }
-
-		[Import]
-		public IProcessor MainLogicProcessor { get; set; }
-
-		static MainForm()
-		{
-			SensorData = new ArduinoSensorData();
-		}
-
+		private MainVideoProcessor videoProcessor;
+		public MainLogicProcessor MainLogicProcessor { get; set; }
+		
 		public MainForm()
 		{
 			InitializeComponent();
@@ -52,15 +36,10 @@ namespace Robin.ControlPanel
 		
 		private void InitializeVisionControls()
 		{
-			_feed = new VideoFeed(VideoFeed.Sample6);
-			//_feed = new VideoFeed(VideoFeed.Sample2);
-			//_feed = new VideoFeed();
-			_feed.FrameProcessed += FeedOnFrameProcessed;
-			Application.ApplicationExit += (o1, args1) => _feed.Stop();
+			videoProcessor = new MainVideoProcessor();
+			videoProcessor.FrameProcessed += VideoProcessorOnFrameProcessed;
+			Application.ApplicationExit += (o1, args1) => videoProcessor.Stop();
 			
-			uxPlayer.MouseDown += UxFrameOnMouseDown;
-			uxPlayer.MouseUp += UxFrameOnMouseUp;
-			uxPlayer.MouseMove += UxFrameOnMouseMove;
 			KeyPress += OnKeyPress;
 		}
 
@@ -80,10 +59,10 @@ namespace Robin.ControlPanel
 			_arduinoSerial.DataReceived +=
 				(o, args) =>
 				{
-					var data = ArduinoSensorData.FromSerialData(args.Data);
+					var data = SensorData.FromSerialData(args.Data);
 					Action appendAction = () => uxSerialData.AppendText(data + Environment.NewLine);
 					uxSerialData.Invoke(appendAction);
-					SensorData.UpdateFromSerialData(args.Data);
+					MainLogicProcessor.SensorData.UpdateFromSerialData(args.Data);
 				};
 
 			var connectCommand = new ConnectCommand(_arduinoSerial);
@@ -113,60 +92,58 @@ namespace Robin.ControlPanel
 				uxPorts.SelectedItem = Settings.Default.ArduinoSerialPort;
 		}
 
-		private void FeedOnFrameProcessed(object sender, FrameEventArgs frameEventArgs)
+		private static bool showCircles;
+		private static bool showLines;
+
+		private readonly Pen ellipsePen = new Pen(Color.Fuchsia, 2);
+		private readonly Pen linePen = new Pen(Color.Gold, 2);
+		private readonly Pen camshiftPen = new Pen(Color.Red, 2);
+
+		private void VideoProcessorOnFrameProcessed(object sender, FrameEventArgs frameEventArgs)
 		{
+			var results = videoProcessor.Results;
+			MainLogicProcessor.VisionData.UpdateFromVisionResults(results);
+
 			var frame = frameEventArgs.Frame;
-
-			//if (dragging && (dragRectangle.Width != 0 && dragRectangle.Height != 0))
-			//	frame.Draw(dragRectangle, new Bgr(Color.Red), 2);
-
+			DrawDebugInfo(frame, results);
 			uxPlayer.Image = frame;
+		}
+
+		private void DrawDebugInfo(Bitmap frame, VisionResults results)
+		{
+			using (var g = Graphics.FromImage(frame))
+			{
+				g.FillRectangle(Brushes.White, 5, 5, 100, 50);
+				g.DrawString("Threshold: " + HoughTransform.CannyThreshold, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 10));
+				g.DrawString("Linking: " + HoughTransform.CannyThresholdLinking, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 30));
+
+				if (showCircles)
+					foreach (var circle in results.Circles)
+					{
+						g.DrawEllipse(ellipsePen, circle.X - circle.Radius, circle.Y - circle.Radius, circle.Radius*2, circle.Radius*2);
+						g.DrawString(circle.Intensity.ToString(), SystemFonts.DefaultFont, Brushes.Orange, circle.X, circle.Y);
+					}
+
+				if (showLines)
+					foreach (var line in results.Lines)
+						g.DrawLine(linePen, line.P1, line.P2);
+
+				if (results.TrackingBall)
+					g.DrawRectangle(camshiftPen, results.TrackWindow);
+			}
 		}
 
 		private void OnKeyPress(object sender, KeyPressEventArgs keyPressEventArgs)
 		{
-			if (_feed != null)
-				_feed.ProcessKeyCommand(keyPressEventArgs.KeyChar);
-			VisionExperiments.ProcessKey(keyPressEventArgs.KeyChar);
+			var key = keyPressEventArgs.KeyChar;
+			if (key == 'p')
+				videoProcessor.Restart();
+			if (key == 'c')
+				showCircles = !showCircles;
+			if (key == 'l')
+				showLines = !showLines;
 
-			if (keyPressEventArgs.KeyChar == 'p')
-				_feed.Restart();
-		}
-
-		private void UxFrameOnMouseDown(object sender, MouseEventArgs args)
-		{
-			if (args.Button != MouseButtons.Left)
-			{
-				dragging = false;
-				return;
-			}
-
-			dragging = true;
-			startDrag = args.Location;
-		}
-
-		private void UxFrameOnMouseUp(object sender, MouseEventArgs args)
-		{
-			if (args.Button != MouseButtons.Left) return;
-			if (!dragging) return;
-			
-			if (dragRectangle.Width != 0 && dragRectangle.Height != 0)
-				_feed.SetRegionOfInterest(dragRectangle);
-
-			dragging = false;
-		}
-
-		private void UxFrameOnMouseMove(object sender, MouseEventArgs args)
-		{
-			if (!dragging) return;
-
-			var end = uxPlayer.PointToClient(MousePosition);
-
-			dragRectangle = Rectangle.FromLTRB(
-				Math.Min(startDrag.X, end.X),
-				Math.Min(startDrag.Y, end.Y),
-				Math.Max(startDrag.X, end.X),
-				Math.Max(startDrag.Y, end.Y));
+			VisionExperiments.ProcessKey(key);
 		}
 		
 		private void MainLogicWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
@@ -194,8 +171,6 @@ namespace Robin.ControlPanel
 					}
 				}
 
-				MainLogicProcessor.ArduinoData = SensorData;
-				MainLogicProcessor.VisionData = VisionData;
 				MainLogicProcessor.Update();
 				_mainLogicWorker.ReportProgress(0, fps);
 			}
@@ -205,7 +180,7 @@ namespace Robin.ControlPanel
 		{
 			var fps = (float)progressChangedEventArgs.UserState;
 			uxLogicFps.Text = string.Format("Main Logic: {0}fps", fps);
-			uxVisionFps.Text = string.Format("Vision: {0}fps", _feed.FramesPerSecond);
+			uxVisionFps.Text = string.Format("Vision: {0}fps", videoProcessor.FramesPerSecond);
 		}
 	}
 }
