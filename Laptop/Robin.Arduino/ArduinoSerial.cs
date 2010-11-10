@@ -20,8 +20,8 @@ namespace Robin.Arduino
 
 		public ArduinoSerial(string portName = null, int baudRate = BaudRate)
 		{
-			portName = portName;
-			baudRate = baudRate;
+			this.portName = portName;
+			this.baudRate = baudRate;
 			port.DataReceived += (sender, args) => OnDataReceived(new ArduinoSerialDataEventArgs(port.ReadExisting()));
 		}
 
@@ -42,7 +42,7 @@ namespace Robin.Arduino
 
 		public void Open(string portName)
 		{
-			portName = portName;
+			this.portName = portName;
 			Open();
 		}
 
@@ -92,16 +92,16 @@ namespace Robin.Arduino
 
 			foreach (var parameter in parameters)
 			{
-				if (parameter.GetType() == typeof(int))
-					byteList.AddRange(BitConverter.GetBytes((int)parameter));
+				if (parameter.GetType() == typeof(short))
+					byteList.AddRange(BitConverter.GetBytes((short)parameter));
 				else if (parameter.GetType() == typeof(bool))
 					byteList.AddRange(BitConverter.GetBytes((bool)parameter));
 				else if (parameter.GetType() == typeof(byte))
 					byteList.Add((byte)parameter);
 			}
 
-			OnDataSent(new ArduinoSerialDataEventArgs(command + ": " + string.Join(", ", parameters)));
-			
+			byteList.Add((byte)'.');
+
 			if (!Write(byteList.ToArray(), 0, byteList.Count))
 				return;
 
@@ -116,6 +116,7 @@ namespace Robin.Arduino
 			try
 			{
 				port.Write(buffer, offset, count);
+				port.WriteLine("");
 				return true;
 			}
 			catch (TimeoutException)

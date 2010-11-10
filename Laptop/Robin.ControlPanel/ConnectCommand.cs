@@ -4,23 +4,23 @@ namespace Robin.ControlPanel
 {
 	public class ConnectCommand : Command
 	{
-		private readonly ArduinoSerial _serial;
+		private readonly ArduinoSerial serial;
 
 		public ConnectCommand(ArduinoSerial serial)
 		{
-			_serial = serial;
+			this.serial = serial;
 			DisplayName = "Connect";
 		}
 
 		public override void Execute()
 		{
-			if (_serial.IsOpen) {
-				_serial.Close();
+			if (serial.IsOpen) {
+				serial.Close();
 				DisplayName = "Connect";
 			}
 			else
 			{
-				_serial.Open(PortName);
+				serial.Open(PortName);
 				DisplayName = "Disconnect";
 			}
 		}

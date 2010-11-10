@@ -12,20 +12,19 @@ namespace Robin.RetroEncabulator
 	public class MainLogicProcessor
 	{
 		private readonly StateMachine<State, Trigger> stateMachine;
-		private readonly Timer timer;
+		private static readonly Timer timer = new Timer();
 		
 		public MainLogicProcessor()
 		{
 			VisionData = new VisionData();
 			SensorData = new SensorData();
-
-			timer = new Timer();
-
+			
 			stateMachine = new StateMachine<State, Trigger>(State.LookingForBall);
 
 			stateMachine.Configure(State.LookingForBall)
 				.Permit(Trigger.CameraLockedOnBall, State.ClosingInOnBall)
-				.Permit(Trigger.BallCaught, State.FindingGoal);
+				.Permit(Trigger.BallCaught, State.FindingGoal)
+				.OnEntry(StopTimer);
 
 			stateMachine.Configure(State.ClosingInOnBall)
 				.Permit(Trigger.CameraLostBall, State.LookingForBall)
@@ -98,6 +97,9 @@ namespace Robin.RetroEncabulator
 
 		private void ClosingInOnBall()
 		{
+			if (!VisionData.TrackingBall)
+				stateMachine.Fire(Trigger.CameraLostBall);
+
 			if (SensorData.BallInDribbler)
 				stateMachine.Fire(Trigger.BallCaught);
 
@@ -106,11 +108,14 @@ namespace Robin.RetroEncabulator
 
 		private void FindingGoal()
 		{
+			if (!SensorData.BallInDribbler)
+				stateMachine.Fire(Trigger.BallLost);
+
 			var beaconInFront = SensorData.OpponentBeaconFound && Math.Abs(SensorData.BeaconServoDirection) < 10;
 			if (beaconInFront && !VisionData.FrontBallPathObstructed)
 				LaunchBall();
 
-			Commander.MoveAndTurn(0, 0, SensorData.BeaconServoDirection < 0 ? -100 : 100);
+			Commander.MoveAndTurn(0, 0, SensorData.BeaconServoDirection < 0 ? (short)-100 : (short)100);
 		}
 
 		private void LaunchBall()

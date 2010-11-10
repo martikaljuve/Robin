@@ -14,9 +14,9 @@ namespace Robin.ControlPanel
 {
 	public partial class MainForm : Form
 	{
-		private readonly Stopwatch _timer = new Stopwatch();
-		private readonly BackgroundWorker _mainLogicWorker = new BackgroundWorker();
-		private readonly ArduinoSerial _arduinoSerial = new ArduinoSerial();
+		private readonly Stopwatch timer = new Stopwatch();
+		private readonly BackgroundWorker mainLogicWorker = new BackgroundWorker();
+		private readonly ArduinoSerial arduinoSerial = new ArduinoSerial();
 
 		private MainVideoProcessor videoProcessor;
 		public MainLogicProcessor MainLogicProcessor { get; set; }
@@ -30,7 +30,7 @@ namespace Robin.ControlPanel
 			InitializeMainLogicControls();
 			InitializeVisionControls();
 
-			_timer.Start();
+			timer.Start();
 
 			//using (var file = File.CreateText("stateMachine.txt"))
 			//    file.WriteLine(MainLogicProcessor.ToDebugString());
@@ -59,38 +59,49 @@ namespace Robin.ControlPanel
 		private void InitializeMainLogicControls()
 		{
 			MainLogicProcessor = new MainLogicProcessor();
-			MainLogicProcessor.Commander = new ArduinoCommander(_arduinoSerial);
+			MainLogicProcessor.Commander = new ArduinoCommander(arduinoSerial);
 
-			_mainLogicWorker.DoWork += MainLogicWorkerOnDoWork;
-			_mainLogicWorker.ProgressChanged += MainLogicWorkerOnProgressChanged;
-			_mainLogicWorker.WorkerReportsProgress = true;
-			_mainLogicWorker.RunWorkerAsync();
+			mainLogicWorker.DoWork += MainLogicWorkerOnDoWork;
+			mainLogicWorker.ProgressChanged += MainLogicWorkerOnProgressChanged;
+			mainLogicWorker.WorkerReportsProgress = true;
+			mainLogicWorker.RunWorkerAsync();
 		}
 
 		private void InitializeSerialPortControls()
 		{
-			_arduinoSerial.DataReceived +=
+			int index = 0;
+			arduinoSerial.DataReceived +=
 				(o, args) =>
 				{
 					var data = SensorData.FromSerialData(args.Data);
-					Action appendAction = () => uxSerialData.AppendText(data + Environment.NewLine);
+					Action appendAction = () =>
+					{
+						uxSerialData.AppendText(index++ + ": " + data + Environment.NewLine);
+						MainLogicProcessor.SensorData.UpdateFromSerialData(args.Data);
+					};
 					uxSerialData.Invoke(appendAction);
-					MainLogicProcessor.SensorData.UpdateFromSerialData(args.Data);
 				};
 
-			_arduinoSerial.DataSent +=
+			arduinoSerial.DataSent +=
 				(o, args) =>
 				{
 					Action appendAction = () => uxSerialSendData.AppendText(args.Data + Environment.NewLine);
 					uxSerialSendData.Invoke(appendAction);
 				};
 
-			var connectCommand = new ConnectCommand(_arduinoSerial);
+			var connectCommand = new ConnectCommand(arduinoSerial);
 			uxPortConnect.DataBindings.Add("Text", connectCommand, "DisplayName");
 			uxPortConnect.DataBindings.Add("Enabled", connectCommand, "Enabled");
 			uxPortConnect.Click += (sender, args) => connectCommand.Execute();
 
-			uxIrChannelPanel.DataBindings.Add("Enabled", _arduinoSerial, "IsOpen");
+			var portsBinding = new Binding("Enabled", arduinoSerial, "IsOpen");
+			portsBinding.Format += (sender, args) => {
+				if (args.Value != null)
+					args.Value = !(bool)args.Value;
+			};
+			uxPorts.DataBindings.Add(portsBinding);
+
+			uxIrChannelPanel.DataBindings.Add("Enabled", arduinoSerial, "IsOpen");
 
 			var ports = SerialPort.GetPortNames();
 			Array.Sort(ports);
@@ -197,10 +208,10 @@ namespace Robin.ControlPanel
 
 			while (true)
 			{
-				if (_timer.IsRunning)
+				if (timer.IsRunning)
 				{
 					timerCount++;
-					var timeNow = _timer.ElapsedMilliseconds;
+					var timeNow = timer.ElapsedMilliseconds;
 					var timeDelta = timeNow - timeLast;
 					timeElapsed += timeDelta;
 					timeLast = timeNow;
@@ -214,7 +225,7 @@ namespace Robin.ControlPanel
 				}
 
 				MainLogicProcessor.Update();
-				_mainLogicWorker.ReportProgress(0, fps);
+				mainLogicWorker.ReportProgress(0, fps);
 			}
 		}
 

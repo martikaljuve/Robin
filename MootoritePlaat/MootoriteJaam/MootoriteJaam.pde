@@ -7,7 +7,7 @@
 void setup() {
 	ledOn();
 
-	Serial.begin(9600);
+	//Serial.begin(9600);
 
 	// SETUP
 	motors_setup();

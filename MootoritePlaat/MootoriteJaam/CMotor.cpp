@@ -17,7 +17,7 @@ void Motor::setSpeedWithDirection(int newSpeed) {
 	// HACK: Let's not allow negative speed at the moment.
 	if (newSpeed < 0) {
 		newSpeed = 0;
-		Serial.println("Negative speed not allowed at the moment.");
+		//Serial.println("Negative speed not allowed at the moment.");
 	}
 
 	speed = newSpeed;

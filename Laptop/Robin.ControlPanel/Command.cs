@@ -4,29 +4,35 @@ namespace Robin.ControlPanel
 {
 	public abstract class Command : INotifyPropertyChanged
 	{
-		private bool _enabled;
-		private string _displayName;
+		private bool enabled;
+		private string displayName;
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		public string Key { get; protected set; }
+
 		public string DisplayName {
-			get { return _displayName; }
+			get { return displayName; }
 			protected set {
-				if (_displayName == value) return;
-				_displayName = value;
+				if (displayName == value) return;
+				displayName = value;
 				OnPropertyChanged(new PropertyChangedEventArgs("DisplayName"));
 			}
 		}
 
 		public bool Enabled {
-			get { return _enabled; }
+			get { return enabled; }
 			set {
-				if (_enabled == value) return;
-				_enabled = value;
+				if (enabled == value) return;
+				enabled = value;
 
 				OnPropertyChanged(new PropertyChangedEventArgs("Enabled"));
 			}
+		}
+
+		public bool Disabled
+		{
+			get { return !Enabled; }
 		}
 
 		public abstract void Execute();

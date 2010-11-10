@@ -19,6 +19,7 @@ void sendMessage() {
 	first = first | (getLeftIrStatus() << 1);
 	first = first | (getRightIrStatus() << 2);
 
+	Serial.write((byte)'D');
 	Serial.write(first);
 	Serial.write(getBytesFromInt(getGyroDirection()), 2);
 	Serial.write(getBytesFromInt(getServoDirection()), 2);

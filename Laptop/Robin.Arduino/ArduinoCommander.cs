@@ -16,12 +16,12 @@ namespace Robin.Arduino
 			_arduino.Command(ArduinoPrefix.CoilgunFire, power);
 		}
 
-		public void Move(int direction, int speed)
+		public void Move(short direction, short speed)
 		{
 			_arduino.Command(ArduinoPrefix.Move, direction, speed);
 		}
 
-		public void Turn(int speed)
+		public void Turn(short speed)
 		{
 			_arduino.Command(ArduinoPrefix.Turn, speed);
 		}
@@ -36,7 +36,7 @@ namespace Robin.Arduino
 			_arduino.Command(ArduinoPrefix.SetDribbler, enabled);
 		}
 
-		public void MoveAndTurn(int direction, int moveSpeed, int turnSpeed)
+		public void MoveAndTurn(short direction, short moveSpeed, short turnSpeed)
 		{
 			_arduino.Command(ArduinoPrefix.MoveAndTurn, direction, moveSpeed, turnSpeed);
 		}

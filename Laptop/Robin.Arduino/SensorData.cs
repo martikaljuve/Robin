@@ -10,9 +10,9 @@ namespace Robin.Arduino
 
 		public bool BeaconIrRightInView { get; set; }
 
-		public int BeaconServoDirection { get; set; }
+		public short BeaconServoDirection { get; set; }
 
-		public int GyroDirection { get; set; }
+		public short GyroDirection { get; set; }
 
 		public bool OpponentBeaconFound
 		{
@@ -29,7 +29,7 @@ namespace Robin.Arduino
 
 		private static void UpdateFromSerialData(SensorData sensorData, string data)
 		{
-			if (data.Length < 6) return;
+			if (data.Length < 7) return;
 			if (!data.StartsWith(ArduinoPrefix.IncomingData)) return;
 
 			var firstByte = (byte) data[1];
