@@ -14,5 +14,9 @@
 		public const string SetDribbler = "D";
 
 		public const string SetIrChannel = "C";
+
+		public const string SetState = "X";
+
+		public static string[] NonRepeatableCommands = new[] { Move, MoveAndTurn, Turn };
 	}
 }

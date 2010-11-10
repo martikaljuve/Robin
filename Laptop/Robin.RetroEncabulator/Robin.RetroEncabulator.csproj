@@ -45,7 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MovementHelper.cs" />
+    <Compile Include="ArduinoCommanderExtensions.cs" />
+    <Compile Include="Maneuver.cs" />
+    <Compile Include="MovementData.cs" />
     <Compile Include="MovementRegion.cs" />
     <Compile Include="MovementRegions.cs" />
     <Compile Include="State.cs" />

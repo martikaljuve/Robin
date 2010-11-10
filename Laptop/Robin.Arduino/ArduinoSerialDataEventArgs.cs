@@ -2,9 +2,9 @@
 
 namespace Robin.Arduino
 {
-	public class ArduinoDataReceivedEventArgs : EventArgs
+	public class ArduinoSerialDataEventArgs : EventArgs
 	{
-		public ArduinoDataReceivedEventArgs(string data)
+		public ArduinoSerialDataEventArgs(string data)
 		{
 			Data = data;
 		}

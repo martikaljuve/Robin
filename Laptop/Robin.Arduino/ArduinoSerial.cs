@@ -10,27 +10,29 @@ namespace Robin.Arduino
 	public class ArduinoSerial : INotifyPropertyChanged
 	{
 		private const int BaudRate = 57600;
-		private readonly SerialPort _port = new SerialPort();
-		private string _portName;
-		private readonly int _baudRate;
+		private readonly SerialPort port = new SerialPort();
+		private string portName;
+		private readonly int baudRate;
+		private string previousCommand;
 
-		public event EventHandler<ArduinoDataReceivedEventArgs> DataReceived;
+		public event EventHandler<ArduinoSerialDataEventArgs> DataReceived;
+		public event EventHandler<ArduinoSerialDataEventArgs> DataSent;
 
 		public ArduinoSerial(string portName = null, int baudRate = BaudRate)
 		{
-			_portName = portName;
-			_baudRate = baudRate;
-			_port.DataReceived += (sender, args) => OnDataReceived(new ArduinoDataReceivedEventArgs(_port.ReadExisting()));
+			portName = portName;
+			baudRate = baudRate;
+			port.DataReceived += (sender, args) => OnDataReceived(new ArduinoSerialDataEventArgs(port.ReadExisting()));
 		}
 
 		public bool IsOpen
 		{
-			get { return _port.IsOpen; }
+			get { return port.IsOpen; }
 		}
 
 		public void Open()
 		{
-			if (TryOpenPort(_portName))
+			if (TryOpenPort(portName))
 				return;
 
 			var names = SerialPort.GetPortNames();
@@ -40,14 +42,14 @@ namespace Robin.Arduino
 
 		public void Open(string portName)
 		{
-			_portName = portName;
+			portName = portName;
 			Open();
 		}
 
 		public void Close()
 		{
-			if (_port != null && _port.IsOpen) { 
-				_port.Close();
+			if (port != null && port.IsOpen) { 
+				port.Close();
 				OnPropertyChanged(new PropertyChangedEventArgs("IsOpen"));
 			}
 		}
@@ -56,15 +58,15 @@ namespace Robin.Arduino
 		{
 			try
 			{
-				_port.PortName = name;
-				_port.BaudRate = _baudRate;
-				_port.NewLine = "\n";
-				_port.DtrEnable = true;
-				_port.ReadTimeout = 2000;
-				_port.WriteTimeout = 2000;
-				_port.Open();
+				port.PortName = name;
+				port.BaudRate = baudRate;
+				port.NewLine = "\n";
+				port.DtrEnable = true;
+				port.ReadTimeout = 2000;
+				port.WriteTimeout = 2000;
+				port.Open();
 				OnPropertyChanged(new PropertyChangedEventArgs("IsOpen"));
-				return _port.IsOpen;
+				return port.IsOpen;
 			}
 			catch (Exception)
 			{
@@ -74,6 +76,15 @@ namespace Robin.Arduino
 
 		public void Command(string command, params object[] parameters)
 		{
+			var currentCommand = command + string.Join("", parameters);
+
+			if (currentCommand == previousCommand && ArduinoPrefix.NonRepeatableCommands.Contains(command)) {
+				previousCommand = currentCommand;
+				return;
+			}
+
+			previousCommand = currentCommand;
+
 			var cmdBytes = Encoding.ASCII.GetBytes(command);
 
 			var byteList = new List<byte>();
@@ -89,19 +100,22 @@ namespace Robin.Arduino
 					byteList.Add((byte)parameter);
 			}
 
-			_port.Write(byteList.ToArray(), 0, byteList.Count);
+			OnDataSent(new ArduinoSerialDataEventArgs(command + ": " + string.Join(", ", parameters)));
+			
+			if (!Write(byteList.ToArray(), 0, byteList.Count))
+				return;
+
+			OnDataSent(new ArduinoSerialDataEventArgs(command + ": " + string.Join(", ", parameters)));
 		}
 
-		public void Command(string data)
+		private bool Write(byte[] buffer, int offset, int count)
 		{
-			Write(data);
-		}
+			if (!port.IsOpen)
+				return false;
 
-		private bool Write(string data)
-		{
 			try
 			{
-				_port.WriteLine(data);
+				port.Write(buffer, offset, count);
 				return true;
 			}
 			catch (TimeoutException)
@@ -110,9 +124,16 @@ namespace Robin.Arduino
 			}
 		}
 
-		protected void OnDataReceived(ArduinoDataReceivedEventArgs eventArgs)
+		protected void OnDataReceived(ArduinoSerialDataEventArgs eventArgs)
 		{
 			var temp = DataReceived;
+			if (temp != null)
+				temp(this, eventArgs);
+		}
+
+		protected void OnDataSent(ArduinoSerialDataEventArgs eventArgs)
+		{
+			var temp = DataSent;
 			if (temp != null)
 				temp(this, eventArgs);
 		}

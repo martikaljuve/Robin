@@ -1,7 +1,7 @@
-﻿#include <avr/pgmspace.h>
+#include <avr/pgmspace.h>
 
 // left, right, back
-const prog_int8_t wheelSpeeds[] PROGMEM = {
+const prog_int16_t wheelSpeeds[] PROGMEM = {
 	255, -255, 0, // 0
 	255, -249, -5, // 1
 	255, -245, -9, // 2
@@ -366,10 +366,10 @@ const prog_int8_t wheelSpeeds[] PROGMEM = {
 
 class WheelSpeedTable {	
 public:
-	static void fromDirection(int direction, int8_t &left, int8_t &right, int8_t &back) {
-		const prog_int8_t* pointer = &wheelSpeeds[direction * 3];
-		left = pgm_read_byte(pointer);
-		right = pgm_read_byte(pointer+1);
-		back = pgm_read_byte(pointer+2);
+	static void fromDirection(int direction, int &left, int &right, int &back) {
+		const prog_int16_t* pointer = &wheelSpeeds[direction * 3];
+		left = (int16_t)pgm_read_word(pointer);
+		right = (int16_t)pgm_read_word(pointer+2);
+		back = (int16_t)pgm_read_word(pointer+4);
 	}
 };

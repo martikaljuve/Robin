@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArduinoCommander.cs" />
-    <Compile Include="ArduinoDataReceivedEventArgs.cs" />
+    <Compile Include="ArduinoSerialDataEventArgs.cs" />
     <Compile Include="ArduinoPrefix.cs" />
     <Compile Include="SensorData.cs" />
     <Compile Include="ArduinoSerial.cs" />

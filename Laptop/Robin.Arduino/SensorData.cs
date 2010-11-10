@@ -30,6 +30,7 @@ namespace Robin.Arduino
 		private static void UpdateFromSerialData(SensorData sensorData, string data)
 		{
 			if (data.Length < 6) return;
+			if (!data.StartsWith(ArduinoPrefix.IncomingData)) return;
 
 			var firstByte = (byte) data[1];
 

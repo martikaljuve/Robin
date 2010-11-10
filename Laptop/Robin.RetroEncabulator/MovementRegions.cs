@@ -22,17 +22,17 @@ namespace Robin.RetroEncabulator
 			var topHeight = (int)(size.Height*TopHeightRatio);
 			var bottomHeight = size.Height - topHeight;
 
-			var topLeft = new Rectangle(0, 0, edgeWidth-1, topHeight-1);
-			var topCenterLeft = new Rectangle(edgeWidth, 0, centerEdgeWidth-1, topHeight-1);
-			var topCenter = new Rectangle(edgeWidth + centerEdgeWidth, 0, centerWidth-1, topHeight-1);
-			var topCenterRight = new Rectangle(size.Width - (edgeWidth + centerEdgeWidth), 0, centerEdgeWidth-1, topHeight-1);
-			var topRight = new Rectangle(size.Width - edgeWidth, 0, edgeWidth, topHeight-1);
+			var topLeft = new Rectangle(0, 0, edgeWidth, topHeight);
+			var topCenterLeft = new Rectangle(edgeWidth, 0, centerEdgeWidth, topHeight);
+			var topCenter = new Rectangle(edgeWidth + centerEdgeWidth, 0, centerWidth, topHeight);
+			var topCenterRight = new Rectangle(size.Width - (edgeWidth + centerEdgeWidth), 0, centerEdgeWidth, topHeight);
+			var topRight = new Rectangle(size.Width - edgeWidth, 0, edgeWidth, topHeight);
 
-			var bottomLeft = new Rectangle(0, 0, edgeWidth - 1, bottomHeight);
-			var bottomCenterLeft = new Rectangle(edgeWidth, 0, centerEdgeWidth - 1, bottomHeight);
-			var bottomCenter = new Rectangle(edgeWidth + centerEdgeWidth, 0, centerWidth - 1, bottomHeight);
-			var bottomCenterRight = new Rectangle(size.Width - (edgeWidth + centerEdgeWidth), 0, centerEdgeWidth - 1, bottomHeight);
-			var bottomRight = new Rectangle(size.Width - edgeWidth, 0, edgeWidth, bottomHeight);
+			var bottomLeft = new Rectangle(0, topHeight, edgeWidth, bottomHeight);
+			var bottomCenterLeft = new Rectangle(edgeWidth, topHeight, centerEdgeWidth, bottomHeight);
+			var bottomCenter = new Rectangle(edgeWidth + centerEdgeWidth, topHeight, centerWidth, bottomHeight);
+			var bottomCenterRight = new Rectangle(size.Width - (edgeWidth + centerEdgeWidth), topHeight, centerEdgeWidth, bottomHeight);
+			var bottomRight = new Rectangle(size.Width - edgeWidth, topHeight, edgeWidth, bottomHeight);
 
 			regions =
 				new Dictionary<MovementRegion, Rectangle>
@@ -54,6 +54,11 @@ namespace Robin.RetroEncabulator
 		public static MovementRegion GetRegionFromPoint(Point p)
 		{
 			return regions.FirstOrDefault(x => x.Value.Contains(p)).Key;
+		}
+
+		public static Dictionary<MovementRegion, Rectangle> Regions
+		{
+			get { return regions; }
 		}
 	}
 }

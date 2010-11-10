@@ -53,6 +53,9 @@ void parseSerialBuffer() {
 		case 'C':
 			parseIrChannelCommand();
 			break;
+		case 'X':
+			parseExtraCommand();
+			break;
 	}
 
 	//Serial.flush();
@@ -122,4 +125,12 @@ void parseIrChannelCommand() {
 	byte channel = readByteFromBuffer();
 
 	// setIrChannel(channel);
+}
+
+void parseExtraCommand() {
+	byte extra = readByteFromBuffer();
+
+	setLedRed(getBit(extra, 1));
+	setLedGreen(getBit(extra, 2));
+	setLedBlue(getBit(extra, 3));
 }

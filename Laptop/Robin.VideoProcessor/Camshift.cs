@@ -13,6 +13,7 @@ namespace Robin.VideoProcessor
 		private Image<Gray, byte> mask;
 
 		private Rectangle trackWindow;
+		private PointF trackCenter;
 		private MCvConnectedComp trackComp;
 
 		private readonly Gray maskLow = new Gray(100);
@@ -47,17 +48,23 @@ namespace Robin.VideoProcessor
 			backProjection = new Image<Gray, byte>(source.Size);
 
 			CvInvoke.cvCalcBackProject(new[] {source.Ptr}, backProjection.Ptr, histogram.Ptr);
-			backProjection.And(mask);
+			backProjection._And(mask);
 
 			MCvBox2D trackBox;
-			CvInvoke.cvCamShift(backProjection.Ptr, trackWindow, new MCvTermCriteria(5, 0.1), out trackComp, out trackBox);
-
+			CvInvoke.cvCamShift(backProjection.Ptr, trackWindow, new MCvTermCriteria(10, 1), out trackComp, out trackBox);
+			
 			trackWindow = trackComp.rect;
+			trackCenter = trackBox.center;
 		}
 
 		public Rectangle TrackWindow
 		{
 			get { return trackWindow; }
+		}
+
+		public Point TrackCenter
+		{
+			get { return Point.Truncate(trackCenter); }
 		}
 
 		public Image<Gray, byte> Mask

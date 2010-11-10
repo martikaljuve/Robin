@@ -7,9 +7,14 @@ namespace Robin.VideoProcessor
 {
 	public class VisionResults
 	{
-		public IEnumerable<HoughCircle> Circles;
-		public bool TrackingBall;
-		public Rectangle TrackWindow;
-		public IEnumerable<LineSegment2D> Lines;
+		public IEnumerable<HoughCircle> Circles { get; set; }
+
+		public bool TrackingBall { get; set; }
+
+		public Rectangle TrackWindow { get; set; }
+
+		public Point TrackCenter { get; set; }
+
+		public IEnumerable<LineSegment2D> Lines { get; set; }
 	}
 }

@@ -45,5 +45,15 @@ namespace Robin.Arduino
 		{
 			_arduino.Command(ArduinoPrefix.SetIrChannel, channel);
 		}
+
+		public void SetState(byte state)
+		{
+			_arduino.Command(ArduinoPrefix.SetState, state);
+		}
+
+		public ArduinoSerial ArduinoSerial
+		{
+			get { return _arduino; }
+		}
 	}
 }

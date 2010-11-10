@@ -4,9 +4,9 @@ using Robin.Arduino;
 
 namespace Robin.RetroEncabulator
 {
-	public static class MovementHelper
+	public static class ArduinoCommanderExtensions
 	{
-		public static void MoveToVisionLocation(ArduinoCommander commander, Point trackedBallLocation)
+		public static void MoveToVisionLocation(this ArduinoCommander commander, Point trackedBallLocation)
 		{
 			switch (MovementRegions.GetRegionFromPoint(trackedBallLocation))
 			{

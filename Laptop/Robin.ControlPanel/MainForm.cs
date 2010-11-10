@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Windows.Forms;
 using Robin.Arduino;
@@ -24,6 +25,7 @@ namespace Robin.ControlPanel
 		{
 			InitializeComponent();
 
+			InitializeUiControls();
 			InitializeSerialPortControls();
 			InitializeMainLogicControls();
 			InitializeVisionControls();
@@ -32,6 +34,17 @@ namespace Robin.ControlPanel
 
 			//using (var file = File.CreateText("stateMachine.txt"))
 			//    file.WriteLine(MainLogicProcessor.ToDebugString());
+		}
+
+		static MainForm()
+		{
+			regionArrowPen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+		}
+
+		private void InitializeUiControls()
+		{
+			uxContentPanel.MouseClick += (sender, args) => uxContentPanel.Focus();
+			uxContentPanel.MouseEnter += (sender, args) => uxContentPanel.Focus();
 		}
 		
 		private void InitializeVisionControls()
@@ -65,6 +78,13 @@ namespace Robin.ControlPanel
 					MainLogicProcessor.SensorData.UpdateFromSerialData(args.Data);
 				};
 
+			_arduinoSerial.DataSent +=
+				(o, args) =>
+				{
+					Action appendAction = () => uxSerialSendData.AppendText(args.Data + Environment.NewLine);
+					uxSerialSendData.Invoke(appendAction);
+				};
+
 			var connectCommand = new ConnectCommand(_arduinoSerial);
 			uxPortConnect.DataBindings.Add("Text", connectCommand, "DisplayName");
 			uxPortConnect.DataBindings.Add("Enabled", connectCommand, "Enabled");
@@ -95,9 +115,11 @@ namespace Robin.ControlPanel
 		private static bool showCircles;
 		private static bool showLines;
 
-		private readonly Pen ellipsePen = new Pen(Color.Fuchsia, 2);
-		private readonly Pen linePen = new Pen(Color.Gold, 2);
-		private readonly Pen camshiftPen = new Pen(Color.Red, 2);
+		private static readonly Pen ellipsePen = new Pen(Color.Fuchsia, 2);
+		private static readonly Pen linePen = new Pen(Color.Gold, 2);
+		private static readonly Pen camshiftPen = new Pen(Color.Red, 2);
+		private static readonly Pen regionPen = new Pen(Color.Coral, 2);
+		private static readonly Pen regionArrowPen = new Pen(Color.LightCoral, 8);
 
 		private void VideoProcessorOnFrameProcessed(object sender, FrameEventArgs frameEventArgs)
 		{
@@ -105,6 +127,10 @@ namespace Robin.ControlPanel
 			MainLogicProcessor.VisionData.UpdateFromVisionResults(results);
 
 			var frame = frameEventArgs.Frame;
+
+			if (!uxPlayer.Visible)
+				return;
+
 			DrawDebugInfo(frame, results);
 			uxPlayer.Image = frame;
 		}
@@ -113,14 +139,19 @@ namespace Robin.ControlPanel
 		{
 			using (var g = Graphics.FromImage(frame))
 			{
-				g.FillRectangle(Brushes.White, 5, 5, 100, 50);
-				g.DrawString("Threshold: " + HoughTransform.CannyThreshold, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 10));
-				g.DrawString("Linking: " + HoughTransform.CannyThresholdLinking, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 30));
+				/*{
+					var thresholdString = string.Format("Threshold: {0}", HoughTransform.CannyThreshold);
+					var linkingString = string.Format("Linking: {0}", HoughTransform.CannyThresholdLinking);
+
+					g.FillRectangle(Brushes.White, 5, 5, 100, 50);
+					g.DrawString(thresholdString, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 10));
+					g.DrawString(linkingString, SystemFonts.DefaultFont, Brushes.Crimson, new PointF(10, 30));
+				}*/
 
 				if (showCircles)
 					foreach (var circle in results.Circles)
 					{
-						g.DrawEllipse(ellipsePen, circle.X - circle.Radius, circle.Y - circle.Radius, circle.Radius*2, circle.Radius*2);
+						g.DrawEllipse(ellipsePen, circle.X - circle.Radius, circle.Y - circle.Radius, circle.Radius * 2, circle.Radius * 2);
 						g.DrawString(circle.Intensity.ToString(), SystemFonts.DefaultFont, Brushes.Orange, circle.X, circle.Y);
 					}
 
@@ -129,7 +160,16 @@ namespace Robin.ControlPanel
 						g.DrawLine(linePen, line.P1, line.P2);
 
 				if (results.TrackingBall)
+				{
 					g.DrawRectangle(camshiftPen, results.TrackWindow);
+					g.DrawLine(camshiftPen, results.TrackCenter, Point.Add(results.TrackCenter, new Size(1, 1)));
+				}
+
+				foreach (var rectangle in MovementRegions.Regions)
+				{
+					g.DrawString(rectangle.Key.ToString(), SystemFonts.DefaultFont, Brushes.Khaki, rectangle.Value);
+					g.DrawRectangle(regionPen, rectangle.Value);
+				}
 			}
 		}
 
@@ -142,6 +182,8 @@ namespace Robin.ControlPanel
 				showCircles = !showCircles;
 			if (key == 'l')
 				showLines = !showLines;
+			if (key == 'd')
+				uxPlayer.Visible = !uxPlayer.Visible;
 
 			VisionExperiments.ProcessKey(key);
 		}

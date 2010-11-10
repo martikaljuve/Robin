@@ -26,10 +26,10 @@ namespace Robin.VideoProcessor
 					if (y < 50) return 15;
 					if (y < 100) return 20;
 					if (y < 150) return 20;
-					if (y < 200) return 25;
-					if (y < 250) return 30;
-					if (y < 300) return 35;
-					if (y < 350) return 40;
+					if (y < 200) return 35;
+					if (y < 250) return 40;
+					if (y < 300) return 45;
+					if (y < 350) return 50;
 					return 50;
 				};
 		//private static readonly Func<int, int, int> MinIntensityFunc = (x, y) => (int)(2.64636615605 + 0.0474890367351 * y);
@@ -38,6 +38,7 @@ namespace Robin.VideoProcessor
 		{
 			CircleTransformation = new HoughCircleTransformation(RobinVideoConstants.RadiusFunc);
 			CircleTransformation.MinIntensityFunc = MinIntensityFunc;
+			CircleTransformation.LocalPeakRadius = 1;
 		}
 
 		public static Image<Gray, byte> GetCanny(Image<Gray, byte> source)

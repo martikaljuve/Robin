@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Linq;
 using System.Timers;
 using AForge.Video;
+using Emgu.CV.Structure;
+using Emgu.CV;
 
 namespace Robin.VideoProcessor
 {
@@ -38,14 +40,22 @@ namespace Robin.VideoProcessor
 			var circles = VisionExperiments.Circles;
 			if (!ballHistogramCalculated && circles.Any())
 			{
-				foundBall = true;
+				//foundBall = true;
 				ballHistogramCalculated = true;
 
+				/*using (var frame2 = new Image<Gray, byte>(640, 480, new Gray(255)))
+				{
+					frame2.ROI = new Rectangle(0, 0, 10, 10);
+					camshift.CalculateHistogram(frame2);
+					frame2.ROI = Rectangle.Empty;
+				}*/
+				
 				var circle = circles.First();
 				var frame = VisionExperiments.FrameGray;
 				frame.ROI = circle.GetRectangle();
 				camshift.CalculateHistogram(frame);
 				frame.ROI = Rectangle.Empty;
+				
 			}
 
 			if (!foundBall && circles.Any())
@@ -83,12 +93,13 @@ namespace Robin.VideoProcessor
 				}
 			}
 
-			results.TrackingBall = foundBall;
 			results.Circles = VisionExperiments.Circles;
 			results.TrackingBall = foundBall;
 			results.TrackWindow = camshift.TrackWindow;
+			results.TrackCenter = camshift.TrackCenter;
 			results.Lines = VisionExperiments.Lines;
 
+			//result = camshift.BackProjection.Convert<Bgr, byte>().Bitmap;
 			OnFrameProcessed(new FrameEventArgs(result));
 		}
 

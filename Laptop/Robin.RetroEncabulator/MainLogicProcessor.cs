@@ -5,6 +5,7 @@ using Robin.Arduino;
 using Robin.VideoProcessor;
 using Stateless;
 using System.Timers;
+using System.Diagnostics;
 
 namespace Robin.RetroEncabulator
 {
@@ -88,6 +89,11 @@ namespace Robin.RetroEncabulator
 		{
 			if (SensorData.BallInDribbler)
 				stateMachine.Fire(Trigger.BallCaught);
+
+			if (VisionData.TrackingBall)
+				stateMachine.Fire(Trigger.CameraLockedOnBall);
+
+
 		}
 
 		private void ClosingInOnBall()
@@ -95,7 +101,7 @@ namespace Robin.RetroEncabulator
 			if (SensorData.BallInDribbler)
 				stateMachine.Fire(Trigger.BallCaught);
 
-			MovementHelper.MoveToVisionLocation(Commander, VisionData.TrackedBallLocation);
+			Commander.MoveToVisionLocation(VisionData.TrackedBallLocation);
 		}
 
 		private void FindingGoal()
