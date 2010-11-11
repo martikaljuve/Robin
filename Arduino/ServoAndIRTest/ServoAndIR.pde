@@ -7,27 +7,41 @@
 Servo servo;
 int currentAngle = 0;
 int turnDirection = 4;
+int turnDirectionAbs = abs(turnDirection);
 int turnTime = 5;
 TimedAction servoAction = TimedAction(turnTime, turnServo);
-TimedAction outputAction = TimedAction(700, outputIR);
+TimedAction outputAction = TimedAction(700, outputInfo);
 
 void servoSetup(){
     servo.attach(SERVO_PIN);
 }
 
 void turnServo(){
-    servo.write(currentAngle+turnDirection);
-    calculateServo();
+    calculateTurnDirection();
+    calculateServoAngle();
+    servo.write(currentAngle);
 }
 
-void calculateServo(){
-   int newAngle = currentAngle += turnDirection;
+void calculateTurnDirection(){
+  if(isLeft() && !isRight()){
+      turnDirection = turnDirectionAbs;
+  }else if(!isLeft() && isRight()){
+      turnDirection = -turnDirectionAbs;
+  }else if(isLeft() && isRight()){
+      turnDirection = 0;
+  }
+}
+
+void calculateServoAngle(){
+   int newAngle = currentAngle + turnDirection;
    if(newAngle >= 0 && newAngle < 180){
      currentAngle = newAngle;
    }else{
+     newAngle = currentAngle;
      //Serial.println("Servo arvutuse viga!");
    }
-   calculateSweepServo();
+  
+   //calculateSweepServo();
 }
 
 void calculateSweepServo(){
@@ -52,7 +66,12 @@ void servoAndIRsetup(){
 void servoAndIRloop(){
     irLoop();
     servoAction.check();
-    //outputAction.check();
+    outputAction.check();
+}
+
+void outputInfo(){
+   outputServo();
+   outputIR();
 }
 
 void outputServo(){
