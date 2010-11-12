@@ -1,11 +1,11 @@
 struct CommandData {
 	char command;
 	int first;
-	byte second;
-	byte third;
+	int second;
+	int third;
 };
 
 union CommandUnion {
-	byte bytes[5];
+	byte bytes[7];
 	struct CommandData command;
 };

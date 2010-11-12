@@ -7,7 +7,7 @@
 void setup() {
 	ledOn();
 
-	//Serial.begin(9600);
+	//Serial.begin(57600);
 
 	// SETUP
 	motors_setup();
@@ -21,7 +21,7 @@ void setup() {
 	// HACK: Testing is easier with a delay.
 	//delay(4000);
 
-	//wheels.moveAndTurn(270, 150, 0);
+	//wheels.moveAndTurn(0, 255, 0);
 	//pidBack.setSetpoint(200);
 	//pidLeft.setSetpoint(200);
 }

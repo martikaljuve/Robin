@@ -8,22 +8,21 @@ void serialSenderSetup() {
 void serialSenderLoop() {
 	if (millis() > nextSend) {
 		sendMessage();
-
 		nextSend += sendInterval;
 	}
 }
 
 void sendMessage() {
 	byte first;
-	first = first | getTripSensorStatus();
-	first = first | (getLeftIrStatus() << 1);
-	first = first | (getRightIrStatus() << 2);
+	first |= (getTripSensorStatus() << 0);
+	first |= (getLeftIrStatus() << 1);
+	first |= (getRightIrStatus() << 2);
 
 	Serial.write((byte)'D');
 	Serial.write(first);
-	Serial.write(getBytesFromInt(getGyroDirection()), 2);
-	Serial.write(getBytesFromInt(getServoDirection()), 2);
-	Serial.write('\n');
+	SerialUtil.writeInt(getGyroDirection());
+	SerialUtil.writeInt(getServoDirection());
+	Serial.println();
 }
 
 bool getTripSensorStatus() {

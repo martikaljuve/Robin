@@ -361,7 +361,7 @@ const prog_int16_t wheelSpeeds[] PROGMEM = {
 	235, -255, 19, // 356
 	239, -255, 15, // 357
 	245, -255, 9, // 358
-	249, -255, 5, // 359
+	249, -255, 5 // 359
 };
 
 class WheelSpeedTable {	
@@ -369,7 +369,7 @@ public:
 	static void fromDirection(int direction, int &left, int &right, int &back) {
 		const prog_int16_t* pointer = &wheelSpeeds[direction * 3];
 		left = (int16_t)pgm_read_word(pointer);
-		right = (int16_t)pgm_read_word(pointer+2);
-		back = (int16_t)pgm_read_word(pointer+4);
+		right = (int16_t)pgm_read_word(pointer+1);
+		back = (int16_t)pgm_read_word(pointer+2);
 	}
 };

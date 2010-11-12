@@ -34,6 +34,7 @@ void Pid::setOutputLimits(int min, int max) {
 void Pid::compute(double dt) {
 	int mappedSetpoint = map(setpoint, inputMin, inputMax, outputMin, outputMax);
 	int mappedInput = map(input, inputMin, inputMax, outputMin, outputMax);
+
 	int error = mappedSetpoint - mappedInput;
 	integral = integral + (error * dt);
 	double derivative = (error - errorPrevious) / dt;

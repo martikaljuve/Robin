@@ -4,10 +4,10 @@ int j = 0;
 void runLoop(){
 	if(j%2 == 1){
 		wheels.stop();
-		Serial.println("STOP");
+		//Serial.println("STOP");
 	}else{
 		wheels.moveAndTurn(fullCorners[j], 200, 0);
-		Serial.println("Turn");
+		//Serial.println("Turn");
 	}
 	j++;
 }

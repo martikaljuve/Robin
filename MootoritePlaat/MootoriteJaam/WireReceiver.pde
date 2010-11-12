@@ -22,6 +22,16 @@ void setupTemp() {
 }
 
 void parseCommand(struct CommandData &cmd) {
+	/*
+	Serial.print(cmd.command);
+	Serial.print(", ");
+	Serial.print(cmd.first);
+	Serial.print(", ");
+	Serial.print(cmd.second);
+	Serial.print(", ");
+	Serial.println(cmd.third);
+	*/
+
 	switch(cmd.command) {
 		case 'S':
 			wheels.stop();
@@ -45,7 +55,7 @@ void parseCommand(struct CommandData &cmd) {
 }
 
 void dataReceived(int numBytes) {
-	for(int i = 0; i < min(6, numBytes); i++) {
+	for(int i = 0; i < min(7, numBytes); i++) {
 		byte tmp = Wire.available() ? Wire.receive() : 0;
 		cmdUnion.bytes[i] = tmp;
 	}

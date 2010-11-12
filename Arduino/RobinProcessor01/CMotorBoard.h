@@ -16,15 +16,23 @@ public:
 		sendCommand(command, first, 0, 0, 3);
 	}
 
-	static void sendCommand(char command, int first, byte second) {
-		sendCommand(command, first, second, 0, 4);
+	static void sendCommand(char command, int first, int second) {
+		sendCommand(command, first, second, 0, 5);
 	}
 
-	static void sendCommand(char command, int first, byte second, int third) {
-		sendCommand(command, first, second, third, 6);
+	static void sendCommand(char command, int first, int second, int third) {
+		sendCommand(command, first, second, third, 7);
 	}
 
 private:
+	static void sendCommand(char command, int first, int second, int third, int byteCount) {
+		cmdData.command = command;
+		cmdData.first = first;
+		cmdData.second = second;
+		cmdData.third = third;
+		sendCommand(cmdData, byteCount);
+	}
+
 	static void sendCommand(struct CommandData &cmd, int byteCount) {
 		Wire.beginTransmission(1);
 		cmdUnion.command = cmd;
@@ -32,14 +40,6 @@ private:
 			Wire.send(cmdUnion.bytes[i]);
 		}
 		Wire.endTransmission();
-	}
-
-	static void sendCommand(char command, int first, byte second, int third, int byteCount) {
-		cmdData.command = command;
-		cmdData.first = first;
-		cmdData.second = second;
-		cmdData.third = third;
-		sendCommand(cmdData, byteCount);
 	}
 };
 

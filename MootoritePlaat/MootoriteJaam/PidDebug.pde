@@ -3,7 +3,7 @@
 unsigned long serialTime;
 
 void pid_debug_setup() {
-	Serial.begin(9600);
+	//Serial.begin(9600);
 }
 
 void pid_debug_loop() {

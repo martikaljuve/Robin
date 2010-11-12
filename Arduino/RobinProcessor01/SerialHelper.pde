@@ -1,21 +1,19 @@
-union IntByteUnion {
-	byte bytes[2];
-	int number;
-} bytesToInt;
+class SerialHelper {
+public:
+	byte readByte() {
+		return Serial.read();
+	}
 
-int readIntFromSerial() {
-	byte first = Serial.read();
-	byte second = Serial.read();
-	return getIntFromBytes(first, second);
-}
+	int readInt() {
+		byte first = Serial.read();
+		byte second = Serial.read();
+		return (second << 8) + first;
+	}
 
-int getIntFromBytes(byte first, byte second) {
-	bytesToInt.bytes[0] = first;
-	bytesToInt.bytes[1] = second;
-	return bytesToInt.number;
-}
+	void writeInt(int value) {
+		Serial.write(lowByte(value));
+		Serial.write(highByte(value));
+	}
+};
 
-byte* getBytesFromInt(int number) {
-	bytesToInt.number = number;
-	return bytesToInt.bytes;
-}
+SerialHelper SerialUtil;

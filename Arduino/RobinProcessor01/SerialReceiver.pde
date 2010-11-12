@@ -1,35 +1,18 @@
-int bufferIndex = 0;
-int readerIndex = 0;
 byte buffer[10];
 
 void serialReceiverSetup() {
-	
+	Serial.flush();
 }
 
 void serialReceiverLoop() {
-	if (!Serial.available()) return;
-
-	byte b = Serial.read();
-
-	if (b == '.') { // HACK: Testime
-		parseSerialBuffer();
-		bufferIndex = 0;
-	}
-	else {
-		buffer[bufferIndex] = b;
-		bufferIndex++;
-	}
-
-	if (bufferIndex >= 10) {
-		bufferIndex = 0;
-	}
+	if(Serial.available() < 8)
+		return;
+	
+	parseSerialBuffer();
 }
 
 void parseSerialBuffer() {
-	if (bufferIndex == 0) return;
-
-	readerIndex = 0;
-	char command = readByteFromBuffer();
+	char command = SerialUtil.readByte();
 
 	switch(command) {
 		case 'F':
@@ -61,41 +44,21 @@ void parseSerialBuffer() {
 	//Serial.flush();
 }
 
-byte readByteFromBuffer() {
-	byte value = buffer[readerIndex];
-	readerIndex++;
-	return value;
-}
-
-int readIntFromBuffer() {
-	int value = getIntFromBytes(buffer[readerIndex], buffer[readerIndex+1]);
-	readerIndex += 2;
-	return value;
-}
-
 void parseFireCommand() {
-	byte power = readByteFromBuffer();
+	byte power = SerialUtil.readByte();
 
 	//fireCoilgun(power);
 }
 
 void parseMoveCommand() {
-	int dir = readIntFromBuffer();
-	int speed = readIntFromBuffer();
-
-	Serial.print("Move dir: ");
-	Serial.print(dir);
-	Serial.print(", speed: ");
-	Serial.println(speed);
+	int dir = SerialUtil.readInt();
+	int speed = SerialUtil.readInt();
 
 	MotorBoard::sendCommand('M', dir, speed);
 }
 
 void parseTurnCommand() {
-	int speed = readIntFromBuffer();
-
-	Serial.print("Turn speed: ");
-	Serial.println(speed);
+	int speed = SerialUtil.readInt();
 
 	MotorBoard::sendCommand('T', speed);
 }
@@ -105,7 +68,7 @@ void parseStopCommand() {
 }
 
 void parseDribblerCommand() {
-	byte enabled = readByteFromBuffer();
+	byte enabled = SerialUtil.readByte();
 
 	if ((enabled & 1) == 1)
 		MotorBoard::sendCommand('D');
@@ -114,21 +77,21 @@ void parseDribblerCommand() {
 }
 
 void parseMoveAndTurnCommand() {
-	int direction = readIntFromBuffer();
-	int moveSpeed = readIntFromBuffer();
-	int turnSpeed = readIntFromBuffer();
+	int direction = SerialUtil.readInt();
+	int moveSpeed = SerialUtil.readInt();
+	int turnSpeed = SerialUtil.readInt();
 
 	MotorBoard::sendCommand('G', direction, moveSpeed, turnSpeed);
 }
 
 void parseIrChannelCommand() {
-	byte channel = readByteFromBuffer();
+	byte channel = SerialUtil.readByte();
 
 	// setIrChannel(channel);
 }
 
 void parseExtraCommand() {
-	byte extra = readByteFromBuffer();
+	byte extra = SerialUtil.readByte();
 
 	setLedRed(getBit(extra, 1));
 	setLedGreen(getBit(extra, 2));
