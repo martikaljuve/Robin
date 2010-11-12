@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}</ProjectGuid>
+    <ProjectGuid>{D45AF369-69AC-43B6-99EA-2725C6CB880E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Robin.Arduino</RootNamespace>
-    <AssemblyName>Robin.Arduino</AssemblyName>
+    <RootNamespace>Robin.Core</RootNamespace>
+    <AssemblyName>Robin.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,18 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArduinoCommander.cs" />
-    <Compile Include="ArduinoDataUtil.cs" />
-    <Compile Include="ArduinoSerialDataEventArgs.cs" />
-    <Compile Include="ArduinoPrefix.cs" />
-    <Compile Include="ArduinoSerial.cs" />
+    <Compile Include="IRobotController.cs" />
+    <Compile Include="IRobotCommander.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Robin.Core\Robin.Core.csproj">
-      <Project>{D45AF369-69AC-43B6-99EA-2725C6CB880E}</Project>
-      <Name>Robin.Core</Name>
-    </ProjectReference>
+    <Compile Include="SensorData.cs" />
+    <Compile Include="States.cs" />
+    <Compile Include="VisionData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

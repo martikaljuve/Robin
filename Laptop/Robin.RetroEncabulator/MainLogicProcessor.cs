@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Robin.Arduino;
-using Robin.VideoProcessor;
+using Robin.Core;
 using Stateless;
 using System.Timers;
-using System.Diagnostics;
 
 namespace Robin.RetroEncabulator
 {
-	public class MainLogicProcessor
+	public class MainLogicProcessor : IRobotController
 	{
 		private readonly StateMachine<State, Trigger> stateMachine;
 		private static readonly Timer timer = new Timer();
@@ -45,7 +43,7 @@ namespace Robin.RetroEncabulator
 
 		public SensorData SensorData { get; set; }
 
-		public ArduinoCommander Commander { get; set; }
+		public IRobotCommander Commander { get; set; }
 
 		private void StartTimer(double milliseconds, Action action)
 		{

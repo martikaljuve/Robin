@@ -2,11 +2,11 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.IO.Ports;
 using System.Windows.Forms;
 using Robin.Arduino;
 using Robin.ControlPanel.Properties;
+using Robin.Core;
 using Robin.RetroEncabulator;
 using Robin.VideoProcessor;
 
@@ -19,7 +19,7 @@ namespace Robin.ControlPanel
 		private readonly ArduinoSerial arduinoSerial = new ArduinoSerial();
 
 		private MainVideoProcessor videoProcessor;
-		public MainLogicProcessor MainLogicProcessor { get; set; }
+		public IRobotController RobotController { get; set; }
 		
 		public MainForm()
 		{
@@ -33,7 +33,7 @@ namespace Robin.ControlPanel
 			timer.Start();
 
 			//using (var file = File.CreateText("stateMachine.txt"))
-			//    file.WriteLine(MainLogicProcessor.ToDebugString());
+			//    file.WriteLine(RobotController.ToDebugString());
 		}
 
 		static MainForm()
@@ -58,8 +58,8 @@ namespace Robin.ControlPanel
 
 		private void InitializeMainLogicControls()
 		{
-			MainLogicProcessor = new MainLogicProcessor();
-			MainLogicProcessor.Commander = new ArduinoCommander(arduinoSerial);
+			RobotController = new MainLogicProcessor();
+			RobotController.Commander = new ArduinoCommander(arduinoSerial);
 
 			mainLogicWorker.DoWork += MainLogicWorkerOnDoWork;
 			mainLogicWorker.ProgressChanged += MainLogicWorkerOnProgressChanged;
@@ -73,14 +73,14 @@ namespace Robin.ControlPanel
 			arduinoSerial.DataReceived +=
 				(o, args) =>
 				{
-					var data = SensorData.FromSerialData(args.Data);
+					var data = ArduinoDataUtil.GetSensorDataFromString(args.Data);
 					Action appendAction = () =>
 					{
 						if (!args.Data.StartsWith("D"))
 							uxSerialData.AppendText(index++ + ": " + args.Data);
 						else
 							uxSerialData.AppendText(index++ + ": " + data + Environment.NewLine);
-						MainLogicProcessor.SensorData.UpdateFromSerialData(args.Data);
+						RobotController.SensorData = data;
 					};
 					uxSerialData.Invoke(appendAction);
 				};
@@ -138,7 +138,7 @@ namespace Robin.ControlPanel
 		private void VideoProcessorOnFrameProcessed(object sender, FrameEventArgs frameEventArgs)
 		{
 			var results = videoProcessor.Results;
-			MainLogicProcessor.VisionData.UpdateFromVisionResults(results);
+			RobotController.VisionData = results.ToVisionData();
 
 			var frame = frameEventArgs.Frame;
 
@@ -227,7 +227,7 @@ namespace Robin.ControlPanel
 					}
 				}
 
-				MainLogicProcessor.Update();
+				RobotController.Update();
 				mainLogicWorker.ReportProgress(0, fps);
 			}
 		}

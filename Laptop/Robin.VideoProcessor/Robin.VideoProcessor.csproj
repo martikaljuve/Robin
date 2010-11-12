@@ -80,7 +80,6 @@
     <Compile Include="VideoFeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MainVideoProcessor.cs" />
-    <Compile Include="VisionData.cs" />
     <Compile Include="VisionExperiments.cs" />
     <Compile Include="VisionResults.cs" />
   </ItemGroup>
@@ -93,6 +92,12 @@
       <Link>Resources\RobotMask30.bmp</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Robin.Core\Robin.Core.csproj">
+      <Project>{D45AF369-69AC-43B6-99EA-2725C6CB880E}</Project>
+      <Name>Robin.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

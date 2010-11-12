@@ -2,6 +2,7 @@
 using System.Drawing;
 using AForge.Imaging;
 using Emgu.CV.Structure;
+using Robin.Core;
 
 namespace Robin.VideoProcessor
 {
@@ -16,5 +17,13 @@ namespace Robin.VideoProcessor
 		public Point TrackCenter { get; set; }
 
 		public IEnumerable<LineSegment2D> Lines { get; set; }
+
+		public VisionData ToVisionData()
+		{
+			var data = new VisionData();
+			data.TrackingBall = TrackingBall;
+			data.TrackedBallLocation = TrackWindow.Center();
+			return data;
+		}
 	}
 }

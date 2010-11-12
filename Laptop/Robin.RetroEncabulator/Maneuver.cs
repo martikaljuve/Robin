@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using Robin.Arduino;
+using Robin.Core;
 
 namespace Robin.RetroEncabulator
 {
@@ -9,11 +9,11 @@ namespace Robin.RetroEncabulator
 		private readonly LinkedList<MovementData> moves = new LinkedList<MovementData>();
 		private LinkedListNode<MovementData> currentMoveNode;
 		private Stopwatch timer = new Stopwatch();
-		private ArduinoCommander commander;
+		private IRobotCommander commander;
 
 		public bool IsDone { get; set; }
 
-		public Maneuver(ArduinoCommander commander)
+		public Maneuver(IRobotCommander commander)
 		{
 			this.commander = commander;
 		}

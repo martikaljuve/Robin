@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Drawing;
-using Robin.Arduino;
+using Robin.Core;
 
 namespace Robin.RetroEncabulator
 {
-	public static class ArduinoCommanderExtensions
+	public static class RobotCommanderExtensions
 	{
-		public static void MoveToVisionLocation(this ArduinoCommander commander, Point trackedBallLocation)
+		public static void MoveToVisionLocation(this IRobotCommander commander, Point trackedBallLocation)
 		{
 			switch (MovementRegions.GetRegionFromPoint(trackedBallLocation))
 			{

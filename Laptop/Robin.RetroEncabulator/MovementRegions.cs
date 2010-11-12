@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Robin.VideoProcessor;
+using Robin.Core;
 
 namespace Robin.RetroEncabulator
 {
@@ -14,7 +14,7 @@ namespace Robin.RetroEncabulator
 
 		static MovementRegions()
 		{
-			var size = RobinVideoConstants.Size;
+			var size = VisionData.FrameSize;
 			var edgeWidth = (int)(size.Width*EdgeRatio);
 			var centerEdgeWidth = (int)(size.Width*CenterEdgeRatio);
 			var centerWidth = size.Width - (2*edgeWidth + 2*centerEdgeWidth);

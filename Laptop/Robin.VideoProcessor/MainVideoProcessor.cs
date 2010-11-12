@@ -3,8 +3,6 @@ using System.Drawing;
 using System.Linq;
 using System.Timers;
 using AForge.Video;
-using Emgu.CV.Structure;
-using Emgu.CV;
 
 namespace Robin.VideoProcessor
 {

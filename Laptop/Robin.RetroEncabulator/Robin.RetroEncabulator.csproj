@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArduinoCommanderExtensions.cs" />
+    <Compile Include="RobotCommanderExtensions.cs" />
     <Compile Include="Maneuver.cs" />
     <Compile Include="MovementData.cs" />
     <Compile Include="MovementRegion.cs" />
@@ -56,13 +56,9 @@
     <Compile Include="Trigger.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Robin.Arduino\Robin.Arduino.csproj">
-      <Project>{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}</Project>
-      <Name>Robin.Arduino</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Robin.VideoProcessor\Robin.VideoProcessor.csproj">
-      <Project>{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}</Project>
-      <Name>Robin.VideoProcessor</Name>
+    <ProjectReference Include="..\Robin.Core\Robin.Core.csproj">
+      <Project>{D45AF369-69AC-43B6-99EA-2725C6CB880E}</Project>
+      <Name>Robin.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

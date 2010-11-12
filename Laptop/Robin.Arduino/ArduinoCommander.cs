@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Robin.Core;
 
 namespace Robin.Arduino
 {
-	public class ArduinoCommander
+	public class ArduinoCommander : IRobotCommander
 	{
 		private readonly ArduinoSerial arduino;
 
