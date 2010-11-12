@@ -53,8 +53,9 @@ namespace Robin.ControlPanel
 			this.uxSerialReceive = new System.Windows.Forms.Label();
 			this.uxSerialSend = new System.Windows.Forms.Label();
 			this.uxSerialSendData = new System.Windows.Forms.TextBox();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.uxVisionPanel = new System.Windows.Forms.GroupBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.uxControllers = new System.Windows.Forms.ComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.uxPlayer)).BeginInit();
@@ -82,7 +83,7 @@ namespace Robin.ControlPanel
 			// 
 			this.uxControlPanelLabel.AutoSize = true;
 			this.uxControlPanelLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-			this.tableLayoutPanel1.SetColumnSpan(this.uxControlPanelLabel, 4);
+			this.tableLayoutPanel1.SetColumnSpan(this.uxControlPanelLabel, 5);
 			this.uxControlPanelLabel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.uxControlPanelLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
 			this.uxControlPanelLabel.ForeColor = System.Drawing.Color.White;
@@ -90,7 +91,7 @@ namespace Robin.ControlPanel
 			this.uxControlPanelLabel.Margin = new System.Windows.Forms.Padding(0);
 			this.uxControlPanelLabel.Name = "uxControlPanelLabel";
 			this.uxControlPanelLabel.Padding = new System.Windows.Forms.Padding(5);
-			this.uxControlPanelLabel.Size = new System.Drawing.Size(690, 27);
+			this.uxControlPanelLabel.Size = new System.Drawing.Size(694, 27);
 			this.uxControlPanelLabel.TabIndex = 2;
 			this.uxControlPanelLabel.Text = "Control Panel";
 			this.uxControlPanelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -133,11 +134,12 @@ namespace Robin.ControlPanel
 			// 
 			this.tableLayoutPanel1.AutoSize = true;
 			this.tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(89)))), ((int)(((byte)(89)))), ((int)(((byte)(89)))));
-			this.tableLayoutPanel1.ColumnCount = 4;
+			this.tableLayoutPanel1.ColumnCount = 5;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 451F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Controls.Add(this.uxLogicFps, 2, 0);
@@ -145,6 +147,7 @@ namespace Robin.ControlPanel
 			this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.uxControlPanelLabel, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.uxVisionFps, 3, 0);
+			this.tableLayoutPanel1.Controls.Add(this.uxControllers, 4, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -161,7 +164,7 @@ namespace Robin.ControlPanel
 			this.uxLogicFps.BackColor = System.Drawing.Color.Transparent;
 			this.uxLogicFps.Location = new System.Drawing.Point(188, 24);
 			this.uxLogicFps.Name = "uxLogicFps";
-			this.uxLogicFps.Size = new System.Drawing.Size(21, 13);
+			this.uxLogicFps.Size = new System.Drawing.Size(23, 13);
 			this.uxLogicFps.TabIndex = 6;
 			this.uxLogicFps.Text = "fps";
 			// 
@@ -170,9 +173,9 @@ namespace Robin.ControlPanel
 			this.uxVisionFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.uxVisionFps.AutoSize = true;
 			this.uxVisionFps.BackColor = System.Drawing.Color.Transparent;
-			this.uxVisionFps.Location = new System.Drawing.Point(215, 24);
+			this.uxVisionFps.Location = new System.Drawing.Point(217, 24);
 			this.uxVisionFps.Name = "uxVisionFps";
-			this.uxVisionFps.Size = new System.Drawing.Size(21, 13);
+			this.uxVisionFps.Size = new System.Drawing.Size(23, 13);
 			this.uxVisionFps.TabIndex = 6;
 			this.uxVisionFps.Text = "fps";
 			// 
@@ -372,18 +375,6 @@ namespace Robin.ControlPanel
 			this.uxSerialSendData.TabIndex = 14;
 			this.uxSerialSendData.WordWrap = false;
 			// 
-			// groupBox1
-			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.uxContentPanel.SetFlowBreak(this.groupBox1, true);
-			this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-			this.groupBox1.Location = new System.Drawing.Point(3, 757);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(658, 187);
-			this.groupBox1.TabIndex = 8;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Vision Settings";
-			// 
 			// uxVisionPanel
 			// 
 			this.uxVisionPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -397,6 +388,28 @@ namespace Robin.ControlPanel
 			this.uxVisionPanel.TabStop = false;
 			this.uxVisionPanel.Text = "Video feed";
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.uxContentPanel.SetFlowBreak(this.groupBox1, true);
+			this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.groupBox1.Location = new System.Drawing.Point(3, 757);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(658, 187);
+			this.groupBox1.TabIndex = 8;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Vision Settings";
+			// 
+			// uxControllers
+			// 
+			this.uxControllers.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.uxControllers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.uxControllers.FormattingEnabled = true;
+			this.uxControllers.Location = new System.Drawing.Point(570, 20);
+			this.uxControllers.Name = "uxControllers";
+			this.uxControllers.Size = new System.Drawing.Size(121, 21);
+			this.uxControllers.TabIndex = 7;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -406,6 +419,7 @@ namespace Robin.ControlPanel
 			this.Controls.Add(this.uxContentPanel);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.DoubleBuffered = true;
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MinimumSize = new System.Drawing.Size(400, 240);
@@ -452,6 +466,7 @@ namespace Robin.ControlPanel
 		private TextBox uxSerialSendData;
 		private Label uxSerialReceive;
 		private GroupBox groupBox1;
+		private ComboBox uxControllers;
 	}
 }
 

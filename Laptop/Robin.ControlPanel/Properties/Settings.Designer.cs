@@ -58,5 +58,17 @@ namespace Robin.ControlPanel.Properties {
                 this["CamIndex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SelectedController {
+            get {
+                return ((string)(this["SelectedController"]));
+            }
+            set {
+                this["SelectedController"] = value;
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Text;
 using Robin.Core;
 using Stateless;
@@ -7,6 +8,7 @@ using System.Timers;
 
 namespace Robin.RetroEncabulator
 {
+	[Export(typeof(IRobotController))]
 	public class MainLogicProcessor : IRobotController
 	{
 		private readonly StateMachine<State, Trigger> stateMachine;
@@ -42,6 +44,11 @@ namespace Robin.RetroEncabulator
 		public VisionData VisionData { get; set; }
 
 		public SensorData SensorData { get; set; }
+
+		public string Name
+		{
+			get { return "RetroEncabulator"; }
+		}
 
 		public IRobotCommander Commander { get; set; }
 

@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
+using System.Reflection;
 using System.Windows.Forms;
 using Robin.Arduino;
 using Robin.ControlPanel.Properties;
 using Robin.Core;
 using Robin.RetroEncabulator;
 using Robin.VideoProcessor;
+using System.Linq;
 
 namespace Robin.ControlPanel
 {
@@ -17,13 +22,19 @@ namespace Robin.ControlPanel
 		private readonly Stopwatch timer = new Stopwatch();
 		private readonly BackgroundWorker mainLogicWorker = new BackgroundWorker();
 		private readonly ArduinoSerial arduinoSerial = new ArduinoSerial();
+		private readonly ArduinoCommander arduinoCommander;
 
+		private IRobotController selectedController;
 		private MainVideoProcessor videoProcessor;
-		public IRobotController RobotController { get; set; }
+
+		[ImportMany]
+		public IEnumerable<IRobotController> RobotControllers { get; set; }
 		
 		public MainForm()
 		{
 			InitializeComponent();
+
+			arduinoCommander = new ArduinoCommander(arduinoSerial);
 
 			InitializeUiControls();
 			InitializeSerialPortControls();
@@ -58,8 +69,36 @@ namespace Robin.ControlPanel
 
 		private void InitializeMainLogicControls()
 		{
-			RobotController = new MainLogicProcessor();
-			RobotController.Commander = new ArduinoCommander(arduinoSerial);
+			var dirCatalog = new DirectoryCatalog("Controllers");
+			var assemblyCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
+			var aggregateCatalog = new AggregateCatalog(dirCatalog, assemblyCatalog);
+			var container = new CompositionContainer(aggregateCatalog);
+			container.ComposeParts(this);
+
+			uxControllers.DataSource = RobotControllers;
+			uxControllers.DisplayMember = "Name";
+			uxControllers.SelectedIndexChanged +=
+				(sender, args) =>
+				{
+					selectedController = (IRobotController)uxControllers.SelectedItem;
+					selectedController.Commander = arduinoCommander;
+				};
+
+			if (!string.IsNullOrWhiteSpace(Settings.Default.SelectedController))
+			{
+				foreach (var controller in RobotControllers)
+				{
+					if (controller.Name != Settings.Default.SelectedController)
+						continue;
+
+					uxControllers.SelectedItem = controller;
+					break;
+				}
+			}
+			else
+			{
+				selectedController = RobotControllers.First();
+			}
 
 			mainLogicWorker.DoWork += MainLogicWorkerOnDoWork;
 			mainLogicWorker.ProgressChanged += MainLogicWorkerOnProgressChanged;
@@ -80,7 +119,8 @@ namespace Robin.ControlPanel
 							uxSerialData.AppendText(index++ + ": " + args.Data);
 						else
 							uxSerialData.AppendText(index++ + ": " + data + Environment.NewLine);
-						RobotController.SensorData = data;
+
+						selectedController.SensorData = data;
 					};
 					uxSerialData.Invoke(appendAction);
 				};
@@ -138,7 +178,7 @@ namespace Robin.ControlPanel
 		private void VideoProcessorOnFrameProcessed(object sender, FrameEventArgs frameEventArgs)
 		{
 			var results = videoProcessor.Results;
-			RobotController.VisionData = results.ToVisionData();
+			selectedController.VisionData = results.ToVisionData();
 
 			var frame = frameEventArgs.Frame;
 
@@ -227,7 +267,7 @@ namespace Robin.ControlPanel
 					}
 				}
 
-				RobotController.Update();
+				selectedController.Update();
 				mainLogicWorker.ReportProgress(0, fps);
 			}
 		}
