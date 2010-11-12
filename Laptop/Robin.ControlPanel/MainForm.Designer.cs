@@ -50,11 +50,11 @@ namespace Robin.ControlPanel
 			this.uxIrChannelPanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.uxContentPanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.uxSerialPanel = new System.Windows.Forms.GroupBox();
-			this.uxVisionPanel = new System.Windows.Forms.GroupBox();
-			this.uxSerialSendData = new System.Windows.Forms.TextBox();
-			this.uxSerialSend = new System.Windows.Forms.Label();
 			this.uxSerialReceive = new System.Windows.Forms.Label();
+			this.uxSerialSend = new System.Windows.Forms.Label();
+			this.uxSerialSendData = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.uxVisionPanel = new System.Windows.Forms.GroupBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.uxPlayer)).BeginInit();
@@ -308,8 +308,8 @@ namespace Robin.ControlPanel
 			this.uxContentPanel.AutoScroll = true;
 			this.uxContentPanel.BackColor = System.Drawing.Color.Transparent;
 			this.uxContentPanel.Controls.Add(this.uxSerialPanel);
-			this.uxContentPanel.Controls.Add(this.groupBox1);
 			this.uxContentPanel.Controls.Add(this.uxVisionPanel);
+			this.uxContentPanel.Controls.Add(this.groupBox1);
 			this.uxContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.uxContentPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.uxContentPanel.Location = new System.Drawing.Point(0, 89);
@@ -338,18 +338,23 @@ namespace Robin.ControlPanel
 			this.uxSerialPanel.TabStop = false;
 			this.uxSerialPanel.Text = "Arduino";
 			// 
-			// uxVisionPanel
+			// uxSerialReceive
 			// 
-			this.uxVisionPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.uxVisionPanel.Controls.Add(this.uxPlayer);
-			this.uxContentPanel.SetFlowBreak(this.uxVisionPanel, true);
-			this.uxVisionPanel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-			this.uxVisionPanel.Location = new System.Drawing.Point(3, 420);
-			this.uxVisionPanel.Name = "uxVisionPanel";
-			this.uxVisionPanel.Size = new System.Drawing.Size(658, 524);
-			this.uxVisionPanel.TabIndex = 1;
-			this.uxVisionPanel.TabStop = false;
-			this.uxVisionPanel.Text = "Video feed";
+			this.uxSerialReceive.AutoSize = true;
+			this.uxSerialReceive.Location = new System.Drawing.Point(332, 74);
+			this.uxSerialReceive.Name = "uxSerialReceive";
+			this.uxSerialReceive.Size = new System.Drawing.Size(66, 21);
+			this.uxSerialReceive.TabIndex = 16;
+			this.uxSerialReceive.Text = "Receive:";
+			// 
+			// uxSerialSend
+			// 
+			this.uxSerialSend.AutoSize = true;
+			this.uxSerialSend.Location = new System.Drawing.Point(9, 74);
+			this.uxSerialSend.Name = "uxSerialSend";
+			this.uxSerialSend.Size = new System.Drawing.Size(48, 21);
+			this.uxSerialSend.TabIndex = 15;
+			this.uxSerialSend.Text = "Send:";
 			// 
 			// uxSerialSendData
 			// 
@@ -367,35 +372,30 @@ namespace Robin.ControlPanel
 			this.uxSerialSendData.TabIndex = 14;
 			this.uxSerialSendData.WordWrap = false;
 			// 
-			// uxSerialSend
-			// 
-			this.uxSerialSend.AutoSize = true;
-			this.uxSerialSend.Location = new System.Drawing.Point(9, 74);
-			this.uxSerialSend.Name = "uxSerialSend";
-			this.uxSerialSend.Size = new System.Drawing.Size(48, 21);
-			this.uxSerialSend.TabIndex = 15;
-			this.uxSerialSend.Text = "Send:";
-			// 
-			// uxSerialReceive
-			// 
-			this.uxSerialReceive.AutoSize = true;
-			this.uxSerialReceive.Location = new System.Drawing.Point(332, 74);
-			this.uxSerialReceive.Name = "uxSerialReceive";
-			this.uxSerialReceive.Size = new System.Drawing.Size(66, 21);
-			this.uxSerialReceive.TabIndex = 16;
-			this.uxSerialReceive.Text = "Receive:";
-			// 
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.uxContentPanel.SetFlowBreak(this.groupBox1, true);
 			this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-			this.groupBox1.Location = new System.Drawing.Point(3, 227);
+			this.groupBox1.Location = new System.Drawing.Point(3, 757);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(658, 187);
 			this.groupBox1.TabIndex = 8;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Vision Settings";
+			// 
+			// uxVisionPanel
+			// 
+			this.uxVisionPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.uxVisionPanel.Controls.Add(this.uxPlayer);
+			this.uxContentPanel.SetFlowBreak(this.uxVisionPanel, true);
+			this.uxVisionPanel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxVisionPanel.Location = new System.Drawing.Point(3, 227);
+			this.uxVisionPanel.Name = "uxVisionPanel";
+			this.uxVisionPanel.Size = new System.Drawing.Size(658, 524);
+			this.uxVisionPanel.TabIndex = 1;
+			this.uxVisionPanel.TabStop = false;
+			this.uxVisionPanel.Text = "Video feed";
 			// 
 			// MainForm
 			// 

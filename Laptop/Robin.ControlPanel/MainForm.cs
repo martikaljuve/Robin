@@ -49,7 +49,7 @@ namespace Robin.ControlPanel
 		
 		private void InitializeVisionControls()
 		{
-			videoProcessor = new MainVideoProcessor();
+			videoProcessor = new MainVideoProcessor(Settings.Default.CamIndex);
 			videoProcessor.FrameProcessed += VideoProcessorOnFrameProcessed;
 			Application.ApplicationExit += (o1, args1) => videoProcessor.Stop();
 			
@@ -76,7 +76,10 @@ namespace Robin.ControlPanel
 					var data = SensorData.FromSerialData(args.Data);
 					Action appendAction = () =>
 					{
-						uxSerialData.AppendText(index++ + ": " + data + Environment.NewLine);
+						if (!args.Data.StartsWith("D"))
+							uxSerialData.AppendText(index++ + ": " + args.Data);
+						else
+							uxSerialData.AppendText(index++ + ": " + data + Environment.NewLine);
 						MainLogicProcessor.SensorData.UpdateFromSerialData(args.Data);
 					};
 					uxSerialData.Invoke(appendAction);

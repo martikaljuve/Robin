@@ -19,9 +19,10 @@ namespace Robin.VideoProcessor
 
 		public event EventHandler<FrameEventArgs> FrameProcessed;
 
-		public MainVideoProcessor()
+		public MainVideoProcessor(int camIndex = 0)
 		{
-			feed = new VideoFeed(VideoFeed.Sample6);
+			feed = new VideoFeed(camIndex);
+			//feed = new VideoFeed(VideoFeed.Sample6);
 
 			feed.NewFrame += VideoSourceOnNewFrame;
 			feed.Start();

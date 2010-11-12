@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Robin.Arduino
 {
@@ -22,14 +23,17 @@ namespace Robin.Arduino
 		public void UpdateFromSerialData(string data)
 		{
 			if (string.IsNullOrEmpty(data)) return;
-			if (data[0] != 'D') return;
+			var tokens = data.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			if (tokens.Length == 0) return;
+			var token = tokens.LastOrDefault(t => t.StartsWith("D"));
+			if (token == default(string)) return;
 
-			UpdateFromSerialData(this, data);
+			UpdateFromSerialData(this, token);
 		}
 
 		private static void UpdateFromSerialData(SensorData sensorData, string data)
 		{
-			if (data.Length < 7) return;
+			if (data.Length < 6) return;
 			if (!data.StartsWith(ArduinoPrefix.IncomingData)) return;
 
 			var firstByte = (byte) data[1];
@@ -37,8 +41,9 @@ namespace Robin.Arduino
 			sensorData.BallInDribbler = (1 & firstByte) == 1;
 			sensorData.BeaconIrLeftInView = (2 & firstByte) == 2;
 			sensorData.BeaconIrRightInView = (4 & firstByte) == 4;
-			sensorData.GyroDirection = BitConverter.ToInt16(new[] { (byte)data[2], (byte)data[3] }, 0);
-			sensorData.BeaconServoDirection = BitConverter.ToInt16(new[] { (byte)data[4], (byte)data[5] }, 0);
+
+			sensorData.GyroDirection = GetShortFromString(data, 2);
+			sensorData.BeaconServoDirection = GetShortFromString(data, 4);
 		}
 
 		public static SensorData FromSerialData(string data)
@@ -56,6 +61,16 @@ namespace Robin.Arduino
 				BeaconIrRightInView,
 				BeaconServoDirection,
 				GyroDirection);
+		}
+
+		public static short GetShortFromString(string value, int index)
+		{
+			var bytes = new[] { (byte)value[index], (byte)value[index + 1] }.AsEnumerable();
+
+			if (!BitConverter.IsLittleEndian)
+				bytes = bytes.Reverse();
+
+			return BitConverter.ToInt16(bytes.ToArray(), 0);
 		}
 	}
 }

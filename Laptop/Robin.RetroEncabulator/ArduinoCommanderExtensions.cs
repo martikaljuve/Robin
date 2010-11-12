@@ -14,19 +14,19 @@ namespace Robin.RetroEncabulator
 					commander.Stop();
 					break;
 				case MovementRegion.TopLeft:
-					commander.MoveAndTurn(340, 255, -10);
+					commander.MoveAndTurn(340, 255, -11);
 					break;
 				case MovementRegion.TopCenterLeft:
-					commander.MoveAndTurn(0, 255, -10);
+					commander.MoveAndTurn(0, 255, -11);
 					break;
 				case MovementRegion.TopCenter:
 					commander.MoveAndTurn(0, 255, 0);
 					break;
 				case MovementRegion.TopCenterRight:
-					commander.MoveAndTurn(0, 255, 10);
+					commander.MoveAndTurn(0, 255, 11);
 					break;
 				case MovementRegion.TopRight:
-					commander.MoveAndTurn(20, 255, 10);
+					commander.MoveAndTurn(20, 255, 11);
 					break;
 				case MovementRegion.BottomLeft:
 					commander.MoveAndTurn(270, 100, 0);

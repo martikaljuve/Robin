@@ -4,56 +4,56 @@ namespace Robin.Arduino
 {
 	public class ArduinoCommander
 	{
-		private readonly ArduinoSerial _arduino;
+		private readonly ArduinoSerial arduino;
 
 		public ArduinoCommander(ArduinoSerial arduino)
 		{
-			_arduino = arduino;
+			this.arduino = arduino;
 		}
 
 		public void FireCoilgun(byte power)
 		{
-			_arduino.Command(ArduinoPrefix.CoilgunFire, power);
+			arduino.Command(ArduinoPrefix.CoilgunFire, power);
 		}
 
 		public void Move(short direction, short speed)
 		{
-			_arduino.Command(ArduinoPrefix.Move, direction, speed);
+			arduino.Command(ArduinoPrefix.Move, direction, speed);
 		}
 
 		public void Turn(short speed)
 		{
-			_arduino.Command(ArduinoPrefix.Turn, speed);
+			arduino.Command(ArduinoPrefix.Turn, speed);
 		}
 		
 		public void Stop()
 		{
-			_arduino.Command(ArduinoPrefix.Stop);
+			arduino.Command(ArduinoPrefix.Stop);
 		}
 
 		public void SetDribbler(bool enabled)
 		{
-			_arduino.Command(ArduinoPrefix.SetDribbler, enabled);
+			arduino.Command(ArduinoPrefix.SetDribbler, enabled);
 		}
 
 		public void MoveAndTurn(short direction, short moveSpeed, short turnSpeed)
 		{
-			_arduino.Command(ArduinoPrefix.MoveAndTurn, direction, moveSpeed, turnSpeed);
+			arduino.Command(ArduinoPrefix.MoveAndTurn, direction, moveSpeed, turnSpeed);
 		}
 
 		public void SetIrChannel(byte channel)
 		{
-			_arduino.Command(ArduinoPrefix.SetIrChannel, channel);
+			arduino.Command(ArduinoPrefix.SetIrChannel, channel);
 		}
 
 		public void SetState(byte state)
 		{
-			_arduino.Command(ArduinoPrefix.SetState, state);
+			arduino.Command(ArduinoPrefix.SetState, state);
 		}
 
 		public ArduinoSerial ArduinoSerial
 		{
-			get { return _arduino; }
+			get { return arduino; }
 		}
 	}
 }

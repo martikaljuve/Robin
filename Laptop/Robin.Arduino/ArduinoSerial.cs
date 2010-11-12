@@ -76,6 +76,8 @@ namespace Robin.Arduino
 
 		public void Command(string command, params object[] parameters)
 		{
+			if (!port.IsOpen) return;
+
 			var currentCommand = command + string.Join("", parameters);
 
 			if (currentCommand == previousCommand && ArduinoPrefix.NonRepeatableCommands.Contains(command)) {
@@ -84,39 +86,37 @@ namespace Robin.Arduino
 			}
 
 			previousCommand = currentCommand;
-
+			
 			var cmdBytes = Encoding.ASCII.GetBytes(command);
 
 			var byteList = new List<byte>();
 			byteList.AddRange(cmdBytes);
 
-			foreach (var parameter in parameters)
-			{
-				if (parameter.GetType() == typeof(short))
-					byteList.AddRange(BitConverter.GetBytes((short)parameter));
-				else if (parameter.GetType() == typeof(bool))
-					byteList.AddRange(BitConverter.GetBytes((bool)parameter));
-				else if (parameter.GetType() == typeof(byte))
-					byteList.Add((byte)parameter);
+			foreach (var parameter in parameters) {
+				var bytes = BitConverter.GetBytes((short)parameter);
+				if (!BitConverter.IsLittleEndian)
+					bytes = bytes.Reverse().ToArray();
+				byteList.AddRange(bytes);
 			}
 
-			byteList.Add((byte)'.');
+			// Fill with 0's
+			while (byteList.Count < 7)
+				byteList.Add(0);
 
-			if (!Write(byteList.ToArray(), 0, byteList.Count))
+			byteList.Add((byte)'\n');
+
+			if (!WriteLine(byteList))
 				return;
 
 			OnDataSent(new ArduinoSerialDataEventArgs(command + ": " + string.Join(", ", parameters)));
 		}
 
-		private bool Write(byte[] buffer, int offset, int count)
+		private bool WriteLine(IEnumerable<byte> bytes)
 		{
-			if (!port.IsOpen)
-				return false;
-
 			try
 			{
-				port.Write(buffer, offset, count);
-				port.WriteLine("");
+				var byteArray = bytes.ToArray();
+				port.Write(byteArray, 0, byteArray.Length);
 				return true;
 			}
 			catch (TimeoutException)
