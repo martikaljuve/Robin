@@ -184,7 +184,7 @@ namespace Robin.ControlPanel
 			this.uxControllers.FormattingEnabled = true;
 			this.uxControllers.Location = new System.Drawing.Point(246, 20);
 			this.uxControllers.Name = "uxControllers";
-			this.uxControllers.Size = new System.Drawing.Size(121, 21);
+			this.uxControllers.Size = new System.Drawing.Size(246, 21);
 			this.uxControllers.TabIndex = 7;
 			// 
 			// uxSerialData

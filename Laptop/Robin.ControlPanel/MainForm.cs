@@ -27,7 +27,7 @@ namespace Robin.ControlPanel
 		private MainVideoProcessor videoProcessor;
 
 		[ImportMany]
-		public IEnumerable<IRobotController> RobotControllers { get; set; }
+		public IEnumerable<Lazy<IRobotController>> RobotControllers { get; set; }
 		
 		public MainForm()
 		{
@@ -61,7 +61,14 @@ namespace Robin.ControlPanel
 		{
 			videoProcessor = new MainVideoProcessor(Settings.Default.CamIndex);
 			videoProcessor.FrameProcessed += VideoProcessorOnFrameProcessed;
-			Application.ApplicationExit += (o1, args1) => videoProcessor.Stop();
+			Application.ApplicationExit +=
+				(o1, args1) =>
+				{
+					mainLogicWorker.CancelAsync();
+					videoProcessor.Stop();
+					foreach (var controller in RobotControllers)
+						controller.Value.Dispose();
+				};
 			
 			KeyPress += OnKeyPress;
 		}
@@ -76,33 +83,38 @@ namespace Robin.ControlPanel
 
 			uxControllers.DataSource = RobotControllers;
 			uxControllers.DisplayMember = "Name";
-			uxControllers.SelectedIndexChanged +=
-				(sender, args) =>
-				{
-					selectedController = (IRobotController)uxControllers.SelectedItem;
-					selectedController.Commander = arduinoCommander;
-				};
+			uxControllers.SelectedIndexChanged += (sender, args) => SetSelectedController((IRobotController)uxControllers.SelectedItem);
 
 			if (!string.IsNullOrWhiteSpace(Settings.Default.SelectedController))
 			{
 				foreach (var controller in RobotControllers)
 				{
-					if (controller.Name != Settings.Default.SelectedController)
+					if (controller.Value.Name != Settings.Default.SelectedController)
 						continue;
 
+					SetSelectedController(controller.Value);
 					uxControllers.SelectedItem = controller;
 					break;
 				}
 			}
 			else
 			{
-				selectedController = RobotControllers.First();
+				SetSelectedController(RobotControllers.Select(x => x.Value).First());
+				uxControllers.SelectedItem = selectedController;
 			}
 
+			mainLogicWorker.WorkerSupportsCancellation = true;
 			mainLogicWorker.DoWork += MainLogicWorkerOnDoWork;
 			mainLogicWorker.ProgressChanged += MainLogicWorkerOnProgressChanged;
 			mainLogicWorker.WorkerReportsProgress = true;
 			mainLogicWorker.RunWorkerAsync();
+		}
+
+		private void SetSelectedController(IRobotController controller)
+		{
+			selectedController = controller;
+			selectedController.Commander = arduinoCommander;
+			selectedController.Parent = Handle;
 		}
 
 		private void InitializeSerialPortControls()

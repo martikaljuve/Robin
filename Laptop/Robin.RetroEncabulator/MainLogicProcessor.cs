@@ -89,6 +89,8 @@ namespace Robin.RetroEncabulator
 			System.Threading.Thread.Sleep(100);
 		}
 
+		public IntPtr Parent { get; set; }
+
 		private void LookingForBall()
 		{
 			if (SensorData.BallInDribbler)
@@ -185,6 +187,11 @@ namespace Robin.RetroEncabulator
 		{
 			var source = sources[destination];
 			return source;
+		}
+
+		public void Dispose()
+		{
+			
 		}
 	}
 }

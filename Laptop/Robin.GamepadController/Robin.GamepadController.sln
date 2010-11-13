@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robin.GamepadController", "Robin.GamepadController.csproj", "{EE5171C9-1700-46FF-9A30-3D38C557F0DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robin.Core", "..\Robin.Core\Robin.Core.csproj", "{D45AF369-69AC-43B6-99EA-2725C6CB880E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Release|x64.ActiveCfg = Release|Any CPU
+		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Debug|x64.ActiveCfg = Debug|x64
+		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Debug|x64.Build.0 = Debug|x64
+		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Release|x64.ActiveCfg = Release|x64
+		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
