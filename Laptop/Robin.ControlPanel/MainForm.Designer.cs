@@ -39,6 +39,7 @@ namespace Robin.ControlPanel
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.uxLogicFps = new System.Windows.Forms.Label();
 			this.uxVisionFps = new System.Windows.Forms.Label();
+			this.uxControllers = new System.Windows.Forms.ComboBox();
 			this.uxSerialData = new System.Windows.Forms.TextBox();
 			this.uxPlayer = new AForge.Controls.PictureBox();
 			this.uxIrChannel1 = new System.Windows.Forms.RadioButton();
@@ -55,7 +56,6 @@ namespace Robin.ControlPanel
 			this.uxSerialSendData = new System.Windows.Forms.TextBox();
 			this.uxVisionPanel = new System.Windows.Forms.GroupBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.uxControllers = new System.Windows.Forms.ComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.uxPlayer)).BeginInit();
@@ -91,7 +91,7 @@ namespace Robin.ControlPanel
 			this.uxControlPanelLabel.Margin = new System.Windows.Forms.Padding(0);
 			this.uxControlPanelLabel.Name = "uxControlPanelLabel";
 			this.uxControlPanelLabel.Padding = new System.Windows.Forms.Padding(5);
-			this.uxControlPanelLabel.Size = new System.Drawing.Size(694, 27);
+			this.uxControlPanelLabel.Size = new System.Drawing.Size(690, 27);
 			this.uxControlPanelLabel.TabIndex = 2;
 			this.uxControlPanelLabel.Text = "Control Panel";
 			this.uxControlPanelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -139,9 +139,7 @@ namespace Robin.ControlPanel
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 451F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.Controls.Add(this.uxLogicFps, 2, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 0);
@@ -178,6 +176,16 @@ namespace Robin.ControlPanel
 			this.uxVisionFps.Size = new System.Drawing.Size(23, 13);
 			this.uxVisionFps.TabIndex = 6;
 			this.uxVisionFps.Text = "fps";
+			// 
+			// uxControllers
+			// 
+			this.uxControllers.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.uxControllers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.uxControllers.FormattingEnabled = true;
+			this.uxControllers.Location = new System.Drawing.Point(246, 20);
+			this.uxControllers.Name = "uxControllers";
+			this.uxControllers.Size = new System.Drawing.Size(121, 21);
+			this.uxControllers.TabIndex = 7;
 			// 
 			// uxSerialData
 			// 
@@ -399,16 +407,6 @@ namespace Robin.ControlPanel
 			this.groupBox1.TabIndex = 8;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Vision Settings";
-			// 
-			// uxControllers
-			// 
-			this.uxControllers.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.uxControllers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.uxControllers.FormattingEnabled = true;
-			this.uxControllers.Location = new System.Drawing.Point(570, 20);
-			this.uxControllers.Name = "uxControllers";
-			this.uxControllers.Size = new System.Drawing.Size(121, 21);
-			this.uxControllers.TabIndex = 7;
 			// 
 			// MainForm
 			// 

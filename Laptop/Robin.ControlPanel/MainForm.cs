@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using Robin.Arduino;
 using Robin.ControlPanel.Properties;
 using Robin.Core;
-using Robin.RetroEncabulator;
 using Robin.VideoProcessor;
 using System.Linq;
 
@@ -218,12 +217,6 @@ namespace Robin.ControlPanel
 					g.DrawRectangle(camshiftPen, results.TrackWindow);
 					g.DrawLine(camshiftPen, results.TrackCenter, Point.Add(results.TrackCenter, new Size(1, 1)));
 				}
-
-				foreach (var rectangle in MovementRegions.Regions)
-				{
-					g.DrawString(rectangle.Key.ToString(), SystemFonts.DefaultFont, Brushes.Khaki, rectangle.Value);
-					g.DrawRectangle(regionPen, rectangle.Value);
-				}
 			}
 		}
 
@@ -275,8 +268,8 @@ namespace Robin.ControlPanel
 		private void MainLogicWorkerOnProgressChanged(object sender, ProgressChangedEventArgs progressChangedEventArgs)
 		{
 			var fps = (float)progressChangedEventArgs.UserState;
-			uxLogicFps.Text = string.Format("Main Logic: {0}fps", fps);
-			uxVisionFps.Text = string.Format("Vision: {0}fps", videoProcessor.FramesPerSecond);
+			uxLogicFps.Text = string.Format("Main Logic: {0:0.00}fps", fps);
+			uxVisionFps.Text = string.Format("Vision: {0:0.00}fps", videoProcessor.FramesPerSecond);
 		}
 	}
 }

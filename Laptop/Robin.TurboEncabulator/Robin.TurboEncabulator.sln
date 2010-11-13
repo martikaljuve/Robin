@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# SharpDevelop 4.0.0.6842
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robin.TurboEncabulator", "Robin.TurboEncabulator.csproj", "{EE5171C9-1700-46FF-9A30-3D38C557F0DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+EndGlobal
