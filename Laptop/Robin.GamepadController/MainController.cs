@@ -98,7 +98,7 @@ namespace Robin.GamepadController
 		/// </remarks>
 		private void ControlRobot()
 		{
-			// gas triggered
+			// acceleration
 			if (state.Z != 0)
 			{
 				var speed = (short) Map(state.Z, -1000, 1000, 500, -500);

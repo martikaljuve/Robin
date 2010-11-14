@@ -48,10 +48,11 @@ namespace Robin.Arduino
 
 		public void Close()
 		{
-			if (port != null && port.IsOpen) { 
-				port.Close();
-				OnPropertyChanged(new PropertyChangedEventArgs("IsOpen"));
-			}
+			if (port == null || !port.IsOpen)
+				return;
+
+			port.Close();
+			OnPropertyChanged(new PropertyChangedEventArgs("IsOpen"));
 		}
 
 		private bool TryOpenPort(string name)
@@ -76,7 +77,8 @@ namespace Robin.Arduino
 
 		public void Command(string command, params object[] parameters)
 		{
-			if (!port.IsOpen) return;
+			if (!port.IsOpen)
+				return;
 
 			var currentCommand = command + string.Join("", parameters);
 
