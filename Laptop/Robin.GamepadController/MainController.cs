@@ -28,9 +28,7 @@ namespace Robin.GamepadController
 			}
 
 			if (gamepad == null)
-			{
-				throw new ArgumentException("No gamepads available.");
-			}
+				return;
 
 			foreach (var deviceObject in gamepad.GetObjects())
 			{
@@ -56,6 +54,9 @@ namespace Robin.GamepadController
 		{
 			// HACK: Testime
 			System.Threading.Thread.Sleep(100);
+
+			if (gamepad == null)
+				return;
 
 			if (gamepad.Acquire().IsFailure)
 				return;
