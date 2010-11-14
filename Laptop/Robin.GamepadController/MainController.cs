@@ -35,7 +35,7 @@ namespace Robin.GamepadController
 				if ((deviceObject.ObjectType & ObjectDeviceType.Axis) != 0)
 					gamepad.GetObjectPropertiesById((int) deviceObject.ObjectType).SetRange(-1000, 1000);
 			}
-
+			
 			gamepad.Acquire();
 		}
 
@@ -93,6 +93,8 @@ namespace Robin.GamepadController
 		/// left joystick = 10
 		/// right joystick = 11
 		/// left arrows none-up-right-down-left = -1, 0, 9000, 18000, 27000
+		/// 
+		/// 
 		/// </remarks>
 		private void ControlRobot()
 		{
@@ -127,6 +129,19 @@ namespace Robin.GamepadController
 			}
 			else
 				Commander.Stop();
+
+			var buttons = state.GetButtons();
+			if (buttons.Length < 11) return;
+
+			if (buttons[GamepadButtons.A])
+				Commander.FireCoilgun(100);
+			if (buttons[GamepadButtons.B])
+				Commander.FireCoilgun(50);
+
+			if (buttons[GamepadButtons.X])
+				Commander.SetDribbler(true);
+			if (buttons[GamepadButtons.Y])
+				Commander.SetDribbler(false);
 		}
 
 		private static long Map(long value, long inMin, long inMax, long outMin, long outMax)
