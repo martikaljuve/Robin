@@ -1,6 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
+# SharpDevelop 4.0.0.6842
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rihma.FindGolfBalls", "Rihma.FindGolfBalls\Rihma.FindGolfBalls.csproj", "{80D214FD-7084-4320-8414-A879129EBCAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robin.ControlPanel", "Robin.ControlPanel\Robin.ControlPanel.csproj", "{173F4A60-1652-4E88-9919-EC4CB661BD5C}"

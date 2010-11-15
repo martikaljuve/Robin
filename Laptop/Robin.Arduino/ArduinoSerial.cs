@@ -82,7 +82,7 @@ namespace Robin.Arduino
 
 			var currentCommand = command + string.Join("", parameters);
 
-			if (currentCommand == previousCommand && ArduinoPrefix.NonRepeatableCommands.Contains(command)) {
+			if (currentCommand == previousCommand /*&& arduinoPrefix.NonRepeatableCommands.Contains(command)*/) {
 				previousCommand = currentCommand;
 				return;
 			}
