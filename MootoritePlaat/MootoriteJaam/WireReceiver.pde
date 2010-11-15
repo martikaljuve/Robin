@@ -51,6 +51,8 @@ void parseCommand(struct CommandData &cmd) {
 		case 'd':
 			dribbler.stop();
 			break;
+		default:
+			break;
 	}
 }
 

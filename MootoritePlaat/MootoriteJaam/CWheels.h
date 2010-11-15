@@ -23,6 +23,5 @@ public:
 	void setSpeedsWithoutPid(int left, int right, int back);
 
 private:
-	float degreesToRadians(int degrees);
 	void moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, int &left, int &right, int &back);
 };

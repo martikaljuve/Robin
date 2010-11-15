@@ -6,8 +6,6 @@ void setup(){
 
 	//stateMachineSetup();
 	//gyroSetup();
-	//sonarSetup();
-	//sharpIrSetup();
 	serialReceiverSetup();
 	serialSenderSetup();
 	wireSenderSetup();
@@ -17,8 +15,6 @@ void loop(){
 
 	//stateMachineLoop();
 	//gyroLoop();
-	//sonarLoop();
-	//sharpIrLoop();
 	serialReceiverLoop();
 	serialSenderLoop();
 	wireSenderLoop();

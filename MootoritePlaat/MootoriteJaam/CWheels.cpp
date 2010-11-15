@@ -44,9 +44,9 @@ void Wheels::moveAndTurnWithoutPid(int direction, int moveSpeed, int turnSpeed) 
 void Wheels::moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, int &left, int &right, int &back) {
 	WheelSpeedTable::fromDirection(direction, left, right, back);
 	
-	left = (left / 255) * moveSpeed;
-	right = (right / 255) * moveSpeed;
-	back = (back / 255) * moveSpeed;
+	left = (int)(left * moveSpeed / 255.0);
+	right = (int)(right * moveSpeed / 255.0);
+	back = (int)(back * moveSpeed / 255.0);
 
 	left += turnSpeed;
 	right += turnSpeed;
@@ -73,8 +73,4 @@ void Wheels::setSpeedsWithoutPid(int left, int right, int back) {
 	motorLeft.setSpeedWithDirection(left);
 	motorRight.setSpeedWithDirection(right);
 	motorBack.setSpeedWithDirection(back);
-}
-
-float Wheels::degreesToRadians(int degrees) {
-  return M_PI * degrees / 180;
 }

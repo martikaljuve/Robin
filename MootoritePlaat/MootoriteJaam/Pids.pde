@@ -25,7 +25,18 @@ void pidCompute() {
 	pidRight.compute(dt / 1000.0);
 	pidBack.compute(dt / 1000.0);
 	
-	motorLeft.setSpeedWithDirection(pidLeft.output);
-	motorRight.setSpeedWithDirection(pidRight.output);
-	motorBack.setSpeedWithDirection(pidBack.output);
+	if (pidLeft.setpoint != 0)
+		motorLeft.setSpeedWithDirection(pidLeft.output);
+	else
+		motorLeft.stop();
+
+	if (pidRight.setpoint != 0)
+		motorRight.setSpeedWithDirection(pidRight.output);
+	else
+		motorRight.stop();
+
+	if (pidBack.setpoint != 0)
+		motorBack.setSpeedWithDirection(pidBack.output);
+	else
+		motorBack.stop();
 }
