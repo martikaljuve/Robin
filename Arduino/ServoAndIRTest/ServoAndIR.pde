@@ -1,14 +1,20 @@
 #include <Servo.h>
 #include <TimedAction.h>
+#include <EEPROM.h>
 #include <WProgram.h>
 #include "pins.h"
 
 
 Servo servo;
 int currentAngle = 0;
-int turnDirection = 4;
+int startTurnDirection = 4;
+int turnDirection = startTurnDirection;
 int turnDirectionAbs = abs(turnDirection);
-int turnTime = 5;
+
+int startTurnTime = 5;
+int turnTime = startTurnTime;
+int maxTurnTime = 20;
+
 TimedAction servoAction = TimedAction(turnTime, turnServo);
 TimedAction outputAction = TimedAction(700, outputInfo);
 
@@ -23,11 +29,11 @@ void turnServo(){
 }
 
 void calculateTurnDirection(){
-  if(isLeft() && !isRight()){
-      turnDirection = turnDirectionAbs;
-  }else if(!isLeft() && isRight()){
-      turnDirection = -turnDirectionAbs;
-  }else if(isLeft() && isRight()){
+  if(isLeftInView() && !isRightInView()){
+      turnDirection = (turnDirection == 0)?startTurnDirection:turnDirectionAbs;
+  }else if(!isLeftInView() && isRightInView()){
+      turnDirection = (turnDirection == 0)?-startTurnDirection:-turnDirectionAbs;
+  }else if(isLeftInView() && isRightInView()){
       turnDirection = 0;
   }
 }
@@ -51,10 +57,19 @@ void calculateSweepServo(){
    }
 }
 
+//REDO
 void increaseSpeed(){
-    if(turnTime > 1){
+    if(turnTime > 2){
       turnTime--;
     }
+    servoAction.setInterval(turnTime);
+}
+//REDO
+void decreaseSpeed(){
+    if(turnTime < maxTurnTime){
+      turnTime++;
+    }
+    servoAction.setInterval(turnTime);
 }
 
 void servoAndIRsetup(){

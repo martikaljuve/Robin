@@ -7,7 +7,6 @@ static IRrecv irRecvLeft(RECV_PIN_L);
 static IRrecv irRecvRight(RECV_PIN_R);
 static decode_results resultsLeft;
 static decode_results resultsRight;
-static byte channelToSearch;
 
 TimedAction irCheckAction = TimedAction(50, irCheck);
 
@@ -66,13 +65,25 @@ int getRightResult(){
   return rightResult;
 }
 
-bool isLeft(){
-  return (getLeftResult() == channelToSearch);
+
+bool isLeftInView(int channel){
+  return (getLeftResult() == channel);
 }
-bool isRight(){
-  return (getRightResult() == channelToSearch);
+bool isRightInView(int channel){
+  return (getRightResult() == channel);
+}
+
+bool isLeftInView(){
+  return (getLeftResult() == getChannelToSearch());
+}
+bool isRightInView(){
+  return (getRightResult() == getChannelToSearch());
 }
 
 void setChannelToSearch(byte newChannel){
-  channelToSearch = newChannel;
+  EEPROM.write(0, newChannel);
+}
+
+byte getChannelToSearch(){
+ EEPROM.read(0);
 }
