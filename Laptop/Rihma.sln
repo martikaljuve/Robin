@@ -1,7 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-# SharpDevelop 4.0.0.6842
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rihma.FindGolfBalls", "Rihma.FindGolfBalls\Rihma.FindGolfBalls.csproj", "{80D214FD-7084-4320-8414-A879129EBCAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robin.ControlPanel", "Robin.ControlPanel\Robin.ControlPanel.csproj", "{173F4A60-1652-4E88-9919-EC4CB661BD5C}"
@@ -70,6 +69,7 @@ Global
 		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Release|x64.ActiveCfg = Release|x64
 		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Release|x64.Build.0 = Release|x64
 		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Release|x86.ActiveCfg = Release|Any CPU
+		{EE5171C9-1700-46FF-9A30-3D38C557F0DC}.Release|x86.Build.0 = Release|Any CPU
 		{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -83,6 +83,7 @@ Global
 		{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}.Release|x64.ActiveCfg = Release|x64
 		{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}.Release|x64.Build.0 = Release|x64
 		{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}.Release|x86.ActiveCfg = Release|Any CPU
+		{69D5FC34-FBD9-4D2E-BD2F-4FFE3212DC40}.Release|x86.Build.0 = Release|Any CPU
 		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -95,7 +96,8 @@ Global
 		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|x64.ActiveCfg = Release|x64
 		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|x64.Build.0 = Release|x64
-		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|x86.ActiveCfg = Release|Any CPU
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|x86.ActiveCfg = Release|x86
+		{D9BED560-90A3-4D6C-ACC8-BD5EF13A1423}.Release|x86.Build.0 = Release|x86
 		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCECE5CD-1524-4B64-949D-9BBCC79FBA26}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -121,6 +123,7 @@ Global
 		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Release|x64.ActiveCfg = Release|x64
 		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Release|x64.Build.0 = Release|x64
 		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Release|x86.ActiveCfg = Release|Any CPU
+		{D45AF369-69AC-43B6-99EA-2725C6CB880E}.Release|x86.Build.0 = Release|Any CPU
 		{DDD8D078-08C6-4A13-8D71-4A7AE2B8BE86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DDD8D078-08C6-4A13-8D71-4A7AE2B8BE86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDD8D078-08C6-4A13-8D71-4A7AE2B8BE86}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -133,7 +136,8 @@ Global
 		{DDD8D078-08C6-4A13-8D71-4A7AE2B8BE86}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DDD8D078-08C6-4A13-8D71-4A7AE2B8BE86}.Release|x64.ActiveCfg = Release|x64
 		{DDD8D078-08C6-4A13-8D71-4A7AE2B8BE86}.Release|x64.Build.0 = Release|x64
-		{DDD8D078-08C6-4A13-8D71-4A7AE2B8BE86}.Release|x86.ActiveCfg = Release|Any CPU
+		{DDD8D078-08C6-4A13-8D71-4A7AE2B8BE86}.Release|x86.ActiveCfg = Release|x86
+		{DDD8D078-08C6-4A13-8D71-4A7AE2B8BE86}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

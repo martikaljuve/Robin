@@ -22,6 +22,7 @@ namespace Robin.ControlPanel
 		private readonly BackgroundWorker mainLogicWorker = new BackgroundWorker();
 		private readonly ArduinoSerial arduinoSerial = new ArduinoSerial();
 		private readonly ArduinoCommander arduinoCommander;
+		private VideoForm videoForm;
 
 		private IRobotController selectedController;
 		private MainVideoProcessor videoProcessor;
@@ -69,8 +70,20 @@ namespace Robin.ControlPanel
 					foreach (var controller in RobotControllers)
 						controller.Value.Dispose();
 				};
-			
+
 			KeyPress += OnKeyPress;
+
+			uxShowVideo.Click += (sender, args) =>
+			{
+				if (videoForm != null) {
+					videoForm.Dispose();
+					return;
+				}
+
+				videoForm = new VideoForm();
+				videoForm.KeyPress += OnKeyPress;
+				videoForm.Show(this);
+			};
 		}
 
 		private void InitializeMainLogicControls()
@@ -193,11 +206,11 @@ namespace Robin.ControlPanel
 
 			var frame = frameEventArgs.Frame;
 
-			if (!uxPlayer.Visible)
+			if (videoForm == null || !videoForm.Visible)
 				return;
 
 			DrawDebugInfo(frame, results);
-			uxPlayer.Image = frame;
+			videoForm.Frame = frame;
 		}
 
 		private void DrawDebugInfo(Bitmap frame, VisionResults results)
@@ -241,8 +254,6 @@ namespace Robin.ControlPanel
 				showCircles = !showCircles;
 			if (key == 'l')
 				showLines = !showLines;
-			if (key == 'd')
-				uxPlayer.Visible = !uxPlayer.Visible;
 
 			VisionExperiments.ProcessKey(key);
 		}

@@ -41,7 +41,6 @@ namespace Robin.ControlPanel
 			this.uxVisionFps = new System.Windows.Forms.Label();
 			this.uxControllers = new System.Windows.Forms.ComboBox();
 			this.uxSerialData = new System.Windows.Forms.TextBox();
-			this.uxPlayer = new AForge.Controls.PictureBox();
 			this.uxIrChannel1 = new System.Windows.Forms.RadioButton();
 			this.uxIrChannel3 = new System.Windows.Forms.RadioButton();
 			this.uxIrChannel2 = new System.Windows.Forms.RadioButton();
@@ -54,15 +53,14 @@ namespace Robin.ControlPanel
 			this.uxSerialReceive = new System.Windows.Forms.Label();
 			this.uxSerialSend = new System.Windows.Forms.Label();
 			this.uxSerialSendData = new System.Windows.Forms.TextBox();
-			this.uxVisionPanel = new System.Windows.Forms.GroupBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.uxShowVideo = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.uxPlayer)).BeginInit();
 			this.uxIrChannelPanel.SuspendLayout();
 			this.uxContentPanel.SuspendLayout();
 			this.uxSerialPanel.SuspendLayout();
-			this.uxVisionPanel.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -115,7 +113,7 @@ namespace Robin.ControlPanel
 			this.uxPortConnect.Name = "uxPortConnect";
 			this.uxPortConnect.Size = new System.Drawing.Size(97, 31);
 			this.uxPortConnect.TabIndex = 3;
-			this.uxPortConnect.Text = "Connect";
+			this.uxPortConnect.Text = "&Connect";
 			this.uxPortConnect.UseVisualStyleBackColor = true;
 			// 
 			// pictureBox1
@@ -202,16 +200,6 @@ namespace Robin.ControlPanel
 			this.uxSerialData.Size = new System.Drawing.Size(323, 114);
 			this.uxSerialData.TabIndex = 6;
 			this.uxSerialData.WordWrap = false;
-			// 
-			// uxPlayer
-			// 
-			this.uxPlayer.BackColor = System.Drawing.Color.Transparent;
-			this.uxPlayer.Image = null;
-			this.uxPlayer.Location = new System.Drawing.Point(6, 28);
-			this.uxPlayer.Name = "uxPlayer";
-			this.uxPlayer.Size = new System.Drawing.Size(640, 480);
-			this.uxPlayer.TabIndex = 7;
-			this.uxPlayer.TabStop = false;
 			// 
 			// uxIrChannel1
 			// 
@@ -319,13 +307,12 @@ namespace Robin.ControlPanel
 			this.uxContentPanel.AutoScroll = true;
 			this.uxContentPanel.BackColor = System.Drawing.Color.Transparent;
 			this.uxContentPanel.Controls.Add(this.uxSerialPanel);
-			this.uxContentPanel.Controls.Add(this.uxVisionPanel);
 			this.uxContentPanel.Controls.Add(this.groupBox1);
 			this.uxContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.uxContentPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.uxContentPanel.Location = new System.Drawing.Point(0, 89);
 			this.uxContentPanel.Name = "uxContentPanel";
-			this.uxContentPanel.Size = new System.Drawing.Size(690, 640);
+			this.uxContentPanel.Size = new System.Drawing.Size(690, 440);
 			this.uxContentPanel.TabIndex = 14;
 			this.uxContentPanel.WrapContents = false;
 			// 
@@ -383,37 +370,34 @@ namespace Robin.ControlPanel
 			this.uxSerialSendData.TabIndex = 14;
 			this.uxSerialSendData.WordWrap = false;
 			// 
-			// uxVisionPanel
-			// 
-			this.uxVisionPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.uxVisionPanel.Controls.Add(this.uxPlayer);
-			this.uxContentPanel.SetFlowBreak(this.uxVisionPanel, true);
-			this.uxVisionPanel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-			this.uxVisionPanel.Location = new System.Drawing.Point(3, 227);
-			this.uxVisionPanel.Name = "uxVisionPanel";
-			this.uxVisionPanel.Size = new System.Drawing.Size(658, 524);
-			this.uxVisionPanel.TabIndex = 1;
-			this.uxVisionPanel.TabStop = false;
-			this.uxVisionPanel.Text = "Video feed";
-			// 
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Controls.Add(this.uxShowVideo);
 			this.uxContentPanel.SetFlowBreak(this.groupBox1, true);
 			this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-			this.groupBox1.Location = new System.Drawing.Point(3, 757);
+			this.groupBox1.Location = new System.Drawing.Point(3, 227);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(658, 187);
 			this.groupBox1.TabIndex = 8;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Vision Settings";
 			// 
+			// uxShowVideo
+			// 
+			this.uxShowVideo.Location = new System.Drawing.Point(495, 28);
+			this.uxShowVideo.Name = "uxShowVideo";
+			this.uxShowVideo.Size = new System.Drawing.Size(154, 39);
+			this.uxShowVideo.TabIndex = 0;
+			this.uxShowVideo.Text = "Show/Hide &Video";
+			this.uxShowVideo.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-			this.ClientSize = new System.Drawing.Size(690, 729);
+			this.ClientSize = new System.Drawing.Size(690, 529);
 			this.Controls.Add(this.uxContentPanel);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.DoubleBuffered = true;
@@ -426,13 +410,12 @@ namespace Robin.ControlPanel
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.uxPlayer)).EndInit();
 			this.uxIrChannelPanel.ResumeLayout(false);
 			this.uxIrChannelPanel.PerformLayout();
 			this.uxContentPanel.ResumeLayout(false);
 			this.uxSerialPanel.ResumeLayout(false);
 			this.uxSerialPanel.PerformLayout();
-			this.uxVisionPanel.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -448,7 +431,6 @@ namespace Robin.ControlPanel
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label uxLogicFps;
 		private System.Windows.Forms.TextBox uxSerialData;
-		private AForge.Controls.PictureBox uxPlayer;
 		private RadioButton uxIrChannel1;
 		private RadioButton uxIrChannel3;
 		private RadioButton uxIrChannel2;
@@ -459,12 +441,12 @@ namespace Robin.ControlPanel
 		private Label uxVisionFps;
 		private FlowLayoutPanel uxContentPanel;
 		private GroupBox uxSerialPanel;
-		private GroupBox uxVisionPanel;
 		private Label uxSerialSend;
 		private TextBox uxSerialSendData;
 		private Label uxSerialReceive;
 		private GroupBox groupBox1;
 		private ComboBox uxControllers;
+		private Button uxShowVideo;
 	}
 }
 

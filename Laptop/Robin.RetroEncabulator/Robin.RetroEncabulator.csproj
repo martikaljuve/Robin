@@ -65,7 +65,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Stateless">
-      <HintPath>..\lib\Stateless.dll</HintPath>
+      <HintPath>..\lib\x86\Stateless.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />

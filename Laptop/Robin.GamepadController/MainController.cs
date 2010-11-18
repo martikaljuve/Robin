@@ -11,6 +11,7 @@ namespace Robin.GamepadController
 	{
 		private Joystick gamepad;
 		private JoystickState state = new JoystickState();
+		private bool wasMoving;
 
 		public MainController()
 		{
@@ -101,19 +102,20 @@ namespace Robin.GamepadController
 			// acceleration
 			if (state.Z != 0)
 			{
-				var speed = (short) Map(state.Z, -1000, 1000, 500, -500);
+				wasMoving = true;
+				var speed = (short)Map(state.Z, -1000, 1000, 500, -500);
 				var direction = 0;
 				short rotation = 0;
 
 				//if (state.X == 0 && state.Y == 0)
 				//	direction = 0;
 				if (state.X == 0)
-					direction = state.Y < 0 ? 0 : 180;
+					direction = state.Y <= 0 ? 0 : 180;
 				else if (state.Y == 0)
 					direction = state.X < 0 ? 270 : 90;
 				else
 				{
-					direction = (int) (Math.Atan((double) Math.Abs(state.X)/Math.Abs(state.Y))*(180/Math.PI));
+					direction = (int)(Math.Atan((double)Math.Abs(state.X) / Math.Abs(state.Y)) * (180 / Math.PI));
 					if (state.X > 0 && state.Y > 0)
 						direction += 90;
 					else if (state.X < 0 && state.Y > 0)
@@ -123,12 +125,15 @@ namespace Robin.GamepadController
 				}
 
 				if (state.RotationX != 0)
-					rotation = (short) Map(state.RotationX, -1000, 1000, -100, 100);
+					rotation = (short)Map(state.RotationX, -1000, 1000, -100, 100);
 
-				Commander.MoveAndTurn((short) direction, speed, rotation);
+				Commander.MoveAndTurn((short)direction, speed, rotation);
 			}
-			else
+			else if (wasMoving)
+			{
 				Commander.Stop();
+				wasMoving = false;
+			}
 
 			var buttons = state.GetButtons();
 			if (buttons.Length < 11) return;

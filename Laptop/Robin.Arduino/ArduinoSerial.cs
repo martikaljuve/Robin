@@ -95,10 +95,19 @@ namespace Robin.Arduino
 			byteList.AddRange(cmdBytes);
 
 			foreach (var parameter in parameters) {
-				var bytes = BitConverter.GetBytes((short)parameter);
-				if (!BitConverter.IsLittleEndian)
-					bytes = bytes.Reverse().ToArray();
-				byteList.AddRange(bytes);
+				if (parameter is bool) {
+					var bytes = BitConverter.GetBytes((bool)parameter);
+					byteList.AddRange(bytes);
+				}
+				else if (parameter is byte)
+					byteList.Add((byte)parameter);
+				else {
+					var bytes = BitConverter.GetBytes((short)parameter);
+					if (!BitConverter.IsLittleEndian)
+						bytes = bytes.Reverse().ToArray();
+					byteList.AddRange(bytes);
+					break;
+				}
 			}
 
 			// Fill with 0's

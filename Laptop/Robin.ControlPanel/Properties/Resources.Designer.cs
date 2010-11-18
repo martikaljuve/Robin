@@ -66,5 +66,12 @@ namespace Robin.ControlPanel.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Bitmap VisualStudioBackgroundBrown {
+            get {
+                object obj = ResourceManager.GetObject("VisualStudioBackgroundBrown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
