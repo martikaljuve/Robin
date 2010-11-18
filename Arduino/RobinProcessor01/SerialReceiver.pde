@@ -80,7 +80,7 @@ void parseMoveAndTurnCommand() {
 	int direction = SerialUtil.readInt();
 	int moveSpeed = SerialUtil.readInt();
 	int turnSpeed = SerialUtil.readInt();
-
+	
 	MotorBoard::sendCommand('G', direction, moveSpeed, turnSpeed);
 }
 

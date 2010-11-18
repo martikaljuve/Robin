@@ -42,23 +42,28 @@ void Wheels::moveAndTurnWithoutPid(int direction, int moveSpeed, int turnSpeed) 
 }
 
 void Wheels::moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, int &left, int &right, int &back) {
-	WheelSpeedTable::fromDirection(direction, left, right, back);
-	
-	left = (int)(left * moveSpeed / 255.0);
-	right = (int)(right * moveSpeed / 255.0);
-	back = (int)(back * moveSpeed / 255.0);
+	int left1, right1, back1;
+	WheelSpeedTable::fromDirection(direction, left1, right1, back1);
 
-	left += turnSpeed;
-	right += turnSpeed;
-	back += turnSpeed;
+	left1 = ((long)left1 * moveSpeed) / 255;
+	right1 = ((long)right1 * moveSpeed) / 255;
+	back1 = ((long)back1 * moveSpeed) / 255;
 
-	// Constrain values to -255..255
-	if (abs(left) > 255 || abs(right) > 255 || abs(back) > 255) {
-		int max = max(abs(left), max(abs(right), abs(back)));
-		left = map(left, -max, max, -255, 255);
-		right = map(right, -max, max, -255, 255);
-		back = map(back, -max, max, -255, 255);
+	left1 += turnSpeed;
+	right1 += turnSpeed;
+	back1 += turnSpeed;
+
+	// Constrain values to -max_rpm..max_rpm
+	if (abs(left1) > MAX_RPM || abs(right1) > MAX_RPM || abs(back1) > MAX_RPM) {
+		int max = max(abs(left1), max(abs(right1), abs(back1)));
+		left1 = map(left1, -max, max, -MAX_RPM, MAX_RPM);
+		right1 = map(right1, -max, max, -MAX_RPM, MAX_RPM);
+		back1 = map(back1, -max, max, -MAX_RPM, MAX_RPM);
 	}
+
+	left = left1;
+	right = right1;
+	back = back1;
 }
 
 void Wheels::stop() {

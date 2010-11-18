@@ -12,6 +12,7 @@ class Wheels {
 	Pid& pidLeft;
 	Pid& pidRight;
 	Pid& pidBack;
+	static const int MAX_RPM = 400;
 public:
 
 	Wheels(Motor& left, Motor& right, Motor& back, Pid& leftPid, Pid& rightPid, Pid& backPid);

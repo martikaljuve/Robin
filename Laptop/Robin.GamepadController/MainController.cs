@@ -103,7 +103,7 @@ namespace Robin.GamepadController
 			if (state.Z != 0)
 			{
 				wasMoving = true;
-				var speed = (short)Map(state.Z, -1000, 1000, 500, -500);
+				var speed = (short)Map(state.Z, -1000, 1000, 300, -300);
 				var direction = 0;
 				short rotation = 0;
 

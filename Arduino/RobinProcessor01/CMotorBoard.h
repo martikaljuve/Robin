@@ -39,7 +39,7 @@ private:
 		for (int i = 0; i < byteCount; i++) {
 			Wire.send(cmdUnion.bytes[i]);
 		}
-		Wire.endTransmission();
+		Wire.endTransmission();	
 	}
 };
 

@@ -106,7 +106,6 @@ namespace Robin.Arduino
 					if (!BitConverter.IsLittleEndian)
 						bytes = bytes.Reverse().ToArray();
 					byteList.AddRange(bytes);
-					break;
 				}
 			}
 
@@ -114,7 +113,7 @@ namespace Robin.Arduino
 			while (byteList.Count < 7)
 				byteList.Add(0);
 
-			byteList.Add((byte)'\n');
+			//byteList.Add((byte)'\n');
 
 			if (!WriteLine(byteList))
 				return;
@@ -128,6 +127,7 @@ namespace Robin.Arduino
 			{
 				var byteArray = bytes.ToArray();
 				port.Write(byteArray, 0, byteArray.Length);
+				port.WriteLine(string.Empty);
 				return true;
 			}
 			catch (TimeoutException)

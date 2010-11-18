@@ -2,9 +2,6 @@
 #include "CPid.h"
 
 Pid::Pid(double p, double i, double d) {
-	inputMin = -500;
-	inputMax = 500;
-
 	outputMin = -255;
 	outputMax = 255;
 
@@ -21,21 +18,13 @@ void Pid::setSetpoint(int newSetpoint) {
 	setpoint = newSetpoint;
 }
 
-void Pid::setInputLimits(int min, int max) {
-	inputMin = min;
-	inputMax = max;
-}
-
 void Pid::setOutputLimits(int min, int max) {
 	outputMin = min;
 	outputMax = max;
 }
 
 void Pid::compute(double dt) {
-	int mappedSetpoint = map(setpoint, inputMin, inputMax, outputMin, outputMax);
-	int mappedInput = map(input, inputMin, inputMax, outputMin, outputMax);
-
-	int error = mappedSetpoint - mappedInput;
+	int error = setpoint - input;
 	integral = integral + (error * dt);
 	double derivative = (error - errorPrevious) / dt;
 	output += (kp * error) + (ki * integral) + (kd * derivative);
