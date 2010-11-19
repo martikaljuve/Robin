@@ -8,7 +8,7 @@
 #ifndef MLX90316_h
 #define MLX90316_h
 
-
+#include "WProgram.h"
 
 class MLX90316
 {

@@ -5,9 +5,7 @@
   Released into the public domain.
 */
 
-#include "WProgram.h"
 #include "MLX90316.h"
-
 
 // constructor
 MLX90316::MLX90316(){
