@@ -15,8 +15,21 @@ int startTurnTime = 5;
 int turnTime = startTurnTime;
 int maxTurnTime = 20;
 
+const int halfRotation = 95;
+
 TimedAction servoAction = TimedAction(turnTime, turnServo);
 TimedAction outputAction = TimedAction(700, outputInfo);
+
+void servoAndIRsetup(){
+    irSetup();
+    servoSetup();
+}
+
+void servoAndIRloop(){
+    irLoop();
+    servoAction.check();
+    outputAction.check();
+}
 
 void servoSetup(){
     servo.attach(SERVO_PIN);
@@ -72,18 +85,6 @@ void decreaseSpeed(){
     servoAction.setInterval(turnTime);
 }
 
-void servoAndIRsetup(){
-    Serial.begin(57600);
-    irSetup();
-    servoSetup();
-}
-
-void servoAndIRloop(){
-    irLoop();
-    servoAction.check();
-    outputAction.check();
-}
-
 void outputInfo(){
    outputServo();
    outputIR();
@@ -103,6 +104,6 @@ void outputIR(){
 }
 
 int getServoAngle(){ //Returns the probable servo angle, servo might not be in that position yet
-  return currentAngle;
+  return currentAngle - halfRotation;
 }
 

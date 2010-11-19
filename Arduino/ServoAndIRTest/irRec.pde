@@ -19,9 +19,13 @@ int const maxCount = 2; //How many results to take the max value from
 
 bool debug = false;
 
+byte channelToSearch;
+
 void irSetup(){
   irRecvLeft.enableIRIn(); // Start the receiver
   irRecvRight.enableIRIn();
+
+  channelToSearch = readChannelFromEeprom();
 }
 
 void irResume(){
@@ -65,25 +69,27 @@ int getRightResult(){
   return rightResult;
 }
 
-
 bool isLeftInView(int channel){
   return (getLeftResult() == channel);
 }
+
 bool isRightInView(int channel){
   return (getRightResult() == channel);
 }
 
 bool isLeftInView(){
-  return (getLeftResult() == getChannelToSearch());
-}
-bool isRightInView(){
-  return (getRightResult() == getChannelToSearch());
+  return isLeftInView(channelToSearch);
 }
 
-void setChannelToSearch(byte newChannel){
+bool isRightInView(){
+  return isRightInView(channelToSearch);
+}
+
+void writeChannelToEeprom(byte newChannel){
+  channelToSearch = newChannel;
   EEPROM.write(0, newChannel);
 }
 
-byte getChannelToSearch(){
+byte readChannelFromEeprom(){
  EEPROM.read(0);
 }
