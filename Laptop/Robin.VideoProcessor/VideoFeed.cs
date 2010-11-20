@@ -16,10 +16,7 @@ namespace Robin.VideoProcessor
 
 		public VideoFeed(string filename)
 			: this(new FileVideoSource(filename)) { }
-
-		public VideoFeed(int camIndex = 0)
-			: this(new VideoCaptureDevice(new FilterInfoCollection(FilterCategory.VideoInputDevice)[camIndex].MonikerString)) { }
-
+		
 		private VideoFeed(IVideoSource source)
 		{
 			videoSource = source;
@@ -30,6 +27,15 @@ namespace Robin.VideoProcessor
 			videoSource.Start();
 		}
 
+		public static VideoFeed FromCamIndex(int camIndex) {
+			var videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
+			if (videoDevices.Count == 0)
+				return null;
+
+			return new VideoFeed(new VideoCaptureDevice(videoDevices[camIndex].MonikerString));
+		}
+
 		public event NewFrameEventHandler NewFrame
 		{
 			add { videoSource.NewFrame += value; }
@@ -38,7 +44,8 @@ namespace Robin.VideoProcessor
 
 		public void Start()
 		{
-			videoSource.Start();
+			if (videoSource != null)
+				videoSource.Start();
 		}
 
 		public void Stop()

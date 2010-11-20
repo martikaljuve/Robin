@@ -107,27 +107,32 @@ namespace Robin.GamepadController
 				var direction = 0;
 				short rotation = 0;
 
-				//if (state.X == 0 && state.Y == 0)
-				//	direction = 0;
-				if (state.X == 0)
-					direction = state.Y <= 0 ? 0 : 180;
-				else if (state.Y == 0)
-					direction = state.X < 0 ? 270 : 90;
-				else
+				if (state.Y == 0 && state.X == 0)
 				{
-					direction = (int)(Math.Atan((double)Math.Abs(state.X) / Math.Abs(state.Y)) * (180 / Math.PI));
-					if (state.X > 0 && state.Y > 0)
-						direction += 90;
-					else if (state.X < 0 && state.Y > 0)
-						direction += 180;
-					else if (state.X < 0 && state.Y < 0)
-						direction += 270;
+					if (speed != 0)
+						Commander.Turn((short)(speed * (state.RotationX < 0 ? -1 : 1)));
 				}
+				else {
+					if (state.X == 0)
+						direction = state.Y <= 0 ? 0 : 180;
+					//else if (state.Y == 0)
+					//	direction = state.X < 0 ? 270 : 90;
+					else
+					{
+						direction = (int)(Math.Atan((double)Math.Abs(state.X) / Math.Abs(state.Y)) * (180 / Math.PI));
+						if (state.X > 0 && state.Y > 0)
+							direction += 90;
+						else if (state.X < 0 && state.Y > 0)
+							direction += 180;
+						else if (state.X < 0 && state.Y < 0)
+							direction += 270;
+					}
 
-				if (state.RotationX != 0)
-					rotation = (short)Map(state.RotationX, -1000, 1000, -100, 100);
+					if (state.RotationX != 0)
+						rotation = (short)Map(state.RotationX, -1000, 1000, -100, 100);
 
-				Commander.MoveAndTurn((short)direction, speed, rotation);
+					Commander.MoveAndTurn((short)direction, speed, rotation);
+				}
 			}
 			else if (wasMoving)
 			{

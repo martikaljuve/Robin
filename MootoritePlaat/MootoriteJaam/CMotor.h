@@ -5,6 +5,7 @@ class Motor {
 	byte dirPin;
 	byte minPwm;
 	byte maxPwm;
+
 public:
 	int speed;
 	byte pwm;
@@ -12,8 +13,9 @@ public:
 
 	Motor(byte speedPin, byte directionPin);
 	void setSpeedWithDirection(int newSpeed);
+	void stop();
+
+private:
 	void setPwm(byte newPwm);
 	void setDirection(bool forward);
-	void stop();
-	void setMinMaxPwm(byte min, byte max);
 };

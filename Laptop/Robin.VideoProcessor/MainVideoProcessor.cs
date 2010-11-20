@@ -19,8 +19,10 @@ namespace Robin.VideoProcessor
 
 		public MainVideoProcessor(int camIndex = 0)
 		{
-			feed = new VideoFeed(camIndex);
+			feed = VideoFeed.FromCamIndex(camIndex);
 			//feed = new VideoFeed(VideoFeed.Sample6);
+			if (feed == null)
+				return;
 
 			feed.NewFrame += VideoSourceOnNewFrame;
 			feed.Start();
@@ -111,12 +113,14 @@ namespace Robin.VideoProcessor
 
 		public void Stop()
 		{
-			feed.Stop();
+			if (feed != null)
+				feed.Stop();
 		}
 
 		public void Restart()
 		{
-			feed.Restart();
+			if (feed != null)
+				feed.Restart();
 		}
 
 		public VisionResults Results

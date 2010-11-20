@@ -64,6 +64,15 @@ void Wheels::moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, i
 	left = left1;
 	right = right1;
 	back = back1;
+
+	/*
+	Serial.print("New speeds: ");
+	Serial.print(left);
+	Serial.print(", ");
+	Serial.print(right);
+	Serial.print(", ");
+	Serial.println(back);
+	*/
 }
 
 void Wheels::stop() {

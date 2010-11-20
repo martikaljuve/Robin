@@ -1,4 +1,4 @@
-TimedAction pidAction = TimedAction(200, pidCompute);
+TimedAction pidAction = TimedAction(150, pidCompute);
 
 long timePrevious = 0;
 
@@ -17,26 +17,26 @@ void pidCompute() {
 	long dt = now - timePrevious;
 	timePrevious = now;
 
-	pidLeft.setInput(magnetLeft.average);
-	pidRight.setInput(magnetRight.average);
-	pidBack.setInput(magnetBack.average);
+	pidLeft.setInput(magnetLeft.speed);
+	pidRight.setInput(magnetRight.speed);
+	pidBack.setInput(magnetBack.speed);
 
 	pidLeft.compute(dt / 1000.0);
 	pidRight.compute(dt / 1000.0);
 	pidBack.compute(dt / 1000.0);
-	
+
 	//if (pidLeft.setpoint != 0)
-	motorLeft.setSpeedWithDirection(pidLeft.output);
+		motorLeft.setSpeedWithDirection(pidLeft.output);
 	//else
 	//	motorLeft.stop();
 
 	//if (pidRight.setpoint != 0)
-	motorRight.setSpeedWithDirection(pidRight.output);
+		motorRight.setSpeedWithDirection(pidRight.output);
 	//else
 	//	motorRight.stop();
 
 	//if (pidBack.setpoint != 0)
-	motorBack.setSpeedWithDirection(pidBack.output);
+		motorBack.setSpeedWithDirection(pidBack.output);
 	//else
 	//	motorBack.stop();
 }
