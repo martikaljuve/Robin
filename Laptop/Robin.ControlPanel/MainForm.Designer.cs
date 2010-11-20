@@ -89,7 +89,7 @@ namespace Robin.ControlPanel
 			this.uxControlPanelLabel.Margin = new System.Windows.Forms.Padding(0);
 			this.uxControlPanelLabel.Name = "uxControlPanelLabel";
 			this.uxControlPanelLabel.Padding = new System.Windows.Forms.Padding(5);
-			this.uxControlPanelLabel.Size = new System.Drawing.Size(690, 27);
+			this.uxControlPanelLabel.Size = new System.Drawing.Size(816, 27);
 			this.uxControlPanelLabel.TabIndex = 2;
 			this.uxControlPanelLabel.Text = "Control Panel";
 			this.uxControlPanelLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -102,14 +102,14 @@ namespace Robin.ControlPanel
 			this.uxPorts.FormattingEnabled = true;
 			this.uxPorts.Location = new System.Drawing.Point(9, 35);
 			this.uxPorts.Name = "uxPorts";
-			this.uxPorts.Size = new System.Drawing.Size(121, 29);
+			this.uxPorts.Size = new System.Drawing.Size(264, 29);
 			this.uxPorts.TabIndex = 2;
 			// 
 			// uxPortConnect
 			// 
 			this.uxPortConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.uxPortConnect.AutoSize = true;
-			this.uxPortConnect.Location = new System.Drawing.Point(136, 33);
+			this.uxPortConnect.Location = new System.Drawing.Point(279, 33);
 			this.uxPortConnect.Name = "uxPortConnect";
 			this.uxPortConnect.Size = new System.Drawing.Size(97, 31);
 			this.uxPortConnect.TabIndex = 3;
@@ -150,7 +150,7 @@ namespace Robin.ControlPanel
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(690, 89);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(816, 89);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
 			// uxLogicFps
@@ -187,17 +187,18 @@ namespace Robin.ControlPanel
 			// 
 			// uxSerialData
 			// 
-			this.uxSerialData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.uxSerialData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.uxSerialData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.uxSerialData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.uxSerialData.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
 			this.uxSerialData.ForeColor = System.Drawing.Color.White;
-			this.uxSerialData.Location = new System.Drawing.Point(329, 98);
+			this.uxSerialData.Location = new System.Drawing.Point(404, 98);
 			this.uxSerialData.Multiline = true;
 			this.uxSerialData.Name = "uxSerialData";
 			this.uxSerialData.ReadOnly = true;
 			this.uxSerialData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.uxSerialData.Size = new System.Drawing.Size(323, 114);
+			this.uxSerialData.Size = new System.Drawing.Size(391, 114);
 			this.uxSerialData.TabIndex = 6;
 			this.uxSerialData.WordWrap = false;
 			// 
@@ -297,7 +298,7 @@ namespace Robin.ControlPanel
 			this.uxIrChannelPanel.Controls.Add(this.uxIrChannelNone);
 			this.uxIrChannelPanel.Controls.Add(this.uxIrChannelLabel);
 			this.uxIrChannelPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.uxIrChannelPanel.Location = new System.Drawing.Point(242, 28);
+			this.uxIrChannelPanel.Location = new System.Drawing.Point(385, 28);
 			this.uxIrChannelPanel.Name = "uxIrChannelPanel";
 			this.uxIrChannelPanel.Size = new System.Drawing.Size(410, 43);
 			this.uxIrChannelPanel.TabIndex = 13;
@@ -312,7 +313,7 @@ namespace Robin.ControlPanel
 			this.uxContentPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.uxContentPanel.Location = new System.Drawing.Point(0, 89);
 			this.uxContentPanel.Name = "uxContentPanel";
-			this.uxContentPanel.Size = new System.Drawing.Size(690, 440);
+			this.uxContentPanel.Size = new System.Drawing.Size(816, 440);
 			this.uxContentPanel.TabIndex = 14;
 			this.uxContentPanel.WrapContents = false;
 			// 
@@ -331,7 +332,7 @@ namespace Robin.ControlPanel
 			this.uxSerialPanel.Location = new System.Drawing.Point(3, 3);
 			this.uxSerialPanel.MinimumSize = new System.Drawing.Size(100, 50);
 			this.uxSerialPanel.Name = "uxSerialPanel";
-			this.uxSerialPanel.Size = new System.Drawing.Size(658, 218);
+			this.uxSerialPanel.Size = new System.Drawing.Size(801, 218);
 			this.uxSerialPanel.TabIndex = 0;
 			this.uxSerialPanel.TabStop = false;
 			this.uxSerialPanel.Text = "Arduino";
@@ -339,7 +340,7 @@ namespace Robin.ControlPanel
 			// uxSerialReceive
 			// 
 			this.uxSerialReceive.AutoSize = true;
-			this.uxSerialReceive.Location = new System.Drawing.Point(332, 74);
+			this.uxSerialReceive.Location = new System.Drawing.Point(400, 74);
 			this.uxSerialReceive.Name = "uxSerialReceive";
 			this.uxSerialReceive.Size = new System.Drawing.Size(66, 21);
 			this.uxSerialReceive.TabIndex = 16;
@@ -348,7 +349,7 @@ namespace Robin.ControlPanel
 			// uxSerialSend
 			// 
 			this.uxSerialSend.AutoSize = true;
-			this.uxSerialSend.Location = new System.Drawing.Point(9, 74);
+			this.uxSerialSend.Location = new System.Drawing.Point(5, 74);
 			this.uxSerialSend.Name = "uxSerialSend";
 			this.uxSerialSend.Size = new System.Drawing.Size(48, 21);
 			this.uxSerialSend.TabIndex = 15;
@@ -356,7 +357,8 @@ namespace Robin.ControlPanel
 			// 
 			// uxSerialSendData
 			// 
-			this.uxSerialSendData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.uxSerialSendData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.uxSerialSendData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.uxSerialSendData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.uxSerialSendData.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
@@ -366,7 +368,7 @@ namespace Robin.ControlPanel
 			this.uxSerialSendData.Name = "uxSerialSendData";
 			this.uxSerialSendData.ReadOnly = true;
 			this.uxSerialSendData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.uxSerialSendData.Size = new System.Drawing.Size(317, 114);
+			this.uxSerialSendData.Size = new System.Drawing.Size(392, 114);
 			this.uxSerialSendData.TabIndex = 14;
 			this.uxSerialSendData.WordWrap = false;
 			// 
@@ -378,14 +380,15 @@ namespace Robin.ControlPanel
 			this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
 			this.groupBox1.Location = new System.Drawing.Point(3, 227);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(658, 187);
+			this.groupBox1.Size = new System.Drawing.Size(801, 187);
 			this.groupBox1.TabIndex = 8;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Vision Settings";
 			// 
 			// uxShowVideo
 			// 
-			this.uxShowVideo.Location = new System.Drawing.Point(495, 28);
+			this.uxShowVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.uxShowVideo.Location = new System.Drawing.Point(638, 28);
 			this.uxShowVideo.Name = "uxShowVideo";
 			this.uxShowVideo.Size = new System.Drawing.Size(154, 39);
 			this.uxShowVideo.TabIndex = 0;
@@ -397,7 +400,7 @@ namespace Robin.ControlPanel
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-			this.ClientSize = new System.Drawing.Size(690, 529);
+			this.ClientSize = new System.Drawing.Size(816, 529);
 			this.Controls.Add(this.uxContentPanel);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.DoubleBuffered = true;

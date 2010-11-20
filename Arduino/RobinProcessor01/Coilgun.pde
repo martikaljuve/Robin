@@ -1,4 +1,5 @@
-bool coilgunFired = true;
+
+bool coilgunShouldCharge = true;
 bool coilgunCharging;
 long coilgunChargingEnd;
 const int CHARGE_TIME = 3000;
@@ -7,6 +8,9 @@ void coilgunSetup() {
 	pinMode(DONE_PIN, INPUT);
 	pinMode(KICK_PIN, OUTPUT);
 	pinMode(CHARGE_PIN, OUTPUT);
+
+	if (digitalRead(DONE_PIN) == LOW)
+		coilgunShouldCharge = false;
 }
 
 void coilgunLoop() {
@@ -15,11 +19,11 @@ void coilgunLoop() {
 		coilgunCharging = false;
 	}
 
-	if (coilgunFired) {
+	if (coilgunShouldCharge) {
 		digitalWrite(CHARGE_PIN, HIGH);
 		coilgunCharging = true;
 		coilgunChargingEnd = millis() + CHARGE_TIME;
-		coilgunFired = false;
+		coilgunShouldCharge = false;
 	}
 }
 
@@ -29,5 +33,5 @@ void fireCoilgun(byte power) {
 	delay(map(power, 0, 100, 0, 10));
 	digitalWrite(KICK_PIN, LOW);
 
-	coilgunFired = true;
+	coilgunShouldCharge = true;
 }

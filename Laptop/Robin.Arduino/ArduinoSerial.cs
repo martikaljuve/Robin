@@ -22,7 +22,13 @@ namespace Robin.Arduino
 		{
 			this.portName = portName;
 			this.baudRate = baudRate;
-			port.DataReceived += (sender, args) => OnDataReceived(new ArduinoSerialDataEventArgs(port.ReadExisting()));
+			port.DataReceived +=
+				(sender, args) =>
+					{
+						var bytes = new byte[port.BytesToRead];
+						port.Read(bytes, 0, port.BytesToRead);
+						OnDataReceived(new ArduinoSerialDataEventArgs(bytes));
+					};
 		}
 
 		public bool IsOpen

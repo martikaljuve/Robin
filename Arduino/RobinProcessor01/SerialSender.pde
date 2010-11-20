@@ -1,5 +1,5 @@
 long nextSend;
-const int sendInterval = 2000;
+const int sendInterval = 500;
 
 void serialSenderSetup() {
 	
@@ -17,24 +17,28 @@ void sendMessage() {
 	first |= (getTripSensorStatus() << 0);
 	first |= (getLeftIrStatus() << 1);
 	first |= (getRightIrStatus() << 2);
+	first |= (getPower() << 3);
+
+	byte second = getIrChannel();
 
 	Serial.write((byte)'D');
 	Serial.write(first);
+	Serial.write(second);
 	SerialUtil.writeInt(getGyroDirection());
 	SerialUtil.writeInt(getServoDirection());
 	Serial.println();
 }
 
 bool getTripSensorStatus() {
-	return false; // tripSensor;
+	return digitalRead(TRIP_SENSOR) == HIGH; // tripSensor;
 }
 
 bool getLeftIrStatus() {
-	return false; // leftIrInView;
+	return isLeftIr(); // leftIrInView;
 }
 
 bool getRightIrStatus() {
-	return false; // rightIrInView;
+	return isRightIr(); // rightIrInView;
 }
 
 int getGyroDirection() {
@@ -42,5 +46,6 @@ int getGyroDirection() {
 }
 
 int getServoDirection() {
-	return (int)'B'; // servoDirection;
+	//return -60;
+	return getServoAngle(); // servoDirection;
 }

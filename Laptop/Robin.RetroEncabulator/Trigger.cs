@@ -2,6 +2,7 @@
 {
 	public enum Trigger
 	{
+		PoweredUp,
 		CameraLockedOnBall,
 		BallCaught,
 		CoilgunLaunched,
@@ -9,6 +10,7 @@
 		CameraLostBall,
 		Timeout,
 		DebugForward,
-		DebugBack
+		DebugBack,
+		Finished
 	}
 }

@@ -1,6 +1,6 @@
+#include "ArduinoPins.h"
 #include "CMotorBoard.h"
 
-#define TRIP_SENSOR 7
 static bool POWER = false;
 
 void setup(){
@@ -11,6 +11,7 @@ void setup(){
 
 	//stateMachineSetup();
 	//gyroSetup();
+	powerSetup();
 	serialReceiverSetup();
 	serialSenderSetup();
 	wireSenderSetup();
@@ -22,6 +23,7 @@ void loop(){
 
 	//stateMachineLoop();
 	//gyroLoop();
+	powerLoop();
 	POWER ? serialReceiverLoop() : Serial.flush();
 	serialSenderLoop();
 	wireSenderLoop();

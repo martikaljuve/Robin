@@ -20,7 +20,14 @@ namespace Robin.RetroEncabulator
 			VisionData = new VisionData();
 			SensorData = new SensorData();
 			
-			stateMachine = new StateMachine<State, Trigger>(State.LookingForBall);
+			stateMachine = new StateMachine<State, Trigger>(State.Idle);
+
+			stateMachine.Configure(State.Idle)
+				.Permit(Trigger.PoweredUp, State.Starting);
+
+			stateMachine.Configure(State.Starting)
+				.Permit(Trigger.Finished, State.LookingForBall)
+				.Permit(Trigger.BallCaught, State.FindingGoal);
 
 			stateMachine.Configure(State.LookingForBall)
 				.Permit(Trigger.CameraLockedOnBall, State.ClosingInOnBall)
@@ -48,8 +55,11 @@ namespace Robin.RetroEncabulator
 		
 		public IRobotCommander Commander { get; set; }
 
+		public IntPtr Parent { get; set; }
+
 		private void StartTimer(double milliseconds, Action action)
 		{
+			timer.AutoReset = false;
 			timer.Stop();
 			timer.Interval = milliseconds;
 			timer.Start();
@@ -70,6 +80,12 @@ namespace Robin.RetroEncabulator
 		{
 			switch (stateMachine.State)
 			{
+				case State.Idle:
+					Idle();
+					break;
+				case State.Starting:
+					Starting();
+					break;
 				case State.LookingForBall:
 					LookingForBall();
 					break;
@@ -85,7 +101,24 @@ namespace Robin.RetroEncabulator
 			System.Threading.Thread.Sleep(100);
 		}
 
-		public IntPtr Parent { get; set; }
+		private long startFinished;
+		private void Idle()
+		{
+			if (SensorData.IsPowered) { 
+				stateMachine.Fire(Trigger.PoweredUp);
+				startFinished = DateTime.Now.Ticks + 2000 * TimeSpan.TicksPerMillisecond;
+			}
+		}
+
+		private void Starting()
+		{
+			if (startFinished < DateTime.Now.Ticks)
+				Commander.MoveAndTurn(315, 50, -50);
+			else {
+				Commander.Stop();
+				stateMachine.Fire(Trigger.Finished);
+			}
+		}
 
 		private void LookingForBall()
 		{
@@ -95,7 +128,7 @@ namespace Robin.RetroEncabulator
 			if (VisionData.TrackingBall)
 				stateMachine.Fire(Trigger.CameraLockedOnBall);
 
-
+			Commander.Turn(-20);
 		}
 
 		private void ClosingInOnBall()
@@ -111,12 +144,15 @@ namespace Robin.RetroEncabulator
 
 		private void FindingGoal()
 		{
-			if (!SensorData.BallInDribbler)
-				stateMachine.Fire(Trigger.BallLost);
-
 			var beaconInFront = SensorData.OpponentBeaconFound && Math.Abs(SensorData.BeaconServoDirection) < 10;
 			if (beaconInFront && !VisionData.FrontBallPathObstructed)
+			{
 				LaunchBall();
+				return;
+			}
+
+			if (!SensorData.BallInDribbler)
+				stateMachine.Fire(Trigger.BallLost);
 
 			Commander.MoveAndTurn(0, 0, SensorData.BeaconServoDirection < 0 ? (short)-100 : (short)100);
 		}

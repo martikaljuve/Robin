@@ -137,15 +137,17 @@ namespace Robin.ControlPanel
 			arduinoSerial.DataReceived +=
 				(o, args) =>
 				{
-					var data = ArduinoDataUtil.GetSensorDataFromString(args.Data);
+					var data = ArduinoDataUtil.GetSensorDataFromBytes(args.Bytes);
 					Action appendAction = () =>
 					{
-						if (!args.Data.StartsWith("D"))
+						if (args.Bytes.First() != (byte)ArduinoPrefix.IncomingData)
 							uxSerialData.AppendText(index++ + ": " + args.Data);
 						else
 							uxSerialData.AppendText(index++ + ": " + data + Environment.NewLine);
 
 						selectedController.SensorData = data;
+
+						SetIrChannelButton(data.IrChannel);
 					};
 					uxSerialData.Invoke(appendAction);
 				};
@@ -189,6 +191,44 @@ namespace Robin.ControlPanel
 
 			if (uxPorts.Items.Contains(Settings.Default.ArduinoSerialPort))
 				uxPorts.SelectedItem = Settings.Default.ArduinoSerialPort;
+
+			uxIrChannel1.CheckedChanged += uxIrChannelCheckedChanged;
+			uxIrChannel2.CheckedChanged += uxIrChannelCheckedChanged;
+			uxIrChannel3.CheckedChanged += uxIrChannelCheckedChanged;
+			uxIrChannel4.CheckedChanged += uxIrChannelCheckedChanged;
+			uxIrChannelNone.CheckedChanged += uxIrChannelCheckedChanged;
+		}
+
+		private void SetIrChannelButton(byte irChannel)
+		{
+			switch (irChannel)
+			{
+				default:
+				case 0:
+					uxIrChannelNone.Checked = true;
+					break;
+				case 1:
+					uxIrChannel1.Checked = true;
+					break;
+				case 2:
+					uxIrChannel1.Checked = true;
+					break;
+				case 3:
+					uxIrChannel1.Checked = true;
+					break;
+				case 4:
+					uxIrChannel1.Checked = true;
+					break;
+			}
+		}
+
+		private void uxIrChannelCheckedChanged(object sender, EventArgs eventArgs)
+		{
+			if (uxIrChannel1.Checked) arduinoCommander.SetIrChannel(1);
+			else if (uxIrChannel2.Checked) arduinoCommander.SetIrChannel(2);
+			else if (uxIrChannel3.Checked) arduinoCommander.SetIrChannel(3);
+			else if (uxIrChannel4.Checked) arduinoCommander.SetIrChannel(4);
+			//else if (uxIrChannelNone.Checked) arduinoCommander.SetIrChannel(0);
 		}
 
 		private static bool showCircles;

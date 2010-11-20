@@ -2,7 +2,7 @@
 {
 	public static class ArduinoPrefix
 	{
-		public const string IncomingData = "D";
+		public const char IncomingData = 'D';
 		
 		public const string CoilgunFire = "F";
 

@@ -13,3 +13,7 @@ void powerLoop() {
 void powerCheck() {
 	POWER = digitalRead(POWER_PIN);
 }
+
+bool getPower() {
+	return (POWER == HIGH);
+}

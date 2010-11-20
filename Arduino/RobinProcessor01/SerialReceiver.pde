@@ -86,7 +86,7 @@ void parseMoveAndTurnCommand() {
 void parseIrChannelCommand() {
 	byte channel = SerialUtil.readByte();
 
-	// setIrChannel(channel);
+	setIrChannel(channel);
 }
 
 void parseExtraCommand() {

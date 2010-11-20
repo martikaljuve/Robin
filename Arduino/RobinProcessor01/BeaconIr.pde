@@ -13,7 +13,6 @@ int leftResult;
 int rightResult;
 short leftTimer;
 short rightTimer;
-int const maxCount = 2; //How many results to take the max value from
 byte channelToSearch;
 
 void beaconIrSetup(){
@@ -21,6 +20,8 @@ void beaconIrSetup(){
   irRecvRight.enableIRIn();
 
   channelToSearch = readChannelFromEeprom();
+  if (channelToSearch == 0)
+	  channelToSearch = 1;
   //channelToSearch = 1;
 }
 
@@ -99,10 +100,14 @@ void writeChannelToEeprom(byte newChannel){
 }
 
 byte readChannelFromEeprom(){
- EEPROM.read(0);
+  return EEPROM.read(0);
 }
 
 void setIrChannel(byte channel) {
 	channelToSearch = channel;
 	writeChannelToEeprom(channel);
+}
+
+byte getIrChannel() {
+	return channelToSearch;
 }

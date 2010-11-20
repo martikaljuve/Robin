@@ -40,8 +40,11 @@ namespace Robin.VideoProcessor
 			frameCanny = HoughTransform.GetCanny(frameGray);
 			frameCanny.SetValue(new Gray(0), RobotMask);
 
-			//var lines = HoughTransform.GetLines(frameCanny);
-			//Lines = lines;
+			var lines = HoughTransform.GetLines(frameCanny);
+			Lines = lines;
+			foreach (var line in lines)
+				frameCanny.Draw(line, new Gray(0), 5);
+
 			//Lines = HoughTransform.FilterLines(lines);
 			Circles = HoughTransform.GetCircles(frameCanny.Bitmap);
 

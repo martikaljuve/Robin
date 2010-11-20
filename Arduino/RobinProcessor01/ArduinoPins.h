@@ -1,3 +1,5 @@
+#pragma once
+
 // BeaconFinder.pde
 #define RECV_PIN_L 2
 #define RECV_PIN_R 3
@@ -17,4 +19,7 @@
 #define BLUE_PIN 4
 
 // Power.pde
-#define POWER_PIN 4
+#define POWER_PIN 8
+
+// RobinProcessor01.pde
+#define TRIP_SENSOR 7

@@ -1,54 +1,50 @@
 using System;
 using System.Linq;
+using System.Text;
 using Robin.Core;
 
 namespace Robin.Arduino
 {
 	public static class ArduinoDataUtil
 	{
-		private static void UpdateFromSerialData(SensorData sensorData, string data)
+		private static void UpdateFromSerialData(SensorData sensorData, byte[] data)
 		{
 			if (data.Length < 6) return;
-			if (!data.StartsWith(ArduinoPrefix.IncomingData)) return;
+			if ((char)data[0] != ArduinoPrefix.IncomingData) return;
 
-			var firstByte = (byte)data[1];
+			var firstByte = data[1];
 
 			sensorData.BallInDribbler = (1 & firstByte) == 1;
 			sensorData.BeaconIrLeftInView = (2 & firstByte) == 2;
 			sensorData.BeaconIrRightInView = (4 & firstByte) == 4;
+			sensorData.IsPowered = (8 & firstByte) == 8;
+			sensorData.IrChannel = data[2];
 
-			sensorData.GyroDirection = GetShortFromString(data, 2);
-			sensorData.BeaconServoDirection = GetShortFromString(data, 4);
+			sensorData.GyroDirection = GetShortFromBytes(data, 3);
+			sensorData.BeaconServoDirection = GetShortFromBytes(data, 5);
 		}
 
-		public static SensorData GetSensorDataFromString(string data)
+		public static SensorData GetSensorDataFromBytes(byte[] data)
 		{
 			var sensorData = new SensorData();
 
-			if (string.IsNullOrEmpty(data))
+			if (data.Length == 0)
 				return sensorData;
 
-			var tokens = data.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			var bytes = data.TakeWhile(x => (char) x != '\n').ToArray();
 
-			if (tokens.Length == 0)
-				return sensorData;
-
-			var token = tokens.LastOrDefault(t => t.StartsWith("D"));
-			if (token == default(string))
-				return sensorData;
-
-			UpdateFromSerialData(sensorData, token);
+			UpdateFromSerialData(sensorData, bytes);
 			return sensorData;
 		}
 
-		private static short GetShortFromString(string value, int index)
+		private static short GetShortFromBytes(byte[] bytes, int index)
 		{
-			var bytes = new[] { (byte)value[index], (byte)value[index + 1] }.AsEnumerable();
+			var data = bytes.Skip(index).Take(2).ToArray();
 
 			if (!BitConverter.IsLittleEndian)
-				bytes = bytes.Reverse();
+				data = data.Reverse().ToArray();
 
-			return BitConverter.ToInt16(bytes.ToArray(), 0);
+			return BitConverter.ToInt16(data, 0);
 		}
 	}
 }
