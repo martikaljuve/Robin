@@ -1,7 +1,6 @@
 byte buffer[10];
 
 void serialReceiverSetup() {
-	Serial.flush();
 }
 
 void serialReceiverLoop() {
@@ -47,7 +46,7 @@ void parseSerialBuffer() {
 void parseFireCommand() {
 	byte power = SerialUtil.readByte();
 
-	//fireCoilgun(power);
+	fireCoilgun(power);
 }
 
 void parseMoveCommand() {

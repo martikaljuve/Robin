@@ -1,10 +1,11 @@
 
-
 void setup(){
-  Serial.begin(57600);
-  servoAndIRsetup();
+	#ifdef SERVO_DEBUG
+	Serial.begin(57600);
+	#endif
+	beaconFinderSetup();
 }
 
 void loop(){
-  servoAndIRloop();
+	beaconFinderLoop();
 }

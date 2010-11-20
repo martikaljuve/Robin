@@ -1,31 +1,31 @@
-#include "pins.h"
 #include <IRremote.h>
 #include <TimedAction.h>
-#include <WProgram.h>
 
 static IRrecv irRecvLeft(RECV_PIN_L);
 static IRrecv irRecvRight(RECV_PIN_R);
 static decode_results resultsLeft;
 static decode_results resultsRight;
+static const short MAX_TIMER = 20;
 
 TimedAction irCheckAction = TimedAction(50, irCheck);
 
 int leftResult;
 int rightResult;
-
-int leftCount = 0;
-int rightCount = 0;
+short leftTimer;
+short rightTimer;
 int const maxCount = 2; //How many results to take the max value from
-
-bool debug = false;
-
 byte channelToSearch;
 
-void irSetup(){
+void beaconIrSetup(){
   irRecvLeft.enableIRIn(); // Start the receiver
   irRecvRight.enableIRIn();
 
   channelToSearch = readChannelFromEeprom();
+  //channelToSearch = 1;
+}
+
+void beaconIrLoop() {
+  irCheckAction.check();
 }
 
 void irResume(){
@@ -36,6 +36,7 @@ void irResume(){
 void irCheck(){
   bool left = irRecvLeft.decode(&resultsLeft);
   bool right = irRecvRight.decode(&resultsRight);
+
   if(left){
     resultsLeft.value &= 0b000000000111;
     leftResult = resultsLeft.value;  
@@ -47,18 +48,26 @@ void irCheck(){
     rightResult = resultsRight.value;      
   }else{
      rightResult = 0;
-  }  
-  irResume();
-  if(debug){
-    Serial.print(leftResult);
-    Serial.print("\t");
-    Serial.print(rightResult);
-    Serial.println();
   }
-}
 
-void irLoop() {
-  irCheckAction.check();
+  irResume();
+
+  if (isLeftInView())
+	  leftTimer = MAX_TIMER;
+  else if (leftTimer > 0)
+	  leftTimer--;
+
+  if (isRightInView())
+	  rightTimer = MAX_TIMER;
+  else if (rightTimer > 0)
+	  rightTimer--;
+
+  #ifdef SERVO_DEBUG
+  Serial.print(leftResult);
+  Serial.print("\t");
+  Serial.print(rightResult);
+  Serial.println();
+  #endif
 }
 
 int getLeftResult(){
@@ -69,27 +78,31 @@ int getRightResult(){
   return rightResult;
 }
 
-bool isLeftInView(int channel){
-  return (getLeftResult() == channel);
-}
-
-bool isRightInView(int channel){
-  return (getRightResult() == channel);
-}
-
 bool isLeftInView(){
-  return isLeftInView(channelToSearch);
+  return getLeftResult() == channelToSearch;
 }
 
 bool isRightInView(){
-  return isRightInView(channelToSearch);
+  return getRightResult() == channelToSearch;
+}
+
+bool isLeftIr() {
+	return leftTimer > 0;
+}
+
+bool isRightIr() {
+	return rightTimer > 0;
 }
 
 void writeChannelToEeprom(byte newChannel){
-  channelToSearch = newChannel;
   EEPROM.write(0, newChannel);
 }
 
 byte readChannelFromEeprom(){
  EEPROM.read(0);
+}
+
+void setIrChannel(byte channel) {
+	channelToSearch = channel;
+	writeChannelToEeprom(channel);
 }

@@ -1,7 +1,5 @@
 #include <SPI.h>
 
-const int SS = 10;
-
 int rate;
 int temperature;
 unsigned long timeLast = 0;
@@ -16,7 +14,7 @@ long samplingMax = 0;
 float samplingAvg = 0;
 int samplingAvgDeg = 0;
 
-float currentAngle = 0;
+float gyroAngle = 0;
 float samplingRate = 0.01;
 
 void gyroSetup() {
@@ -29,7 +27,7 @@ void gyroSetup() {
 
 	SPI.begin();
 
-	digitalWrite(SS, HIGH);
+	digitalWrite(SS_PIN, HIGH);
 	timeLast = millis();
 	timeNext = timeLast + updateMilliseconds;
 }
@@ -69,7 +67,7 @@ void gyroLoop() {
 	}
 	else {
 		unsigned int angularRate = adcToAngularRate(rate);
-		currentAngle = ((angularRate - samplingAvgDeg) * samplingRate) + currentAngle;
+		gyroAngle = ((angularRate - samplingAvgDeg) * samplingRate) + gyroAngle;
 
 		if(timeNow > timeNext) {
 			timeNext = timeNow + updateMilliseconds;
@@ -78,7 +76,7 @@ void gyroLoop() {
 			Serial.print(angularRate, DEC);
 
 			Serial.print(", \tAN ");
-			Serial.print(currentAngle);
+			Serial.print(gyroAngle);
 
 			Serial.print(", \tTP ");
 			Serial.print(adcToTemperature(temperature), DEC);
@@ -97,15 +95,15 @@ unsigned int getTemperature()
 	byte dataH;
 	byte dataL;
 
-	digitalWrite(SS, LOW);
+	digitalWrite(SS_PIN, LOW);
 	SPI.transfer(0b10011100); // ADCC for temperature channel
-	digitalWrite(SS, HIGH);
+	digitalWrite(SS_PIN, HIGH);
 	delayMicroseconds(250);
-	digitalWrite(SS, LOW);
+	digitalWrite(SS_PIN, LOW);
 	SPI.transfer(0b10000000);  // ADCR (ADC reading) Instruction
 	dataH = SPI.transfer(0x00);  // get the sensor response high byte
 	dataL = SPI.transfer(0x00);  // get the sensor response low byte
-	digitalWrite(SS, HIGH);
+	digitalWrite(SS_PIN, HIGH);
 
 	// The sensor response is two bytes length but the answer length
 	// is 11 bits only and saved using the lower 4 bits from the high 
@@ -125,15 +123,15 @@ unsigned int getAngularRate()
 	byte dataH;
 	byte dataL;
 
-	digitalWrite(SS, LOW);
+	digitalWrite(SS_PIN, LOW);
 	SPI.transfer(0b10010100);  // ADCC for angular rate channel
-	digitalWrite(SS,HIGH);
+	digitalWrite(SS_PIN,HIGH);
 	delayMicroseconds(250);
-	digitalWrite(SS,LOW);
+	digitalWrite(SS_PIN,LOW);
 	SPI.transfer(0b10000000);  // send SPI ADCR instruction
 	dataH = SPI.transfer(0x00);  // get the sensor response high byte
 	dataL = SPI.transfer(0x00);  // get the sensor response low byte
-	digitalWrite(SS,HIGH);
+	digitalWrite(SS_PIN,HIGH);
 
 	// The sensor response is two bytes length but the answer length
 	// is 11 bits only and saved using the lower 4 bits from the high 
