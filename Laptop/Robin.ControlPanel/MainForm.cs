@@ -28,7 +28,7 @@ namespace Robin.ControlPanel
 		private MainVideoProcessor videoProcessor;
 
 		[ImportMany]
-		public IEnumerable<Lazy<IRobotController>> RobotControllers { get; set; }
+		public IEnumerable<Lazy<IRobotController, IRobotControllerMetadata>> RobotControllers { get; set; }
 		
 		public MainForm()
 		{
@@ -94,15 +94,16 @@ namespace Robin.ControlPanel
 			var container = new CompositionContainer(aggregateCatalog);
 			container.ComposeParts(this);
 
-			uxControllers.DataSource = RobotControllers;
+			uxControllers.DataSource = RobotControllers.Select(item => new { Name = item.Metadata.Name, Value = item.Value }).ToList();
 			uxControllers.DisplayMember = "Name";
-			uxControllers.SelectedIndexChanged += (sender, args) => SetSelectedController((IRobotController)uxControllers.SelectedItem);
+			uxControllers.ValueMember = "Value";
+			uxControllers.SelectedIndexChanged += (sender, args) => SetSelectedController((IRobotController)uxControllers.SelectedValue);
 
 			if (!string.IsNullOrWhiteSpace(Settings.Default.SelectedController))
 			{
 				foreach (var controller in RobotControllers)
 				{
-					if (controller.Value.Name != Settings.Default.SelectedController)
+					if (controller.Metadata.Name != Settings.Default.SelectedController)
 						continue;
 
 					SetSelectedController(controller.Value);

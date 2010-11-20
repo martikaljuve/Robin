@@ -8,6 +8,7 @@ using System.Timers;
 
 namespace Robin.RetroEncabulator
 {
+	[ExportMetadata("Name", "RetroEncabulator")]
 	[Export(typeof(IRobotController))]
 	public class MainLogicProcessor : IRobotController
 	{
@@ -44,12 +45,7 @@ namespace Robin.RetroEncabulator
 		public VisionData VisionData { get; set; }
 
 		public SensorData SensorData { get; set; }
-
-		public string Name
-		{
-			get { return "RetroEncabulator"; }
-		}
-
+		
 		public IRobotCommander Commander { get; set; }
 
 		private void StartTimer(double milliseconds, Action action)

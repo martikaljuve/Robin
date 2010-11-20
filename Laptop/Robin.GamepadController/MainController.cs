@@ -6,6 +6,7 @@ using SlimDX.DirectInput;
 
 namespace Robin.GamepadController
 {
+	[ExportMetadata("Name", "Gamepad Controller")]
 	[Export(typeof(IRobotController))]
 	public class MainController : IRobotController
 	{
@@ -43,11 +44,6 @@ namespace Robin.GamepadController
 		public VisionData VisionData { get; set; }
 
 		public SensorData SensorData { get; set; }
-
-		public string Name
-		{
-			get { return "Gamepad Controller"; }
-		}
 
 		public IRobotCommander Commander { get; set; }
 
