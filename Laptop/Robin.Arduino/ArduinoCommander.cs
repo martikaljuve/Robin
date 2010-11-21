@@ -33,7 +33,12 @@ namespace Robin.Arduino
 
 		public void SetDribbler(bool enabled)
 		{
-			arduino.Command(ArduinoPrefix.SetDribbler, enabled);
+			arduino.Command(ArduinoPrefix.SetDribbler, enabled ? (short)255 : (short)0);
+		}
+
+		public void SetDribbler(short speed)
+		{
+			arduino.Command(ArduinoPrefix.SetDribbler, speed);
 		}
 
 		public void MoveAndTurn(short direction, short moveSpeed, short turnSpeed)

@@ -6,8 +6,8 @@
 		public const int A = 1;
 		public const int B = 2;
 		public const int Y = 3;
-		public const int LeftBumber = 4;
-		public const int RightBumber = 5;
+		public const int LeftBumper = 4;
+		public const int RightBumper = 5;
 		public const int LeftTrigger = 6;
 		public const int RightTrigger = 7;
 		public const int Back = 8;

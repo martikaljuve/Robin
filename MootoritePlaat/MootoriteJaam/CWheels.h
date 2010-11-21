@@ -23,6 +23,8 @@ public:
 	void stop();
 	void setSpeedsWithoutPid(int left, int right, int back);
 
+	void ForwardKinematics();
+
 private:
 	void moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, int &left, int &right, int &back);
 };

@@ -13,6 +13,7 @@ namespace Robin.GamepadController
 		private Joystick gamepad;
 		private JoystickState state = new JoystickState();
 		private bool wasMoving;
+		private short dribblerSpeed;
 
 		public MainController()
 		{
@@ -145,9 +146,30 @@ namespace Robin.GamepadController
 				Commander.FireCoilgun(50);
 
 			if (buttons[GamepadButtons.X])
+			{
+				dribblerSpeed = 255;
 				Commander.SetDribbler(true);
+			}
 			if (buttons[GamepadButtons.Y])
+			{
+				dribblerSpeed = 0;
 				Commander.SetDribbler(false);
+			}
+
+			if (buttons[GamepadButtons.LeftBumper])
+			{
+				dribblerSpeed -= 10;
+				if (dribblerSpeed < -255)
+					dribblerSpeed = -255;
+				Commander.SetDribbler(dribblerSpeed);
+			}
+			if (buttons[GamepadButtons.RightBumper])
+			{
+				dribblerSpeed += 10;
+				if (dribblerSpeed > 255)
+					dribblerSpeed = 255;
+				Commander.SetDribbler(dribblerSpeed);
+			}
 		}
 
 		private static long Map(long value, long inMin, long inMax, long outMin, long outMax)

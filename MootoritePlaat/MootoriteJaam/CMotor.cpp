@@ -23,8 +23,12 @@ void Motor::setSpeedWithDirection(int newSpeed) {
 void Motor::setPwm(byte newPwm) {
 	pwm = newPwm;
 
-	if (minPwm != 0 || maxPwm != 0)
+	if (pwm != 0 && (minPwm != 0 || maxPwm != 255)) {
 		pwm = map(pwm, 0, 255, minPwm, maxPwm);
+	}
+
+	if (newPwm < 5)
+		pwm = 0;
 
 	analogWrite(pwmPin, pwm);
 }
@@ -35,5 +39,12 @@ void Motor::setDirection(bool clockwiseFromMotor) {
 }
 
 void Motor::stop() {
+	speed = 0;
+	pwm = 0;
 	analogWrite(pwmPin, 0);
+}
+
+void Motor::setMinMaxPwm(byte min, byte max) {
+	minPwm = min;
+	maxPwm = max;
 }

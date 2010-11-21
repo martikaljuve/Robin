@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <GCC_CPP_AVR Include="_vsAddIn\include_sketch.cpp" />
+    <GCC_CPP_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\HardwareSerial.cpp">
+      <Filter>_core\src</Filter>
+    </GCC_CPP_AVR>
+    <GCC_CPP_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\main.cpp">
+      <Filter>_core\src</Filter>
+    </GCC_CPP_AVR>
+    <GCC_CPP_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\Print.cpp">
+      <Filter>_core\src</Filter>
+    </GCC_CPP_AVR>
+    <GCC_CPP_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\Tone.cpp">
+      <Filter>_core\src</Filter>
+    </GCC_CPP_AVR>
+    <GCC_CPP_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\WMath.cpp">
+      <Filter>_core\src</Filter>
+    </GCC_CPP_AVR>
+    <GCC_CPP_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\WString.cpp">
+      <Filter>_core\src</Filter>
+    </GCC_CPP_AVR>
+    <GCC_CPP_AVR Include="CMagnetSensor.cpp" />
+    <GCC_CPP_AVR Include="CMotor.cpp" />
+    <GCC_CPP_AVR Include="CPid.cpp" />
+    <GCC_CPP_AVR Include="CWheels.cpp" />
+    <GCC_CPP_AVR Include="..\..\..\Arduino IDE\libraries\TimedAction\TimedAction.cpp">
+      <Filter>_libraries\Core\TimedAction</Filter>
+    </GCC_CPP_AVR>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="_core">
+      <UniqueIdentifier>{81649b69-7867-45a7-9f3b-1662b6dce1f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_core\src">
+      <UniqueIdentifier>{859723d4-46b6-40d2-ae17-9cc0ef68fe71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_core\inc">
+      <UniqueIdentifier>{a3fbd4a5-054c-4850-9e76-941a52f9c22d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_libraries">
+      <UniqueIdentifier>{bc14f7e6-c9e4-44a6-a3ff-0b5a9dbe5a33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_libraries\Core">
+      <UniqueIdentifier>{ef971f92-fc19-435a-8fa9-78e3fb9b8464}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_libraries\Board">
+      <UniqueIdentifier>{9ecbdb51-0d5d-477e-a2ff-7330d187b99a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_libraries\User">
+      <UniqueIdentifier>{858b8d45-0872-4fa9-8411-81cd4cd59bfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_libraries\Core\TimedAction">
+      <UniqueIdentifier>{f506a764-cd80-41b1-ac46-79f6e550bc41}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <GCC_C_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\pins_arduino.c">
+      <Filter>_core\src</Filter>
+    </GCC_C_AVR>
+    <GCC_C_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\WInterrupts.c">
+      <Filter>_core\src</Filter>
+    </GCC_C_AVR>
+    <GCC_C_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\wiring.c">
+      <Filter>_core\src</Filter>
+    </GCC_C_AVR>
+    <GCC_C_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\wiring_analog.c">
+      <Filter>_core\src</Filter>
+    </GCC_C_AVR>
+    <GCC_C_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\wiring_digital.c">
+      <Filter>_core\src</Filter>
+    </GCC_C_AVR>
+    <GCC_C_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\wiring_pulse.c">
+      <Filter>_core\src</Filter>
+    </GCC_C_AVR>
+    <GCC_C_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\wiring_shift.c">
+      <Filter>_core\src</Filter>
+    </GCC_C_AVR>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\binary.h">
+      <Filter>_core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\HardwareSerial.h">
+      <Filter>_core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\pins_arduino.h">
+      <Filter>_core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\Print.h">
+      <Filter>_core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\Stream.h">
+      <Filter>_core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\WConstants.h">
+      <Filter>_core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\wiring.h">
+      <Filter>_core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\wiring_private.h">
+      <Filter>_core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\WProgram.h">
+      <Filter>_core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\WString.h">
+      <Filter>_core\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="ArduinoPins.h" />
+    <ClInclude Include="CMagnetSensor.h" />
+    <ClInclude Include="CMotor.h" />
+    <ClInclude Include="CommandData.h" />
+    <ClInclude Include="CPid.h" />
+    <ClInclude Include="CWheels.h" />
+    <ClInclude Include="CWheelSpeedTable.h" />
+    <ClInclude Include="Definitions.h" />
+    <ClInclude Include="..\..\..\Arduino IDE\libraries\TimedAction\TimedAction.h">
+      <Filter>_libraries\Core\TimedAction</Filter>
+    </ClInclude>
+    <ClInclude Include="PidDebugSerial.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MagnetSensors.pde" />
+    <None Include="MootoriteJaam.pde" />
+    <None Include="..\..\..\Arduino IDE\libraries\TimedAction\keywords.txt">
+      <Filter>_libraries\Core\TimedAction</Filter>
+    </None>
+    <None Include="Motors.pde" />
+    <None Include="MovementPatterns.pde" />
+    <None Include="PidDebug.pde" />
+    <None Include="Pids.pde" />
+    <None Include="WireReceiver.pde" />
+  </ItemGroup>
+</Project>

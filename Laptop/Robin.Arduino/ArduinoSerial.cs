@@ -88,7 +88,7 @@ namespace Robin.Arduino
 
 			var currentCommand = command + string.Join("", parameters);
 
-			if (currentCommand == previousCommand /*&& arduinoPrefix.NonRepeatableCommands.Contains(command)*/) {
+			if (currentCommand == previousCommand && ArduinoPrefix.NonRepeatableCommands.Contains(command)) {
 				previousCommand = currentCommand;
 				return;
 			}
@@ -119,7 +119,7 @@ namespace Robin.Arduino
 			while (byteList.Count < 7)
 				byteList.Add(0);
 
-			//byteList.Add((byte)'\n');
+			byteList.Add((byte)'\n');
 
 			if (!WriteLine(byteList))
 				return;
@@ -133,7 +133,6 @@ namespace Robin.Arduino
 			{
 				var byteArray = bytes.ToArray();
 				port.Write(byteArray, 0, byteArray.Length);
-				port.WriteLine(string.Empty);
 				return true;
 			}
 			catch (TimeoutException)

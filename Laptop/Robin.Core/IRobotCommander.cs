@@ -7,6 +7,7 @@ namespace Robin.Core
 		void Turn(short speed);
 		void Stop();
 		void SetDribbler(bool enabled);
+		void SetDribbler(short speed);
 		void MoveAndTurn(short direction, short moveSpeed, short turnSpeed);
 		void SetIrChannel(byte channel);
 		void SetState(byte state);

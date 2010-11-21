@@ -17,6 +17,6 @@
 
 		public const string SetState = "X";
 
-		public static readonly string[] NonRepeatableCommands = new[] { Move, MoveAndTurn, Turn, SetDribbler, CoilgunFire };
+		public static readonly string[] NonRepeatableCommands = new[] { Move, MoveAndTurn, Turn, CoilgunFire };
 	}
 }

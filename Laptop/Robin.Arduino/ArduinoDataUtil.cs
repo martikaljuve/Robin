@@ -18,6 +18,7 @@ namespace Robin.Arduino
 			sensorData.BeaconIrLeftInView = (2 & firstByte) == 2;
 			sensorData.BeaconIrRightInView = (4 & firstByte) == 4;
 			sensorData.IsPowered = (8 & firstByte) == 8;
+
 			sensorData.IrChannel = data[2];
 
 			sensorData.GyroDirection = GetShortFromBytes(data, 3);
@@ -40,6 +41,8 @@ namespace Robin.Arduino
 		private static short GetShortFromBytes(byte[] bytes, int index)
 		{
 			var data = bytes.Skip(index).Take(2).ToArray();
+			if (data.Length < 2)
+				return 0;
 
 			if (!BitConverter.IsLittleEndian)
 				data = data.Reverse().ToArray();

@@ -38,9 +38,11 @@ void parseSerialBuffer() {
 		case 'X':
 			parseExtraCommand();
 			break;
+		default:
+			break;
 	}
 
-	//Serial.flush();
+	Serial.flush();
 }
 
 void parseFireCommand() {
@@ -67,12 +69,9 @@ void parseStopCommand() {
 }
 
 void parseDribblerCommand() {
-	byte enabled = SerialUtil.readByte();
+	int speed = SerialUtil.readInt();
 
-	if ((enabled & 1) == 1)
-		MotorBoard::sendCommand('D');
-	else
-		MotorBoard::sendCommand('d');
+	MotorBoard::sendCommand('D', speed);
 }
 
 void parseMoveAndTurnCommand() {
