@@ -10,11 +10,11 @@ Pid::Pid(double p, double i, double d) {
 	kd = d;
 }
 
-void Pid::setInput(int newInput) {
+void Pid::setInput(long newInput) {
 	input = newInput;
 }
 
-void Pid::setSetpoint(int newSetpoint) {
+void Pid::setSetpoint(long newSetpoint) {
 	setpoint = newSetpoint;
 }
 
@@ -24,14 +24,14 @@ void Pid::setOutputLimits(int min, int max) {
 }
 
 void Pid::compute(double dt) {
-	int error = setpoint - input;
+	long error = setpoint - input;
 	integral = integral + (error * dt);
 	double derivative = (error - errorPrevious) / dt;
 	output += (kp * error) + (ki * integral) + (kd * derivative);
 	errorPrevious = error;
 
 	output = constrain(output, outputMin, outputMax);
-
+	
 	/*if (input < desiredSetpoint) {
 		setpoint += acceleration;
 		if (setpoint > desiredSetpoint) {

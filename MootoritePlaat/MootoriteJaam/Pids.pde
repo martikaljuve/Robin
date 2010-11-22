@@ -1,4 +1,4 @@
-TimedAction pidAction = TimedAction(150, pidCompute);
+TimedAction pidAction = TimedAction(100, pidCompute);
 
 long timePrevious = 0;
 
@@ -6,6 +6,11 @@ void pids_setup() {
 	//pidLeft.setOutputLimits(-255, 255);
 	//pidRight.setOutputLimits(-255, 255);
 	//pidBack.setOutputLimits(-255, 255);
+
+	wheels.desiredPositionLeft = magnetLeft.position;
+	wheels.desiredPositionRight = magnetRight.position;
+	wheels.desiredPositionBack = magnetBack.position;
+	wheels.stop();
 }
 
 void pids_loop() {
@@ -17,26 +22,28 @@ void pidCompute() {
 	long dt = now - timePrevious;
 	timePrevious = now;
 
-	pidLeft.setInput(magnetLeft.speed);
-	pidRight.setInput(magnetRight.speed);
-	pidBack.setInput(magnetBack.speed);
+	wheels.update(dt);
+
+	pidLeft.setInput(magnetLeft.position);
+	pidRight.setInput(magnetRight.position);
+	pidBack.setInput(magnetBack.position);
+
+	pidLeft.setSetpoint(wheels.desiredPositionLeft);
+	pidRight.setSetpoint(wheels.desiredPositionRight);
+	pidBack.setSetpoint(wheels.desiredPositionBack);
 
 	pidLeft.compute(dt / 1000.0);
 	pidRight.compute(dt / 1000.0);
 	pidBack.compute(dt / 1000.0);
 
-	//if (pidLeft.setpoint != 0)
-		motorLeft.setSpeedWithDirection(pidLeft.output);
-	//else
-	//	motorLeft.stop();
+	motorLeft.setSpeedWithDirection(pidLeft.output);
+	motorRight.setSpeedWithDirection(pidRight.output);
+	motorBack.setSpeedWithDirection(pidBack.output);
 
-	//if (pidRight.setpoint != 0)
-		motorRight.setSpeedWithDirection(pidRight.output);
-	//else
-	//	motorRight.stop();
-
-	//if (pidBack.setpoint != 0)
-		motorBack.setSpeedWithDirection(pidBack.output);
-	//else
-	//	motorBack.stop();
+	Serial.print("right input: ");
+	Serial.print(magnetRight.position);
+	Serial.print(", setpoint: ");
+	Serial.print(wheels.desiredPositionRight);
+	Serial.print(", output: ");
+	Serial.println(pidRight.output);
 }

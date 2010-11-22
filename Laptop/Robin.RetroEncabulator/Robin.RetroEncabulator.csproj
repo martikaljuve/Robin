@@ -78,11 +78,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="RobotCommanderExtensions.cs" />
     <Compile Include="Maneuver.cs" />
     <Compile Include="MovementData.cs" />
     <Compile Include="MovementRegion.cs" />
     <Compile Include="MovementRegions.cs" />
+    <Compile Include="SoundClipPlayer.cs" />
+    <Compile Include="Sounds.cs" />
     <Compile Include="State.cs" />
     <Compile Include="MainLogicProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,6 +96,32 @@
       <Project>{D45AF369-69AC-43B6-99EA-2725C6CB880E}</Project>
       <Name>Robin.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Resources\pacman.wav">
+      <Link>Resources\pacman.wav</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Resources\r2d2-14.mp3">
+      <Link>Resources\r2d2-14.mp3</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Resources\r2d2a.wav">
+      <Link>Resources\r2d2a.wav</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Resources\sbomb-start.mid">
+      <Link>Resources\sbomb-start.mid</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Resources\sm3-start.mid">
+      <Link>Resources\sm3-start.mid</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Resources\smb-time-warning.mid">
+      <Link>Resources\smb-time-warning.mid</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

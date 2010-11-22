@@ -3,24 +3,12 @@
 #include "CPid.h"
 #include "CWheelSpeedTable.h"
 
-Wheels::Wheels(Motor& left, Motor& right, Motor& back, Pid& leftPid, Pid& rightPid, Pid& backPid)
-	:
-	motorLeft(left),
-	motorRight(right),
-	motorBack(back),
-	pidLeft(leftPid),
-	pidRight(rightPid),
-	pidBack(backPid) {
-}
-
 void Wheels::move(int direction, int speed) {
 	moveAndTurn(direction, speed, 0);
 }
 
 void Wheels::turn(int speed) {
-	pidLeft.setSetpoint(speed);
-	pidRight.setSetpoint(speed);
-	pidBack.setSetpoint(speed);
+	moveAndTurn(0, 0, speed);
 }
 
 void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed) {
@@ -28,17 +16,7 @@ void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed) {
 	
 	moveAndTurnCalculate(direction, moveSpeed, turnSpeed, left, right, back);
 
-	pidLeft.setSetpoint(left);
-	pidRight.setSetpoint(right);
-	pidBack.setSetpoint(back);
-}
-
-void Wheels::moveAndTurnWithoutPid(int direction, int moveSpeed, int turnSpeed) {
-	int left, right, back;
-	
-	moveAndTurnCalculate(direction, moveSpeed, turnSpeed, left, right, back);
-
-	setSpeedsWithoutPid(left, right, back);
+	setDesiredSpeeds(left, right, back);
 }
 
 void Wheels::moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, int &left, int &right, int &back) {
@@ -75,16 +53,23 @@ void Wheels::moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, i
 	*/
 }
 
-void Wheels::stop() {
-	pidLeft.setSetpoint(0);
-	pidRight.setSetpoint(0);
-	pidBack.setSetpoint(0);
+void Wheels::setDesiredSpeeds(int leftRpm, int rightRpm, int backRpm) {
+	const long tenthDegreesPerRotation = 3600;
+	const long millisecondsInMinute = 60000;
 
-	setSpeedsWithoutPid(0, 0, 0);
+	speedLeft = leftRpm * tenthDegreesPerRotation / millisecondsInMinute;
+	speedRight = rightRpm * tenthDegreesPerRotation / millisecondsInMinute;;
+	speedBack = backRpm * tenthDegreesPerRotation / millisecondsInMinute;;
 }
 
-void Wheels::setSpeedsWithoutPid(int left, int right, int back) {
-	motorLeft.setSpeedWithDirection(left);
-	motorRight.setSpeedWithDirection(right);
-	motorBack.setSpeedWithDirection(back);
+void Wheels::update(unsigned long deltaInMilliseconds) {
+	desiredPositionLeft += speedLeft * deltaInMilliseconds;
+	desiredPositionRight += speedRight * deltaInMilliseconds;
+	desiredPositionBack += speedBack * deltaInMilliseconds;
+}
+
+void Wheels::stop() {
+	speedLeft = 0;
+	speedRight = 0;
+	speedBack = 0;
 }

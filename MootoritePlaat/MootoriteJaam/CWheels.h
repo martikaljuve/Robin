@@ -6,24 +6,23 @@
 #define RADIUS 1
 
 class Wheels {
-	Motor& motorLeft;
-	Motor& motorRight;
-	Motor& motorBack;
-	Pid& pidLeft;
-	Pid& pidRight;
-	Pid& pidBack;
+	int speedLeft;
+	int speedRight;
+	int speedBack;
 	static const int MAX_RPM = 400;
-public:
 
-	Wheels(Motor& left, Motor& right, Motor& back, Pid& leftPid, Pid& rightPid, Pid& backPid);
+public:
+	long desiredPositionLeft;
+	long desiredPositionRight;
+	long desiredPositionBack;
+
 	void move(int direction, int speed);
 	void turn(int speed);
 	void moveAndTurn(int direction, int moveSpeed, int turnSpeed);
-	void moveAndTurnWithoutPid(int direction, int moveSpeed, int turnSpeed);
 	void stop();
-	void setSpeedsWithoutPid(int left, int right, int back);
 
-	void ForwardKinematics();
+	void setDesiredSpeeds(int leftRpm, int rightRpm, int backRpm);
+	void update(unsigned long deltaInMilliseconds);
 
 private:
 	void moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, int &left, int &right, int &back);

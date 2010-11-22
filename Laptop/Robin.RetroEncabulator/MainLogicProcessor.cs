@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Media;
 using System.Text;
 using Robin.Core;
 using Stateless;
@@ -14,6 +15,7 @@ namespace Robin.RetroEncabulator
 	{
 		private readonly StateMachine<State, Trigger> stateMachine;
 		private static readonly Timer timer = new Timer();
+		private static SoundPlayer soundPlayer = new SoundPlayer();
 		
 		public MainLogicProcessor()
 		{
@@ -27,7 +29,8 @@ namespace Robin.RetroEncabulator
 
 			stateMachine.Configure(State.Starting)
 				.Permit(Trigger.Finished, State.LookingForBall)
-				.Permit(Trigger.BallCaught, State.FindingGoal);
+				.Permit(Trigger.BallCaught, State.FindingGoal)
+				.OnEntry(SoundClipPlayer.PlayIntro);
 
 			stateMachine.Configure(State.LookingForBall)
 				.Permit(Trigger.CameraLockedOnBall, State.ClosingInOnBall)

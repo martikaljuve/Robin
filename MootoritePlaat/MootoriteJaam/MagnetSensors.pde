@@ -9,12 +9,7 @@ void magnet_sensors_loop(){
 }
 
 void checkAngles() {
-	magnetLeft.takeMeasurement();
-	magnetRight.takeMeasurement();
-	magnetBack.takeMeasurement();
-
-	long time = millis();
-	magnetLeft.calculateSpeed(time);
-	magnetRight.calculateSpeed(time);
-	magnetBack.calculateSpeed(time);
+	magnetLeft.update();
+	magnetRight.update();
+	magnetBack.update();
 }
