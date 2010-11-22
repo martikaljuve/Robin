@@ -2,7 +2,7 @@ static IRrecv irRecvLeft(RECV_PIN_L);
 static IRrecv irRecvRight(RECV_PIN_R);
 static decode_results resultsLeft;
 static decode_results resultsRight;
-static const short MAX_TIMER = 20;
+static const short MAX_TIMER = 40;
 
 TimedAction irCheckAction = TimedAction(50, irCheck);
 
@@ -93,5 +93,12 @@ bool isLeftIr() {
 
 bool isRightIr() {
 	return rightTimer > 0;
+}
+
+short getLeftTimer(){
+  return leftTimer;
+}
+short getRightTimer(){
+  return rightTimer;
 }
 

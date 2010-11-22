@@ -14,7 +14,7 @@
 #include <WProgram.h>
 #include "IRconstants.h"
 
-//#define DEBUG
+#define DEBUG
 
 #define CLKFUDGE 5      // fudge factor for clock interrupt overhead
 #define CLK 256      // max value for clock (timer 2)

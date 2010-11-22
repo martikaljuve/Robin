@@ -5,6 +5,7 @@
 
 #include "pins.h"
 
+TimedAction outputAction = TimedAction(200, outputCheck);
 
 void setup(){
   Serial.begin(57600);
@@ -13,4 +14,17 @@ void setup(){
 
 void loop(){
   beaconIrLoop();
+  outputAction.check();
+}
+
+void outputCheck(){
+  Serial.print(getLeftResult());
+  Serial.print("\t");
+  Serial.print(getRightResult());  
+  Serial.print("\t");  
+  Serial.print(getLeftTimer());
+  Serial.print("\t");
+  Serial.print(getRightTimer());    
+  Serial.println();
+  
 }
