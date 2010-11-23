@@ -5,14 +5,18 @@ static IRrecv irRecvLeft(RECV_PIN_L);
 static IRrecv irRecvRight(RECV_PIN_R);
 static decode_results resultsLeft;
 static decode_results resultsRight;
-static const short MAX_TIMER = 7;
+static const short MAX_TIMER = 200;
+static const short SIGNAL_TIMER_PERIOD = 113; //Kui 113 ms jooksul pole signaali
 
-TimedAction irCheckAction = TimedAction(200, irCheck);
+//TimedAction irCheckAction = TimedAction(200, irCheck);
 
 int leftResult;
 int rightResult;
 short leftTimer;
 short rightTimer;
+long leftSignalTimer;
+long rightSignalTimer;
+
 byte channelToSearch;
 
 void beaconIrSetup(){
@@ -26,7 +30,8 @@ void beaconIrSetup(){
 }
 
 void beaconIrLoop() {
-	irCheckAction.check();
+        irCheck();
+	//irCheckAction.check();
 }
 
 void irResume(){
@@ -42,13 +47,20 @@ void irCheck(){
 		resultsLeft.value &= 0b000000000111;
 		leftResult = resultsLeft.value;  
 	}else{
-		leftResult = 0;
+                if(leftSignalTimer <= millis()){
+		      leftResult = 0;
+                      leftSignalTimer = millis()+SIGNAL_TIMER_PERIOD;
+                }
 	}
 	if(right){
 		resultsRight.value &= 0b000000000111;
 		rightResult = resultsRight.value;      
 	}else{
-		rightResult = 0;
+                if(rightSignalTimer <= millis()){
+		      rightResult = 0;
+                      rightSignalTimer = millis()+SIGNAL_TIMER_PERIOD;
+                }
+		//rightResult = 0;
 	}
 
 	irResume();

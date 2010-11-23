@@ -2,7 +2,7 @@
 #include <TimedAction.h>
 #include <EEPROM.h>
 
-//#define SERVO_DEBUG
+#define SERVO_DEBUG
 
 Servo servo;
 bool moveLeft = false;
@@ -13,7 +13,8 @@ int rightCount = 0;
 
 const int halfRotation = 90;
 
-TimedAction servoAction = TimedAction(200, turnServo);
+//TimedAction servoAction = TimedAction(200, turnServo);
+TimedAction beaconAction = TimedAction(40, beaconFinderAction);
 
 #ifdef SERVO_DEBUG
 TimedAction outputAction = TimedAction(700, outputInfo);
@@ -23,11 +24,15 @@ void beaconFinderSetup(){
 	beaconIrSetup();
 	servo.attach(SERVO_PIN);
 }
-
+void beaconFinderAction(){
+  beaconIrLoop();
+  turnServo();
+  
+}
 void beaconFinderLoop(){
-	beaconIrLoop();
-	servoAction.check();
-
+	//beaconIrLoop();
+	//servoAction.check();
+        beaconAction.check();
 	#ifdef SERVO_DEBUG
 	outputAction.check();
 	#endif
@@ -44,13 +49,13 @@ void calculateServoAngle(){
 		rightCount = 0;
 	}
 	else if (isLeftIr()) {
-		leftCount++;
+		//leftCount++;
 		rightCount = 0;
 		moveLeft = true;
 	}
 	else if (isRightIr()) {
 		leftCount = 0;
-		rightCount++;
+		//rightCount++;
 		moveLeft = false;
 	}
 	else {
@@ -62,7 +67,8 @@ void calculateServoAngle(){
 		return;
 
 	int maxCount = max(leftCount, rightCount);
-	int speed = constrain(maxCount, 1, 15);
+	//int speed = constrain(maxCount, 1, 15);
+        int speed = 2;
 	currentAngle += speed * (moveLeft ? -1 : 1);
 
 	if (currentAngle < 0) {
