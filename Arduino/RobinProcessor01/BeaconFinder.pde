@@ -13,7 +13,7 @@ int rightCount = 0;
 
 const int halfRotation = 90;
 
-TimedAction servoAction = TimedAction(100, turnServo);
+TimedAction servoAction = TimedAction(200, turnServo);
 
 #ifdef SERVO_DEBUG
 TimedAction outputAction = TimedAction(700, outputInfo);
@@ -62,7 +62,7 @@ void calculateServoAngle(){
 		return;
 
 	int maxCount = max(leftCount, rightCount);
-	int speed = maxCount < 5 ? 1 : constrain(maxCount - 5, 1, 10);
+	int speed = 2 + constrain(speed, 1, 20);
 	currentAngle += speed * (moveLeft ? -1 : 1);
 
 	if (currentAngle < 0) {

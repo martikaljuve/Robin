@@ -174,7 +174,6 @@ void IRrecv::checkIR(){
 // As soon as a SPACE gets long, ready is set, state switches to IDLE, timing of SPACE continues.
 // As soon as first MARK arrives, gap width is recorded, ready is cleared, and new logging starts
 
-
 ISR(TIMER2_OVF_vect)
 {
   RESET_TIMER2;
