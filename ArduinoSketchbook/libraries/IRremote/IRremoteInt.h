@@ -14,7 +14,7 @@
 #include <WProgram.h>
 #include "IRconstants.h"
 
-#define DEBUG
+//#define DEBUG
 
 #define CLKFUDGE 5      // fudge factor for clock interrupt overhead
 #define CLK 256      // max value for clock (timer 2)
@@ -61,7 +61,7 @@
 #define RC6_T1		444
 #define RC6_RPT_LENGTH	46000
 
-#define TOLERANCE 40  // percent tolerance in measurements
+#define TOLERANCE 50  // percent tolerance in measurements
 #define LTOL (1.0 - TOLERANCE/100.) 
 #define UTOL (1.0 + TOLERANCE/100.) 
 

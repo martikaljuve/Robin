@@ -27,7 +27,7 @@ void Pid::compute(double dt) {
 	long error = setpoint - input;
 	integral = integral + (error * dt);
 	double derivative = (error - errorPrevious) / dt;
-	output += (kp * error) + (ki * integral) + (kd * derivative);
+	output = (kp * error) + (ki * integral) + (kd * derivative);
 	errorPrevious = error;
 
 	output = constrain(output, outputMin, outputMax);

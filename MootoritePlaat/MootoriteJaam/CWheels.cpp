@@ -54,12 +54,14 @@ void Wheels::moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, i
 }
 
 void Wheels::setDesiredSpeeds(int leftRpm, int rightRpm, int backRpm) {
-	const long tenthDegreesPerRotation = 3600;
-	const long millisecondsInMinute = 60000;
+	const long tenthDegreesPerRotation = 1;
+	const long centisecondsInMinute = 1;
+	//const long tenthDegreesPerRotation = 3600;
+	//const long centisecondsInMinute = 6000;
 
-	speedLeft = leftRpm * tenthDegreesPerRotation / millisecondsInMinute;
-	speedRight = rightRpm * tenthDegreesPerRotation / millisecondsInMinute;;
-	speedBack = backRpm * tenthDegreesPerRotation / millisecondsInMinute;;
+	speedLeft = leftRpm * tenthDegreesPerRotation / centisecondsInMinute;
+	speedRight = rightRpm * tenthDegreesPerRotation / centisecondsInMinute;
+	speedBack = backRpm * tenthDegreesPerRotation / centisecondsInMinute;
 }
 
 void Wheels::update(unsigned long deltaInMilliseconds) {

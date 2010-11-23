@@ -4,10 +4,14 @@
 #include "ArduinoPins.h"
 #include "Definitions.h"
 
+//#define DEBUG
+
 void setup() {
 	ledOn();
 
+#ifdef DEBUG
 	Serial.begin(57600);
+#endif
 
 	// SETUP
 	motors_setup();
