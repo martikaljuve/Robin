@@ -6,7 +6,7 @@ void motors_setup() {
 	//motorRight.setMinMaxPwm(30, 255);
 	//motorBack.setMinMaxPwm(30, 255);
 
-	dribbler.setMinMaxPwm(50, 255);
+	//dribbler.setMinMaxPwm(50, 255);
 	//dribbler.setSpeedWithDirection(255);
 }
 

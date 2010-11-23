@@ -62,7 +62,7 @@ void calculateServoAngle(){
 		return;
 
 	int maxCount = max(leftCount, rightCount);
-	int speed = 2 + constrain(speed, 1, 20);
+	int speed = constrain(maxCount, 1, 15);
 	currentAngle += speed * (moveLeft ? -1 : 1);
 
 	if (currentAngle < 0) {

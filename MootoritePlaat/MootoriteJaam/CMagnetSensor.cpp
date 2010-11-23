@@ -20,7 +20,7 @@ void MagnetSensor::calculateNewPosition(int angle) {
 	if (angle < 0) // Angle should be between 0..3600, otherwise an error occurred
 		return;
 
-	int delta = angle - anglePrevious;
+	int delta = anglePrevious - angle;
 
 	int angleDiff;
 	if (delta < -1800)

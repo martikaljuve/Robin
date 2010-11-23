@@ -5,7 +5,7 @@ static IRrecv irRecvLeft(RECV_PIN_L);
 static IRrecv irRecvRight(RECV_PIN_R);
 static decode_results resultsLeft;
 static decode_results resultsRight;
-static const short MAX_TIMER = 10;
+static const short MAX_TIMER = 7;
 
 TimedAction irCheckAction = TimedAction(200, irCheck);
 

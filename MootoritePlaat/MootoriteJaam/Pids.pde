@@ -1,4 +1,6 @@
-TimedAction pidAction = TimedAction(100, pidCompute);
+//#define PID_DEBUG
+
+TimedAction pidAction = TimedAction(10, pidCompute);
 
 long timePrevious = 0;
 
@@ -40,10 +42,12 @@ void pidCompute() {
 	motorRight.setSpeedWithDirection(pidRight.output);
 	motorBack.setSpeedWithDirection(pidBack.output);
 
+#ifdef PID_DEBUG
 	Serial.print("right input: ");
 	Serial.print(magnetRight.position);
 	Serial.print(", setpoint: ");
 	Serial.print(wheels.desiredPositionRight);
 	Serial.print(", output: ");
 	Serial.println(pidRight.output);
+#endif
 }
