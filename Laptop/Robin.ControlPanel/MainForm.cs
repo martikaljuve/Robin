@@ -23,6 +23,7 @@ namespace Robin.ControlPanel
 		private readonly ArduinoSerial arduinoSerial = new ArduinoSerial();
 		private readonly ArduinoCommander arduinoCommander;
 		private VideoForm videoForm;
+		private int selectedIrChannel = -1;
 
 		private IRobotController selectedController;
 		private MainVideoProcessor videoProcessor;
@@ -54,8 +55,8 @@ namespace Robin.ControlPanel
 
 		private void InitializeUiControls()
 		{
-			uxContentPanel.MouseClick += (sender, args) => uxContentPanel.Focus();
-			uxContentPanel.MouseEnter += (sender, args) => uxContentPanel.Focus();
+			//uxContentPanel.MouseClick += (sender, args) => uxContentPanel.Focus();
+			//uxContentPanel.MouseEnter += (sender, args) => uxContentPanel.Focus();
 		}
 		
 		private void InitializeVisionControls()
@@ -88,6 +89,22 @@ namespace Robin.ControlPanel
 
 		private void InitializeMainLogicControls()
 		{
+			uxControllers.DisplayMember = "Name";
+			uxControllers.ValueMember = "Value";
+			uxControllers.SelectedIndexChanged += (sender, args) => SetSelectedController((IRobotController)uxControllers.SelectedValue);
+
+			PopulateLogicControllers();
+			uxControllers.DropDown += (o, eventArgs) => PopulateLogicControllers();
+
+			mainLogicWorker.WorkerSupportsCancellation = true;
+			mainLogicWorker.DoWork += MainLogicWorkerOnDoWork;
+			mainLogicWorker.ProgressChanged += MainLogicWorkerOnProgressChanged;
+			mainLogicWorker.WorkerReportsProgress = true;
+			mainLogicWorker.RunWorkerAsync();
+		}
+
+		private void PopulateLogicControllers()
+		{
 			var dirCatalog = new DirectoryCatalog("Controllers");
 			var assemblyCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
 			var aggregateCatalog = new AggregateCatalog(dirCatalog, assemblyCatalog);
@@ -95,9 +112,6 @@ namespace Robin.ControlPanel
 			container.ComposeParts(this);
 
 			uxControllers.DataSource = RobotControllers.Select(item => new { Name = item.Metadata.Name, Value = item.Value }).ToList();
-			uxControllers.DisplayMember = "Name";
-			uxControllers.ValueMember = "Value";
-			uxControllers.SelectedIndexChanged += (sender, args) => SetSelectedController((IRobotController)uxControllers.SelectedValue);
 
 			if (!string.IsNullOrWhiteSpace(Settings.Default.SelectedController))
 			{
@@ -116,12 +130,6 @@ namespace Robin.ControlPanel
 				SetSelectedController(RobotControllers.Select(x => x.Value).First());
 				uxControllers.SelectedItem = selectedController;
 			}
-
-			mainLogicWorker.WorkerSupportsCancellation = true;
-			mainLogicWorker.DoWork += MainLogicWorkerOnDoWork;
-			mainLogicWorker.ProgressChanged += MainLogicWorkerOnProgressChanged;
-			mainLogicWorker.WorkerReportsProgress = true;
-			mainLogicWorker.RunWorkerAsync();
 		}
 
 		private void SetSelectedController(IRobotController controller)
@@ -173,13 +181,6 @@ namespace Robin.ControlPanel
 
 			uxIrChannelPanel.DataBindings.Add("Enabled", arduinoSerial, "IsOpen");
 
-			var ports = SerialPort.GetPortNames();
-			Array.Sort(ports);
-
-			uxPorts.Items.Add("");
-			foreach (var portName in ports)
-				uxPorts.Items.Add(portName);
-
 			uxPorts.SelectedIndexChanged +=
 				(o, eventArgs) =>
 					{
@@ -189,8 +190,8 @@ namespace Robin.ControlPanel
 						Settings.Default.Save();
 					};
 
-			if (uxPorts.Items.Contains(Settings.Default.ArduinoSerialPort))
-				uxPorts.SelectedItem = Settings.Default.ArduinoSerialPort;
+			PopulateSerialPorts();
+			uxPorts.DropDown += (sender1, args1) => PopulateSerialPorts();
 
 			uxIrChannel1.CheckedChanged += uxIrChannelCheckedChanged;
 			uxIrChannel2.CheckedChanged += uxIrChannelCheckedChanged;
@@ -199,8 +200,27 @@ namespace Robin.ControlPanel
 			uxIrChannelNone.CheckedChanged += uxIrChannelCheckedChanged;
 		}
 
+		private void PopulateSerialPorts()
+		{
+			var ports = SerialPort.GetPortNames();
+			Array.Sort(ports);
+
+			uxPorts.Items.Clear();
+			uxPorts.Items.Add("");
+			foreach (var portName in ports)
+				uxPorts.Items.Add(portName);
+
+			if (uxPorts.Items.Contains(Settings.Default.ArduinoSerialPort))
+				uxPorts.SelectedItem = Settings.Default.ArduinoSerialPort;
+		}
+
 		private void SetIrChannelButton(byte irChannel)
 		{
+			if (selectedIrChannel == irChannel)
+				return;
+
+			selectedIrChannel = irChannel;
+
 			switch (irChannel)
 			{
 				default:

@@ -1,7 +1,14 @@
 #include <WProgram.h>
+#include "CMagnetSensor.h"
 #include "CWheels.h"
 #include "CPid.h"
 #include "CWheelSpeedTable.h"
+
+Wheels::Wheels(MagnetSensor& left, MagnetSensor& right, MagnetSensor& back)
+	:
+	magnetLeft(left),
+	magnetRight(right),
+	magnetBack(back) { }
 
 void Wheels::move(int direction, int speed) {
 	moveAndTurn(direction, speed, 0);
@@ -16,6 +23,7 @@ void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed) {
 	
 	moveAndTurnCalculate(direction, moveSpeed, turnSpeed, left, right, back);
 
+	resetDesiredPositions();
 	setDesiredSpeeds(left, right, back);
 }
 
@@ -51,6 +59,12 @@ void Wheels::moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, i
 	Serial.print(", ");
 	Serial.println(back);
 	*/
+}
+
+void Wheels::resetDesiredPositions() {
+	desiredPositionLeft = magnetLeft.position;
+	desiredPositionRight = magnetRight.position;
+	desiredPositionBack = magnetBack.position;
 }
 
 void Wheels::setDesiredSpeeds(int leftRpm, int rightRpm, int backRpm) {

@@ -18,8 +18,8 @@ Motor motorRight = Motor(MOTOR_RIGHT_PWM, MOTOR_RIGHT_DIR);
 Motor motorBack = Motor(MOTOR_BACK_PWM, MOTOR_BACK_DIR);
 Motor dribbler = Motor(MOTOR_TOP_PWM, MOTOR_TOP_DIR);
 
-Wheels wheels = Wheels();
-
 MagnetSensor magnetLeft = MagnetSensor(MAGNET_SS_LEFT, SCK, MISO);
 MagnetSensor magnetRight = MagnetSensor(MAGNET_SS_RIGHT, SCK, MISO);
 MagnetSensor magnetBack = MagnetSensor(MAGNET_SS_BACK, SCK, MISO);
+
+Wheels wheels = Wheels(magnetLeft, magnetRight, magnetBack);
