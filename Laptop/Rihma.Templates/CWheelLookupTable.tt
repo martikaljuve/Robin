@@ -2,7 +2,7 @@
 <#@ output extension=".h" encoding="0" #>
 #include <avr/pgmspace.h>
 
-// left, right, back
+// left, right, back (and sin)
 const prog_int16_t wheelSpeeds[] PROGMEM = {
 <#
 	PushIndent("\t");
@@ -11,13 +11,13 @@ const prog_int16_t wheelSpeeds[] PROGMEM = {
 		var velX = Math.Sin(radians);
 		var velY = Math.Cos(radians);
 		var tmp1 = -0.5 * velX;
-		var tmp2 = 0.866 * velY;
-		const int max = 255;
+		var tmp2 = 0.866025404 * velY;
+		const int max = 16384;
 		double speedLeft = (int)((tmp1 - tmp2) * max);
 		double speedRight = (int)((tmp1 + tmp2) * max);
 		double speedBack = (int)(velX * max);
 		
-		if (Math.Abs(speedLeft) >= Math.Abs(speedRight) && Math.Abs(speedLeft) >= Math.Abs(speedBack)) {
+		/*if (Math.Abs(speedLeft) >= Math.Abs(speedRight) && Math.Abs(speedLeft) >= Math.Abs(speedBack)) {
 			speedRight = speedRight/Math.Abs(speedLeft) * max;
 			speedBack = speedBack/Math.Abs(speedLeft) * max;
 			speedLeft = speedLeft < 0 ? -max : max;
@@ -31,20 +31,30 @@ const prog_int16_t wheelSpeeds[] PROGMEM = {
 			speedLeft = speedLeft/Math.Abs(speedBack) * max;
 			speedRight = speedRight/Math.Abs(speedBack) * max;
 			speedBack = speedBack < 0 ? -max : max;
-		}
+		}*/
 		
-		WriteLine((int)Math.Round(-speedLeft) + ", " + (int)Math.Round(-speedRight) + ", " + (int)Math.Round(-speedBack) + ", // " + i);
+		int left = (int)Math.Round(-speedLeft);
+		int right = (int)Math.Round(-speedRight);
+		int back = (int)Math.Round(-speedBack);
+		WriteLine(string.Format("{0}, {1}, {2}, // {3}", left, right, back, i));
 	}
 	PopIndent();
 #>
 };
 
-class WheelSpeedTable {	
+class WheelLookupTable {	
 public:
-	static void fromDirection(int direction, int &left, int &right, int &back) {
+	static void getSpeedsFromDirection(int direction, int &left, int &right, int &back) {
 		const prog_int16_t* pointer = &wheelSpeeds[direction * 3];
 		left = (int16_t)pgm_read_word(pointer);
-		right = (int16_t)pgm_read_word(pointer+2);
-		back = (int16_t)pgm_read_word(pointer+4);
+		right = (int16_t)pgm_read_word(pointer+1);
+		back = (int16_t)pgm_read_word(pointer+2);
+	}
+
+	static void getSinCosFromDirection(int direction, int &sin, int &cos) {
+		const prog_int16_t* pointer = &wheelSpeeds[direction * 3];
+		sin = (int16_t)-pgm_read_word(pointer+2);
+		pointer = &wheelSpeeds[((direction + 270) % 360) * 3];
+		cos = (int16_t)-pgm_read_word(pointer+2);
 	}
 };

@@ -33,16 +33,4 @@ void Pid::compute(double dt) {
 	errorPrevious = error;
 
 	output = constrain(output, outputMin, outputMax);
-	
-	/*if (input < desiredSetpoint) {
-		setpoint += acceleration;
-		if (setpoint > desiredSetpoint) {
-			setpoint = desiredSetpoint;
-		}
-	}
-	else if (input > desiredSetpoint) {
-		setpoint -= acceleration;
-		if (setpoint < desiredSetpoint)
-			setpoint = desiredSetpoint;
-	}*/
 }

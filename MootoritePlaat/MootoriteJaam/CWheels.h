@@ -30,6 +30,8 @@ public:
 	void stop();
 
 	void update(unsigned long deltaInMilliseconds);
+	
+	void forwardKinematics();
 
 private:
 	void moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, int &left, int &right, int &back);

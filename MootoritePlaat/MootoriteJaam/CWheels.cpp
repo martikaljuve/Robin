@@ -79,9 +79,35 @@ void Wheels::setDesiredSpeeds(int leftRpm, int rightRpm, int backRpm) {
 }
 
 void Wheels::update(unsigned long deltaInMilliseconds) {
+	int robotX, robotY, robotTheta;
+	forwardKinematics(robotX, robotY, robotTheta);
+
+	worldTheta += robotTheta;
+
+	int robotVectorLength = sqrt(sq(robotX) + sq(robotY));
+	int sin, cos;
+	WheelLookupTable::getSinCosFromDirection(worldTheta, sin, cos);
+	int deltaX = sin * robotVectorLength;
+	int deltaY = cos * robotVectorLength;
+
+	worldX += deltaX;
+	worldY += deltaY;
+
 	desiredPositionLeft += speedLeft * deltaInMilliseconds;
 	desiredPositionRight += speedRight * deltaInMilliseconds;
 	desiredPositionBack += speedBack * deltaInMilliseconds;
+}
+
+void Wheels::forwardKinematics(int left, int right, int back, int &x, int &y, int &theta) {
+	const long sqrt3 = 1732; // sqrt(3) = 1.73205081
+
+	x = ((sqrt3 * left) - (sqrt3 * right)) / 3000; // * 1000, because sqrt3 is * 1000
+	y = (left + right - (2 * back)) / 3;
+	theta = (left + right + back) / 3;
+}
+
+void Wheels::inverseKinematics(int x, int y, int theta, int &left, int &right, int &back) {
+	
 }
 
 void Wheels::stop() {
