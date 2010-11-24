@@ -21,3 +21,4 @@ public:
 	void setSetpoint(long newSetpoint);
 	void compute(double dt);
 };
+

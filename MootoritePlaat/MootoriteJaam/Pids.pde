@@ -8,11 +8,6 @@ void pids_setup() {
 	//pidLeft.setOutputLimits(-255, 255);
 	//pidRight.setOutputLimits(-255, 255);
 	//pidBack.setOutputLimits(-255, 255);
-
-	wheels.desiredPositionLeft = magnetLeft.position;
-	wheels.desiredPositionRight = magnetRight.position;
-	wheels.desiredPositionBack = magnetBack.position;
-	wheels.stop();
 }
 
 void pids_loop() {
@@ -24,15 +19,16 @@ void pidCompute() {
 	long dt = now - timePrevious;
 	timePrevious = now;
 
-	wheels.update(dt);
+	long desiredLeft, desiredRight, desiredBack;
+	wheels.update(dt, desiredLeft, desiredRight, desiredBack);
 
-	pidLeft.setInput(magnetLeft.position);
-	pidRight.setInput(magnetRight.position);
-	pidBack.setInput(magnetBack.position);
+	pidLeft.setInput(magnetLeft.getPositionTotal());
+	pidRight.setInput(magnetRight.getPositionTotal());
+	pidBack.setInput(magnetBack.getPositionTotal());
 
-	pidLeft.setSetpoint(wheels.desiredPositionLeft);
-	pidRight.setSetpoint(wheels.desiredPositionRight);
-	pidBack.setSetpoint(wheels.desiredPositionBack);
+	pidLeft.setSetpoint(desiredLeft);
+	pidRight.setSetpoint(desiredRight);
+	pidBack.setSetpoint(desiredBack);
 
 	pidLeft.compute(dt / 1000.0);
 	pidRight.compute(dt / 1000.0);
@@ -51,3 +47,4 @@ void pidCompute() {
 	Serial.println(pidRight.output);
 #endif
 }
+

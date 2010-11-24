@@ -27,13 +27,13 @@ void parseCommand(struct CommandData &cmd) {
 			wheels.stop();
 			break;
 		case 'M':
-			wheels.move(cmd.first, cmd.second);
+			wheels.moveDistance(cmd.first, cmd.second);
 			break;
 		case 'T':
-			wheels.turn(cmd.first);
+			wheels.turnDistance(cmd.first);
 			break;
 		case 'G':
-			wheels.moveAndTurn(cmd.first, cmd.second, cmd.third);
+			wheels.moveAndTurnDistance(cmd.first, cmd.second, cmd.third);
 			break;
 		case 'D':
 			dribbler.setSpeedWithDirection(cmd.first);
@@ -51,3 +51,4 @@ void dataReceived(int numBytes) {
 	
 	parseCommand(cmdUnion.command);
 }
+

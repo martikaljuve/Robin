@@ -20,3 +20,4 @@ private:
 	void setPwm(byte newPwm);
 	void setDirection(bool forward);
 };
+

@@ -31,5 +31,18 @@ void MagnetSensor::calculateNewPosition(int angle) {
 		angleDiff += delta;
 
 	anglePrevious = angle;
-	position += angleDiff;
+	positionTotal += angleDiff;
 }
+
+long MagnetSensor::getPositionTotal() {
+	return positionTotal;
+}
+
+int MagnetSensor::getCurrentDelta() {
+	return positionTotal - positionPrevious;
+}
+
+void MagnetSensor::resetCurrentDelta() {
+	positionPrevious = positionTotal;
+}
+

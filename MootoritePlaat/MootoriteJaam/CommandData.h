@@ -9,3 +9,4 @@ union CommandUnion {
 	byte bytes[7];
 	struct CommandData command;
 };
+

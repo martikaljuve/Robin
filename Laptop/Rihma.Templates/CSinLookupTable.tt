@@ -1,0 +1,45 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".h" encoding="0" #>
+#include <avr/pgmspace.h>
+
+// left, right, back (and sin)
+const prog_int16_t sinLookupTable[] PROGMEM = {
+<#
+	PushIndent("\t");
+	for(var i = 0; i < 3600; i++) {
+		var radians = Math.PI * i / 180;
+		const int max = 16384;
+		var sin = (int)Math.Round(Math.Sin(radians) * max);
+		
+		WriteLine(string.Format("{0}, // {1}", sin, i));
+	}
+	PopIndent();
+#>
+};
+
+class TrigonometryLookupTable {	
+public:
+	static void getSin(int tenthAngles) {
+		if (angle > 3600)
+			angle %= DSL_PERIOD;
+		else if (angle<0) {
+			if (angle<-DSL_PERIOD)
+				angle %= DSL_PERIOD;
+			angle += DSL_PERIOD;
+		}
+
+		return (int)sinLookupTable[angle];
+	}
+	
+	static void getCos(int tenthAngles) {
+		if (angle > 3600)
+			angle %= DSL_PERIOD;
+		else if (angle<0) {
+			if (angle<-DSL_PERIOD)
+				angle %= DSL_PERIOD;
+			angle += DSL_PERIOD;
+		}
+
+		return (int)sinLookupTable[angle];
+	}
+};

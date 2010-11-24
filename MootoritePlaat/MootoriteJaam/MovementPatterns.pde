@@ -1,4 +1,5 @@
 //For a rectangle test
+/*
 int fullCorners[] = {0, 90, 180, 270};
 int j = 0;
 void runLoop(){
@@ -125,3 +126,5 @@ void figureCircle() {
 		delay(1000);
 	}
 }
+*/
+

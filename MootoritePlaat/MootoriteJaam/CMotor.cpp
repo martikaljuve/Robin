@@ -48,3 +48,4 @@ void Motor::setMinMaxPwm(byte min, byte max) {
 	minPwm = min;
 	maxPwm = max;
 }
+

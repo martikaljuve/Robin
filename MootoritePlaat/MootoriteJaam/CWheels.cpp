@@ -3,6 +3,7 @@
 #include "CWheels.h"
 #include "CPid.h"
 #include "CWheelSpeedTable.h"
+#include "SinLookupTable.h"
 
 Wheels::Wheels(MagnetSensor& left, MagnetSensor& right, MagnetSensor& back)
 	:
@@ -10,6 +11,114 @@ Wheels::Wheels(MagnetSensor& left, MagnetSensor& right, MagnetSensor& back)
 	magnetRight(right),
 	magnetBack(back) { }
 
+void Wheels::moveDistance(int localDirection, int distance) {
+	moveAndTurnDistance(localDirection, distance, 0);
+}
+
+void Wheels::turnDistance(int localRotation) {
+	moveAndTurnDistance(0, 0, localRotation);
+}
+
+void Wheels::moveAndTurnDistance(int localDirectionInRadians, int distance, int localRotation) {
+	int cosRotation = CosLut(worldCurrentTheta);
+	int sinRotation = SinLut(worldCurrentTheta);
+
+	int localX = SinLut(localDirectionInRadians);
+	int localY = CosLut(localDirectionInRadians);
+
+	int worldX = (localX * cosRotation) + (localY * sinRotation);
+	int worldY = (-localX * sinRotation) + (localY * cosRotation);
+
+	worldX >>= DSL_SCALE;
+	worldY >>= DSL_SCALE;
+
+	worldFinalX = worldX * distance;
+	worldFinalY = worldY * distance;
+	worldFinalTheta = worldCurrentTheta + localRotation;
+}
+
+void Wheels::stop() {
+	worldFinalX = worldCurrentX;
+	worldFinalY = worldCurrentY;
+	worldFinalTheta = worldCurrentTheta;
+}
+
+void Wheels::update(unsigned long deltaInMilliseconds, long &desiredLeft, long &desiredRight, long &desiredBack) {
+	int leftPosition = magnetLeft.getCurrentDelta();
+	int rightPosition = magnetRight.getCurrentDelta();
+	int backPosition = magnetBack.getCurrentDelta();
+
+	magnetLeft.resetCurrentDelta();
+	magnetRight.resetCurrentDelta();
+	magnetBack.resetCurrentDelta();
+
+	int localX, localY, localTheta;
+	forwardKinematics(leftPosition, rightPosition, backPosition, localX, localY, localTheta);
+
+	worldCurrentTheta += localTheta;
+
+	int cosRotation = CosLut(worldCurrentTheta);
+	int sinRotation = SinLut(worldCurrentTheta);
+
+	int worldX = (localX * cosRotation) + (localY * sinRotation);
+	int worldY = (-localX * sinRotation) + (localY * cosRotation);
+
+	worldX >>= DSL_SCALE;
+	worldY >>= DSL_SCALE;
+		
+	worldCurrentX += worldX;
+	worldCurrentY += worldY;
+
+	int diffX = worldFinalX - worldCurrentX;
+	int diffY = worldFinalY - worldCurrentY;
+	int diffTheta = worldFinalTheta - worldCurrentTheta;
+
+	int diffLeft, diffRight, diffBack;
+	inverseKinematics(diffX, diffY, diffTheta, diffLeft, diffRight, diffBack);
+	
+	desiredLeft = magnetLeft.getPositionTotal() + diffLeft;
+	desiredRight = magnetRight.getPositionTotal() + diffRight;
+	desiredBack = magnetBack.getPositionTotal() + diffBack;
+
+	/*
+	desiredPositionLeft += speedLeft * deltaInMilliseconds;
+	desiredPositionRight += speedRight * deltaInMilliseconds;
+	desiredPositionBack += speedBack * deltaInMilliseconds;*/
+}
+
+// Coordinate system:
+//    ^ +Y
+//    |
+// <--+--> +X
+//    |        |
+//    V      <- +Theta
+
+void Wheels::forwardKinematics(int left, int right, int back, int &x, int &y, int &theta) {
+	// x = ((sqrt(3) * vRight) / 3) - ((sqrt(3) * vLeft) / 3)
+	// y = (vRight / 3) + (vLeft / 3) - ((2 * vBack) / 3)
+	// theta = (vRight / 3) + (vLeft / 3) + (vBack / 3)
+
+	const long sqrt3 = 1732; // sqrt(3) = 1.73205081 
+
+	x = ((sqrt3 * left) - (sqrt3 * right)) / 3000; // * 1000, because sqrt3 is * 1000
+	y = (left + right - (2 * back)) / 3;
+	theta = (left + right + back) / 3;
+}
+
+void Wheels::inverseKinematics(int x, int y, int theta, int &left, int &right, int &back) {
+	// vLeft = -vx * sin(150deg) + vy * cos(150deg) + Rw
+	// vRight = -vx * sin(30deg) + vy * cos(30deg) + Rw
+	// vBack = -vx * sin(270deg) + vy * cos(270deg) + Rw
+
+	int temp1 = -0.5 * x;
+	int temp2 = (0.866025404 * y) + theta;
+
+	left = temp1 - temp2;
+	right = temp1 + temp2;
+	back = x + theta;
+}
+
+/*
 void Wheels::move(int direction, int speed) {
 	moveAndTurn(direction, speed, 0);
 }
@@ -19,8 +128,7 @@ void Wheels::turn(int speed) {
 }
 
 void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed) {
-	int left, right, back;
-	
+	int left, right, back;	
 	moveAndTurnCalculate(direction, moveSpeed, turnSpeed, left, right, back);
 
 	resetDesiredPositions();
@@ -50,21 +158,6 @@ void Wheels::moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, i
 	left = left1;
 	right = right1;
 	back = back1;
-
-	/*
-	Serial.print("New speeds: ");
-	Serial.print(left);
-	Serial.print(", ");
-	Serial.print(right);
-	Serial.print(", ");
-	Serial.println(back);
-	*/
-}
-
-void Wheels::resetDesiredPositions() {
-	desiredPositionLeft = magnetLeft.position;
-	desiredPositionRight = magnetRight.position;
-	desiredPositionBack = magnetBack.position;
 }
 
 void Wheels::setDesiredSpeeds(int leftRpm, int rightRpm, int backRpm) {
@@ -78,36 +171,10 @@ void Wheels::setDesiredSpeeds(int leftRpm, int rightRpm, int backRpm) {
 	speedBack = backRpm * tenthDegreesPerRotation / centisecondsInMinute;
 }
 
-void Wheels::update(unsigned long deltaInMilliseconds) {
-	int robotX, robotY, robotTheta;
-	forwardKinematics(robotX, robotY, robotTheta);
-
-	worldTheta += robotTheta;
-
-	int robotVectorLength = sqrt(sq(robotX) + sq(robotY));
-	int sin, cos;
-	WheelLookupTable::getSinCosFromDirection(worldTheta, sin, cos);
-	int deltaX = sin * robotVectorLength;
-	int deltaY = cos * robotVectorLength;
-
-	worldX += deltaX;
-	worldY += deltaY;
-
-	desiredPositionLeft += speedLeft * deltaInMilliseconds;
-	desiredPositionRight += speedRight * deltaInMilliseconds;
-	desiredPositionBack += speedBack * deltaInMilliseconds;
-}
-
-void Wheels::forwardKinematics(int left, int right, int back, int &x, int &y, int &theta) {
-	const long sqrt3 = 1732; // sqrt(3) = 1.73205081
-
-	x = ((sqrt3 * left) - (sqrt3 * right)) / 3000; // * 1000, because sqrt3 is * 1000
-	y = (left + right - (2 * back)) / 3;
-	theta = (left + right + back) / 3;
-}
-
-void Wheels::inverseKinematics(int x, int y, int theta, int &left, int &right, int &back) {
-	
+void Wheels::resetDesiredPositions() {
+	desiredPositionLeft = magnetLeft.getPosition();
+	desiredPositionRight = magnetRight.getPosition();
+	desiredPositionBack = magnetBack.getPosition();
 }
 
 void Wheels::stop() {
@@ -115,3 +182,6 @@ void Wheels::stop() {
 	speedRight = 0;
 	speedBack = 0;
 }
+
+*/
+

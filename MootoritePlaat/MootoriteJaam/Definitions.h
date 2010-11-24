@@ -23,3 +23,4 @@ MagnetSensor magnetRight = MagnetSensor(MAGNET_SS_RIGHT, SCK, MISO);
 MagnetSensor magnetBack = MagnetSensor(MAGNET_SS_BACK, SCK, MISO);
 
 Wheels wheels = Wheels(magnetLeft, magnetRight, magnetBack);
+

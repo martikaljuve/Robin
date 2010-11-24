@@ -162,11 +162,25 @@ goto :eof
     <GCC_CPP_AVR Include="_vsAddIn\include_sketch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="BeaconFinder.pde" />
+    <None Include="BeaconIr.pde" />
+    <None Include="Coilgun.pde" />
     <None Include="Gyro.pde" />
+    <None Include="Leds.pde" />
+    <None Include="Power.pde" />
     <None Include="RobinProcessor01.pde" />
+    <None Include="SerialHelper.pde" />
+    <None Include="SerialReceiver.pde" />
+    <None Include="SerialSender.pde" />
     <None Include="SharpIr.pde" />
     <None Include="Sonar.pde" />
     <None Include="StateMachine.pde" />
+    <None Include="WireSender.pde" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ArduinoPins.h" />
+    <ClInclude Include="CMotorBoard.h" />
+    <ClInclude Include="CommandData.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
