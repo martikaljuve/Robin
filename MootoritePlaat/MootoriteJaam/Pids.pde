@@ -66,7 +66,18 @@ void pidCompute() {
 }
 
 #ifdef KIN_DEBUG
+int previousX, previousY, previousTheta;
+
 void pidDebug() {
+	if (previousX == wheels.worldCurrentX &&
+		previousY == wheels.worldCurrentY &&
+		previousTheta == wheels.worldCurrentTheta)
+		return;
+
+	previousX = wheels.worldCurrentX;
+	previousY = wheels.worldCurrentY;
+	previousTheta = wheels.worldCurrentTheta;
+
 	Serial.print("wheels: ");
 	Serial.print(magnetLeft.getPositionTotal() / 10.0);
 	Serial.print(", ");
