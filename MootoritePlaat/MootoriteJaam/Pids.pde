@@ -1,17 +1,29 @@
 //#define PID_DEBUG
+#define KIN_DEBUG
 
-TimedAction pidAction = TimedAction(10, pidCompute);
+TimedAction pidAction = TimedAction(50, pidCompute);
+#ifdef KIN_DEBUG
+TimedAction debugAction = TimedAction(500, pidDebug);
+#endif
 
 long timePrevious = 0;
+int desiredLeft, desiredRight, desiredBack;
 
 void pids_setup() {
 	//pidLeft.setOutputLimits(-255, 255);
 	//pidRight.setOutputLimits(-255, 255);
 	//pidBack.setOutputLimits(-255, 255);
+
+	pidLeft.setInput(0);
+	pidRight.setInput(0);
+	pidBack.setInput(0);
 }
 
 void pids_loop() {
 	pidAction.check();
+#ifdef KIN_DEBUG
+	debugAction.check();
+#endif
 }
 
 void pidCompute() {
@@ -19,13 +31,18 @@ void pidCompute() {
 	long dt = now - timePrevious;
 	timePrevious = now;
 
-	long desiredLeft, desiredRight, desiredBack;
-	wheels.update(dt, desiredLeft, desiredRight, desiredBack);
+	int left = magnetLeft.getCurrentDelta();
+	int right = magnetRight.getCurrentDelta();
+	int back = magnetBack.getCurrentDelta();
 
-	pidLeft.setInput(magnetLeft.getPositionTotal());
-	pidRight.setInput(magnetRight.getPositionTotal());
-	pidBack.setInput(magnetBack.getPositionTotal());
+	magnetLeft.resetCurrentDelta();
+	magnetRight.resetCurrentDelta();
+	magnetBack.resetCurrentDelta();
 
+	wheels.updateGlobalPosition(left, right, back);
+	wheels.getDesiredWheelPositions(desiredLeft, desiredRight, desiredBack);
+
+	/*
 	pidLeft.setSetpoint(desiredLeft);
 	pidRight.setSetpoint(desiredRight);
 	pidBack.setSetpoint(desiredBack);
@@ -37,7 +54,7 @@ void pidCompute() {
 	motorLeft.setSpeedWithDirection(pidLeft.output);
 	motorRight.setSpeedWithDirection(pidRight.output);
 	motorBack.setSpeedWithDirection(pidBack.output);
-
+	*/
 #ifdef PID_DEBUG
 	Serial.print("right input: ");
 	Serial.print(magnetRight.position);
@@ -48,3 +65,27 @@ void pidCompute() {
 #endif
 }
 
+#ifdef KIN_DEBUG
+void pidDebug() {
+	Serial.print("wheels: ");
+	Serial.print(magnetLeft.getPositionTotal() / 10.0);
+	Serial.print(", ");
+	Serial.print(magnetRight.getPositionTotal() / 10.0);
+	Serial.print(", ");
+	Serial.print(magnetBack.getPositionTotal() / 10.0);
+
+	Serial.print("\tworld: ");
+	Serial.print(wheels.worldCurrentX / 10.0);
+	Serial.print(", ");
+	Serial.print(wheels.worldCurrentY / 10.0);
+	Serial.print(", ");
+	Serial.print(wheels.worldCurrentTheta / 10.0);
+
+	Serial.print("\tdiff: ");
+	Serial.print(desiredLeft);
+	Serial.print(", ");
+	Serial.print(desiredRight);
+	Serial.print(", ");
+	Serial.println(desiredBack);
+}
+#endif

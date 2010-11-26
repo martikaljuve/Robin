@@ -3,7 +3,7 @@
 motoplaat.name=Mootorite plaat w/ ATMEGA324PV
 motoplaat.upload.protocol=stk500
 motoplaat.upload.maximum_size=30720
-motoplaat.upload.speed=19200
+motoplaat.upload.speed=57600
 
 motoplaat.bootloader.low_fuses=0xFF
 motoplaat.bootloader.high_fuses=0xDA

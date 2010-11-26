@@ -1,8 +1,6 @@
 #include <WProgram.h>
 #include "CMagnetSensor.h"
 
-MagnetSensor::MagnetSensor() { }
-
 MagnetSensor::MagnetSensor(int slaveSelect, int sck, int miso) {
 	pinMode(slaveSelect, OUTPUT);
 	digitalWrite(slaveSelect, LOW);
@@ -12,26 +10,36 @@ MagnetSensor::MagnetSensor(int slaveSelect, int sck, int miso) {
 }
 
 void MagnetSensor::update() {
-	int result = sensor.readAngle();
-	calculateNewPosition(result);
+	currentAngle = sensor.readAngle();
+	calculateNewPosition(currentAngle);
 }
 
 void MagnetSensor::calculateNewPosition(int angle) {
-	if (angle < 0) // Angle should be between 0..3600, otherwise an error occurred
+	if (angle < 0) // angle should be between 0..3600, otherwise an error occurred
 		return;
 
-	int delta = anglePrevious - angle;
+	int delta = angle - anglePrevious;
 
-	int angleDiff;
-	if (delta < -1800)
-		angleDiff += 3600 + delta;
-	else if (delta > 1800)
-		angleDiff += delta - 3600;
-	else
-		angleDiff += delta;
+	if (abs(delta) < 10) // only count changes larger than 1 degree
+		return;
 
 	anglePrevious = angle;
-	positionTotal += angleDiff;
+
+	if (delta <= -1800) {
+		knownAngle += 3600;
+	}
+	else if (delta >= 1800) {
+		knownAngle -= 3600;
+	}
+
+	positionTotal = -(knownAngle + angle - angleInitial);
+}
+
+void MagnetSensor::reset() {
+	angleInitial = sensor.readAngle();
+	anglePrevious = angleInitial;
+	knownAngle = 0;
+	positionTotal = 0;
 }
 
 long MagnetSensor::getPositionTotal() {
@@ -39,10 +47,10 @@ long MagnetSensor::getPositionTotal() {
 }
 
 int MagnetSensor::getCurrentDelta() {
-	return positionTotal - positionPrevious;
+	return getPositionTotal() - positionPrevious;
 }
 
 void MagnetSensor::resetCurrentDelta() {
-	positionPrevious = positionTotal;
+	positionPrevious = getPositionTotal();
 }
 

@@ -26,4 +26,3 @@
 #define MAGNET_SS_TOP 1 //PB1 "CS_B"
 
 #define SS_GYRO 2 //PB2
-

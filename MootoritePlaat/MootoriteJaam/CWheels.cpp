@@ -2,14 +2,7 @@
 #include "CMagnetSensor.h"
 #include "CWheels.h"
 #include "CPid.h"
-#include "CWheelSpeedTable.h"
 #include "SinLookupTable.h"
-
-Wheels::Wheels(MagnetSensor& left, MagnetSensor& right, MagnetSensor& back)
-	:
-	magnetLeft(left),
-	magnetRight(right),
-	magnetBack(back) { }
 
 void Wheels::moveDistance(int localDirection, int distance) {
 	moveAndTurnDistance(localDirection, distance, 0);
@@ -19,22 +12,34 @@ void Wheels::turnDistance(int localRotation) {
 	moveAndTurnDistance(0, 0, localRotation);
 }
 
-void Wheels::moveAndTurnDistance(int localDirectionInRadians, int distance, int localRotation) {
-	int cosRotation = CosLut(worldCurrentTheta);
-	int sinRotation = SinLut(worldCurrentTheta);
+// decidegrees, millimeters, decidegrees
+void Wheels::moveAndTurnDistance(int localDirectionInTenthDegrees, int distance, int localRotation) {
+	int localDirectionInRadians = M_PI * localDirectionInTenthDegrees / 1.8; // 180 * 10 / 1000
+	
+	int sinRotation = SinLookupTable::getSinFromTenthDegrees(worldCurrentTheta);
+	int cosRotation = SinLookupTable::getCosFromTenthDegrees(worldCurrentTheta);
 
-	int localX = SinLut(localDirectionInRadians);
-	int localY = CosLut(localDirectionInRadians);
+	int localX = SinLookupTable::getSin(localDirectionInRadians);
+	int localY = SinLookupTable::getCos(localDirectionInRadians);
 
-	int worldX = (localX * cosRotation) + (localY * sinRotation);
-	int worldY = (-localX * sinRotation) + (localY * cosRotation);
+	long worldX = (localX * cosRotation) + (localY * sinRotation);
+	long worldY = (localX * -sinRotation) + (localY * cosRotation);
 
-	worldX >>= DSL_SCALE;
-	worldY >>= DSL_SCALE;
+	worldX >>= LOOKUP_SCALE;
+	worldY >>= LOOKUP_SCALE;
 
-	worldFinalX = worldX * distance;
-	worldFinalY = worldY * distance;
+	worldFinalX = worldCurrentX + (worldX * distance);
+	worldFinalY = worldCurrentY + (worldY * distance);
 	worldFinalTheta = worldCurrentTheta + localRotation;
+
+#ifdef DEBUG
+	Serial.print("world final: ");
+	Serial.print(wheels.worldFinalX);
+	Serial.print(", ");
+	Serial.print(wheels.worldFinalY);
+	Serial.print(", ");
+	Serial.println(wheels.worldFinalTheta);
+#endif
 }
 
 void Wheels::stop() {
@@ -43,47 +48,40 @@ void Wheels::stop() {
 	worldFinalTheta = worldCurrentTheta;
 }
 
-void Wheels::update(unsigned long deltaInMilliseconds, long &desiredLeft, long &desiredRight, long &desiredBack) {
-	int leftPosition = magnetLeft.getCurrentDelta();
-	int rightPosition = magnetRight.getCurrentDelta();
-	int backPosition = magnetBack.getCurrentDelta();
+void Wheels::resetGlobalPosition() {
+	worldCurrentX = 0;
+	worldCurrentY = 0;
+	worldCurrentTheta = 0;
+	worldFinalX = 0;
+	worldFinalY = 0;
+	worldFinalTheta = 0;
+}
 
-	magnetLeft.resetCurrentDelta();
-	magnetRight.resetCurrentDelta();
-	magnetBack.resetCurrentDelta();
-
+void Wheels::updateGlobalPosition(int leftWheel, int rightWheel, int backWheel) {
 	int localX, localY, localTheta;
-	forwardKinematics(leftPosition, rightPosition, backPosition, localX, localY, localTheta);
+	forwardKinematics(leftWheel, rightWheel, backWheel, localX, localY, localTheta);
 
 	worldCurrentTheta += localTheta;
 
-	int cosRotation = CosLut(worldCurrentTheta);
-	int sinRotation = SinLut(worldCurrentTheta);
+	int cosRotation = SinLookupTable::getCos(worldCurrentTheta);
+	int sinRotation = SinLookupTable::getSin(worldCurrentTheta);
 
 	int worldX = (localX * cosRotation) + (localY * sinRotation);
 	int worldY = (-localX * sinRotation) + (localY * cosRotation);
 
-	worldX >>= DSL_SCALE;
-	worldY >>= DSL_SCALE;
+	worldX >>= LOOKUP_SCALE;
+	worldY >>= LOOKUP_SCALE;
 		
 	worldCurrentX += worldX;
 	worldCurrentY += worldY;
+}
 
+void Wheels::getDesiredWheelPositions(int &desiredLeft, int &desiredRight, int &desiredBack) {
 	int diffX = worldFinalX - worldCurrentX;
 	int diffY = worldFinalY - worldCurrentY;
 	int diffTheta = worldFinalTheta - worldCurrentTheta;
 
-	int diffLeft, diffRight, diffBack;
-	inverseKinematics(diffX, diffY, diffTheta, diffLeft, diffRight, diffBack);
-	
-	desiredLeft = magnetLeft.getPositionTotal() + diffLeft;
-	desiredRight = magnetRight.getPositionTotal() + diffRight;
-	desiredBack = magnetBack.getPositionTotal() + diffBack;
-
-	/*
-	desiredPositionLeft += speedLeft * deltaInMilliseconds;
-	desiredPositionRight += speedRight * deltaInMilliseconds;
-	desiredPositionBack += speedBack * deltaInMilliseconds;*/
+	inverseKinematics(diffX, diffY, diffTheta, desiredLeft, desiredRight, desiredBack);
 }
 
 // Coordinate system:
@@ -103,12 +101,20 @@ void Wheels::forwardKinematics(int left, int right, int back, int &x, int &y, in
 	x = ((sqrt3 * left) - (sqrt3 * right)) / 3000; // * 1000, because sqrt3 is * 1000
 	y = (left + right - (2 * back)) / 3;
 	theta = (left + right + back) / 3;
+
+	x /= DECIDEGREES_TO_MILLIMETERS_DIVISOR;
+	y /= DECIDEGREES_TO_MILLIMETERS_DIVISOR;
+	theta *= WHEEL_TO_ROBOT_ROTATION_MULTIPLIER;
 }
 
 void Wheels::inverseKinematics(int x, int y, int theta, int &left, int &right, int &back) {
 	// vLeft = -vx * sin(150deg) + vy * cos(150deg) + Rw
 	// vRight = -vx * sin(30deg) + vy * cos(30deg) + Rw
 	// vBack = -vx * sin(270deg) + vy * cos(270deg) + Rw
+
+	x *= DECIDEGREES_TO_MILLIMETERS_DIVISOR;
+	y *= DECIDEGREES_TO_MILLIMETERS_DIVISOR;
+	theta /= WHEEL_TO_ROBOT_ROTATION_MULTIPLIER;
 
 	int temp1 = -0.5 * x;
 	int temp2 = (0.866025404 * y) + theta;
@@ -117,71 +123,3 @@ void Wheels::inverseKinematics(int x, int y, int theta, int &left, int &right, i
 	right = temp1 + temp2;
 	back = x + theta;
 }
-
-/*
-void Wheels::move(int direction, int speed) {
-	moveAndTurn(direction, speed, 0);
-}
-
-void Wheels::turn(int speed) {
-	moveAndTurn(0, 0, speed);
-}
-
-void Wheels::moveAndTurn(int direction, int moveSpeed, int turnSpeed) {
-	int left, right, back;	
-	moveAndTurnCalculate(direction, moveSpeed, turnSpeed, left, right, back);
-
-	resetDesiredPositions();
-	setDesiredSpeeds(left, right, back);
-}
-
-void Wheels::moveAndTurnCalculate(int direction, int moveSpeed, int turnSpeed, int &left, int &right, int &back) {
-	int left1, right1, back1;
-	WheelSpeedTable::fromDirection(direction, left1, right1, back1);
-
-	left1 = ((long)left1 * moveSpeed) / 255;
-	right1 = ((long)right1 * moveSpeed) / 255;
-	back1 = ((long)back1 * moveSpeed) / 255;
-
-	left1 += turnSpeed;
-	right1 += turnSpeed;
-	back1 += turnSpeed;
-
-	// Constrain values to -max_rpm..max_rpm
-	if (abs(left1) > MAX_RPM || abs(right1) > MAX_RPM || abs(back1) > MAX_RPM) {
-		int max = max(abs(left1), max(abs(right1), abs(back1)));
-		left1 = map(left1, -max, max, -MAX_RPM, MAX_RPM);
-		right1 = map(right1, -max, max, -MAX_RPM, MAX_RPM);
-		back1 = map(back1, -max, max, -MAX_RPM, MAX_RPM);
-	}
-
-	left = left1;
-	right = right1;
-	back = back1;
-}
-
-void Wheels::setDesiredSpeeds(int leftRpm, int rightRpm, int backRpm) {
-	const long tenthDegreesPerRotation = 1;
-	const long centisecondsInMinute = 1;
-	//const long tenthDegreesPerRotation = 3600;
-	//const long centisecondsInMinute = 6000;
-
-	speedLeft = leftRpm * tenthDegreesPerRotation / centisecondsInMinute;
-	speedRight = rightRpm * tenthDegreesPerRotation / centisecondsInMinute;
-	speedBack = backRpm * tenthDegreesPerRotation / centisecondsInMinute;
-}
-
-void Wheels::resetDesiredPositions() {
-	desiredPositionLeft = magnetLeft.getPosition();
-	desiredPositionRight = magnetRight.getPosition();
-	desiredPositionBack = magnetBack.getPosition();
-}
-
-void Wheels::stop() {
-	speedLeft = 0;
-	speedRight = 0;
-	speedBack = 0;
-}
-
-*/
-

@@ -170,7 +170,7 @@ goto :eof
     <GCC_CPP_AVR Include="CMotor.cpp" />
     <GCC_CPP_AVR Include="CPid.cpp" />
     <GCC_CPP_AVR Include="CWheels.cpp" />
-    <GCC_CPP_AVR Include="_vsAddIn\include_sketch.cpp" />
+    <GCC_CPP_AVR Include="SinLookupTableInl.h" />
   </ItemGroup>
   <ItemGroup>
     <GCC_C_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\pins_arduino.c" />
@@ -199,9 +199,9 @@ goto :eof
     <ClInclude Include="CommandData.h" />
     <ClInclude Include="CPid.h" />
     <ClInclude Include="CWheels.h" />
-    <ClInclude Include="CWheelSpeedTable.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="PidDebugSerial.h" />
+    <ClInclude Include="SinLookupTable.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Arduino IDE\libraries\TimedAction\keywords.txt" />
@@ -211,6 +211,7 @@ goto :eof
     <None Include="MovementPatterns.pde" />
     <None Include="PidDebug.pde" />
     <None Include="Pids.pde" />
+    <None Include="SinLookupTable.cpp" />
     <None Include="WireReceiver.pde" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
