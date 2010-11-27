@@ -1,15 +1,14 @@
 #include <TimedAction.h>
 #include <MLX90316.h>
+#include <SPI.h>
 
 #include "ArduinoPins.h"
 #include "Definitions.h"
 
 #define DEBUG
-long milliseconds;
 bool shouldInitialize = true;
 
 void setup() {
-	pinMode(SS_GYRO, OUTPUT); // Magnet sensors won't work unless this slave select pin is set as OUTPUT.
 	ledOn();
 
 #ifdef DEBUG
@@ -19,6 +18,7 @@ void setup() {
 	// SETUP
 	motors_setup();
 	magnet_sensors_setup();
+	gyro_setup();
 	pids_setup();
 	wireReceiverSetup();
 	// END SETUP
@@ -33,24 +33,23 @@ void setup() {
 	//pidLeft.setSetpoint(200);
 }
 
-unsigned long elapsedTime;
-
 void loop() {
-	milliseconds = millis();
-
 	// LOOP
 	motors_loop();
 	magnet_sensors_loop();
+	//gyro_loop();
 	pids_loop();
 	wireReceiverLoop();
 	// END LOOP
 
-	if (shouldInitialize && milliseconds > 200) {
+	if (shouldInitialize && millis() > 300) {
 		shouldInitialize = false;
 		magnetLeft.reset();
 		magnetRight.reset();
 		magnetBack.reset();
 		wheels.resetGlobalPosition();
+		gyro.enable();
+		gyro.resetAngle(0);
 	}
 
 	//pid_debug_loop();

@@ -3,7 +3,7 @@
 
 MagnetSensor::MagnetSensor(int slaveSelect, int sck, int miso) {
 	pinMode(slaveSelect, OUTPUT);
-	digitalWrite(slaveSelect, LOW);
+	digitalWrite(slaveSelect, HIGH); // HIGH - disable device
 
 	sensor = MLX90316();
 	sensor.attach(slaveSelect, sck, miso);

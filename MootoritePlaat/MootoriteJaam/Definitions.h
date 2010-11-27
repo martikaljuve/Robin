@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ArduinoPins.h"
+#include "CGyroscope.h"
 #include "CMagnetSensor.h"
 #include "CMotor.h"
 #include "CPid.h"
@@ -23,3 +24,5 @@ MagnetSensor magnetRight = MagnetSensor(MAGNET_SS_RIGHT, SCK, MISO);
 MagnetSensor magnetBack = MagnetSensor(MAGNET_SS_BACK, SCK, MISO);
 
 Wheels wheels;
+
+Gyroscope gyro = Gyroscope(SS_GYRO, SCK, MOSI, MISO);

@@ -19,9 +19,9 @@ int SinLookupTable::getSin(int angleInMilliRadians) {
 		position = LOOKUP_QUARTER_PERIOD - (position - LOOKUP_QUARTER_PERIOD);
 
 	const prog_int16_t* pointer = &sinLookupTable[position];
-	int sin = (int16_t)pgm_read_word(pointer);
+	int sine = (int16_t)pgm_read_word(pointer);
 	
-	return isNegative ? -sin : sin;
+	return isNegative ? -sine : sine;
 }
 
 int SinLookupTable::getCos(int angleInMilliRadians) {

@@ -79,7 +79,7 @@ uint8_t  MLX90316::_spiByte(uint8_t  tx) {
     pinMode(_pinMOSI,INPUT);    // switch MOSI pin to input
     digitalWrite(_pinMOSI,1);   // turn port internal pullup resistor on
 
-    if (digitalRead(_pinMOSI) ==1) rxb = rxb | 1; // read respose bit from sensor
+    if (digitalRead(_pinMOSI) ==1) rxb = rxb | 1; // read response bit from sensor
     digitalWrite(_pinMOSI,0);   // turn port internal pullup resistor off
     pinMode(_pinMOSI,OUTPUT);   // switch MOSI pin to output
 

@@ -1,5 +1,5 @@
 //#define PID_DEBUG
-#define KIN_DEBUG
+//#define KIN_DEBUG
 
 TimedAction pidAction = TimedAction(50, pidCompute);
 #ifdef KIN_DEBUG
