@@ -1,6 +1,6 @@
 #include "CGyroscope.h"
 
-#define GYRO_DEBUG
+//#define GYRO_DEBUG
 
 TimedAction gyroAction = TimedAction(5, gyroCheck);
 

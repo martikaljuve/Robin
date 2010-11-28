@@ -43,19 +43,28 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CWheelSpeedTable.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CWheelSpeedTable.h</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CWheelSpeedTable.h">
+    <None Include="CSinLookupTable.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CSinLookupTable.h</LastGenOutput>
+    </None>
+    <None Include="CWheelLookupTable.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CWheelLookupTable.h</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CSinLookupTable.h">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CWheelSpeedTable.tt</DependentUpon>
+      <DependentUpon>CSinLookupTable.tt</DependentUpon>
+    </Content>
+    <Content Include="CWheelLookupTable.h">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CWheelLookupTable.tt</DependentUpon>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

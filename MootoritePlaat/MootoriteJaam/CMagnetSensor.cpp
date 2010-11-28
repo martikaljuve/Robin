@@ -1,5 +1,6 @@
 #include <WProgram.h>
 #include "CMagnetSensor.h"
+#include "ArduinoPins.h"
 
 MagnetSensor::MagnetSensor(int slaveSelect, int sck, int miso) {
 	pinMode(slaveSelect, OUTPUT);
@@ -10,7 +11,10 @@ MagnetSensor::MagnetSensor(int slaveSelect, int sck, int miso) {
 }
 
 void MagnetSensor::update() {
+	digitalWrite(SS_GYRO, LOW);
 	currentAngle = sensor.readAngle();
+	digitalWrite(SS_GYRO, HIGH);
+
 	calculateNewPosition(currentAngle);
 }
 
@@ -36,7 +40,9 @@ void MagnetSensor::calculateNewPosition(int angle) {
 }
 
 void MagnetSensor::reset() {
+	digitalWrite(SS_GYRO, LOW);
 	angleInitial = sensor.readAngle();
+	digitalWrite(SS_GYRO, HIGH);
 	anglePrevious = angleInitial;
 	knownAngle = 0;
 	positionTotal = 0;

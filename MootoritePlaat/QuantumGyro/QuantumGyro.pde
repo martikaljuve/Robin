@@ -1,8 +1,13 @@
 #include <SPI.h>
 
-#define ADC_THRESHOLD 5
+#define MIN_ANGULAR_RATE 0.1 // degrees per second
 
 #define LED 10
+
+#undef SCK
+#undef MOSI
+#undef MISO
+#undef SS
 
 #define SCK 7
 #define MOSI 5
@@ -46,56 +51,77 @@ void setup() {
 		// DORD=0: the MSB is transmitted first
 	*/
 	
-	SPCR = (1<<MSTR) | (1<<SPIE);
+	//SPCR = (1<<MSTR) | (1<<SPIE);
+	/*SPI.setBitOrder(MSBFIRST);
+	SPI.setDataMode(SPI_MODE3);
+	SPI.setClockDivider(SPI_CLOCK_DIV4);
+	SPI.begin();*/
 	
 	pinMode(MOSI, OUTPUT);
 	pinMode(SCK, OUTPUT);	
 	pinMode(SS, OUTPUT);
-	pinMode(4, OUTPUT);
+	//pinMode(4, OUTPUT);
 	//SPI.begin();
 	
 	digitalWrite(SS, HIGH);
 	
 	Serial.print("SS PIN: ");
 	Serial.print(SS);
-	Serial.println("Initialized!");
+	Serial.println(" Initialized!");
 	
 	getAdc();
 }
 
+const int CALIBRATION_START = 1000;
+const int CALIBRATION_COUNT = 1024;
+
+int calibratedAdcMin = 2048;
+int calibratedAdcMax = 0;
 int calibratedAdc = 0;
+double calibratedRate = 0;
 unsigned long adcSum = 0;
-unsigned long count = 0;
+unsigned long adcCount = 0;
 bool needsCalibration = true;
 
 void loop() {
 	unsigned long timeNow = millis();
 	if (needsCalibration) {
-		if (timeNow < 250) { }
-		else if (timeNow >= 250 && timeNow < 2000) {
-			adcSum += getAdc();
-			count++;
+		if (timeNow < CALIBRATION_START) { }
+		else if (adcCount < CALIBRATION_COUNT) {
+			int adc = getAdc();
+			adcSum += adc;
+			adcCount++;
+			calibratedAdcMin = min(calibratedAdcMin, adc);
+			calibratedAdcMax = max(calibratedAdcMax, adc);
 		}
 		else {
-			if (count != 0)
-				calibratedAdc = round((float)adcSum / count);
+			if (adcCount != 0) {
+				calibratedAdc = round((float)adcSum / adcCount);
+				calibratedRate = adcToAngularRate(calibratedAdc);
+			}
 			else
 				Serial.println("No results measured.");
 
 			needsCalibration = false;
 			Serial.print("Calibrated adc: ");
-			Serial.println(calibratedAdc);
+			Serial.print(calibratedAdc);
+			Serial.print(", rate: ");
+			Serial.print(calibratedRate);
+			Serial.print(", min: ");
+			Serial.print(calibratedAdcMin);
+			Serial.print(", max: ");
+			Serial.println(calibratedAdcMax);
 		}
 		
-		delay(10);
+		delay(5);
 		return;
 	}
 
 ///*
 	adc = getAdc();
-	double angularRate = adcToAngularRate(adc);
-	
-	if (abs(adc - calibratedAdc) > ADC_THRESHOLD) {
+	double angularRate = adcToAngularRate(adc) - calibratedRate;
+
+	if (adc < calibratedAdcMin - 5 || adc > calibratedAdcMax + 5) {
 		gyroAngle += angularRate * (timeNow - timePrevious) / 1000.0;
 	}
 
@@ -118,18 +144,17 @@ void loop() {
 		//Serial.print(adcToTemperature(temperature), DEC);
 	}
 	
-	if (abs(adc - calibratedAdc) > ADC_THRESHOLD) {
-		Serial.print(", ");
-		Serial.print(adc - calibratedAdc);
-	}
-	
 	timePrevious = timeNow;
-	delay(10);
+	delay(5);
 //*/
 }
 
-//byte spiTransfer(byte tx) { return SPI.transfer(tx); }
-
+/*
+byte spiTransfer(byte tx) {
+	Serial.print("tx");
+	return SPI.transfer(tx);
+}
+*/
 byte spiTransfer(byte tx) {
 	byte rxb = 0;
 
@@ -151,6 +176,8 @@ byte spiTransfer(byte tx) {
 // get angular rate adc in millivolts
 unsigned int getAdc()
 {
+	//return 0;
+
 	digitalWrite(SS, LOW);
 	spiTransfer(0b10010100);  // ADCC for angular rate channel
 	digitalWrite(SS, HIGH);

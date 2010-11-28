@@ -5,6 +5,15 @@ Gyroscope::Gyroscope(int slaveSelect, int sck, int mosi, int miso) {
 	pinSCK = sck;
 	pinMOSI = mosi;
 	pinMISO = miso;
+
+	pinMode(pinMOSI, OUTPUT);
+	pinMode(pinSCK, OUTPUT);
+	pinMode(pinSS, OUTPUT);
+}
+
+void Gyroscope::calibrate(int count) {
+	calibrationCount = count;
+	isCalibrating = true;
 }
 
 void Gyroscope::update(unsigned long deltaInMilliseconds) {
@@ -15,9 +24,24 @@ void Gyroscope::update(unsigned long deltaInMilliseconds) {
 	if (!tryReadAdc(adcCode))
 		return;
 
+	if (isCalibrating) {
+		calibrationAdcSum += adcCode;
+		calibrationAdcMin = min(calibrationAdcMin, adcCode);
+		calibrationAdcMax = max(calibrationAdcMax, adcCode);
+		calibrationIndex++;
+
+		if (calibrationIndex >= calibrationCount) {
+			isCalibrating = false;
+			calibrationAdcAvg = calibrationAdcSum / calibrationIndex;
+			calibrationRateAvg = adcToAngularRate(calibrationAdcAvg);
+		}
+
+		return;
+	}
+
 	double angularRate = adcToAngularRate(adcCode) * deltaInMilliseconds;
 
-	currentAngle += angularRate;
+	currentAngle += angularRate - calibrationRateAvg;
 }
 
 int Gyroscope::getCurrentAngle() {
@@ -54,13 +78,13 @@ void Gyroscope::enable() {
 }
 
 bool Gyroscope::tryReadAdc(unsigned int &result) {
-	digitalWrite(pinSS, HIGH);
+	digitalWrite(pinSS, LOW);
 	spiTransfer(ADCC_RATE); // send control command (conversion start)	
 	delayMicroseconds(200);	
 	spiTransfer(ADCR); // send reading command
 	byte dataHigh = spiTransfer(0x00);
 	byte dataLow = spiTransfer(0x00);
-	digitalWrite(pinSS, LOW);
+	digitalWrite(pinSS, HIGH);
 
 	if ((dataHigh & 0x80) == 0x80) // 0x80 == 0b10000000, 15th bit
 		return false; // operation refused

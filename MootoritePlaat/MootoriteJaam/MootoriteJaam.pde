@@ -1,6 +1,5 @@
 #include <TimedAction.h>
 #include <MLX90316.h>
-#include <SPI.h>
 
 #include "ArduinoPins.h"
 #include "Definitions.h"
@@ -34,21 +33,23 @@ void setup() {
 }
 
 void loop() {
-	// LOOP
-	motors_loop();
-	magnet_sensors_loop();
-	//gyro_loop();
-	pids_loop();
-	wireReceiverLoop();
-	// END LOOP
-
-	if (shouldInitialize && millis() > 300) {
+	if (!shouldInitialize) {
+		// LOOP
+		motors_loop();
+		magnet_sensors_loop();
+		//gyro_loop();
+		pids_loop();
+		wireReceiverLoop();
+		// END LOOP
+	}
+	else if (shouldInitialize && millis() > 300) {
 		shouldInitialize = false;
 		magnetLeft.reset();
 		magnetRight.reset();
 		magnetBack.reset();
 		wheels.resetGlobalPosition();
 		gyro.enable();
+		gyro.calibrate(512);
 		gyro.resetAngle(0);
 	}
 

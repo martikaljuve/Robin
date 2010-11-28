@@ -1,5 +1,5 @@
 //#define PID_DEBUG
-//#define KIN_DEBUG
+#define KIN_DEBUG
 
 TimedAction pidAction = TimedAction(50, pidCompute);
 #ifdef KIN_DEBUG
@@ -42,7 +42,20 @@ void pidCompute() {
 	wheels.updateGlobalPosition(left, right, back);
 	wheels.getDesiredWheelPositions(desiredLeft, desiredRight, desiredBack);
 
-	/*
+	int leftSpeed, rightSpeed, backSpeed;
+	if (abs(desiredLeft) > 500 || abs(desiredRight) > 500 || abs(desiredBack) > 500) {
+		int maxSpeed = max(abs(desiredLeft), max(abs(desiredRight), abs(desiredBack)));
+
+		int leftSpeed = desiredLeft / maxSpeed * 500;
+		int rightSpeed = desiredRight / maxSpeed * 500;
+		int backSpeed = desiredBack / maxSpeed * 500;
+	}
+	else {
+		leftSpeed = desiredLeft;
+		rightSpeed = desiredRight;
+		backSpeed = desiredBack;
+	}
+
 	pidLeft.setSetpoint(desiredLeft);
 	pidRight.setSetpoint(desiredRight);
 	pidBack.setSetpoint(desiredBack);
@@ -54,7 +67,7 @@ void pidCompute() {
 	motorLeft.setSpeedWithDirection(pidLeft.output);
 	motorRight.setSpeedWithDirection(pidRight.output);
 	motorBack.setSpeedWithDirection(pidBack.output);
-	*/
+
 #ifdef PID_DEBUG
 	Serial.print("right input: ");
 	Serial.print(magnetRight.position);
@@ -69,10 +82,10 @@ void pidCompute() {
 int previousX, previousY, previousTheta;
 
 void pidDebug() {
-	if (previousX == wheels.worldCurrentX &&
+	/*if (previousX == wheels.worldCurrentX &&
 		previousY == wheels.worldCurrentY &&
 		previousTheta == wheels.worldCurrentTheta)
-		return;
+		return;*/
 
 	previousX = wheels.worldCurrentX;
 	previousY = wheels.worldCurrentY;
@@ -97,6 +110,9 @@ void pidDebug() {
 	Serial.print(", ");
 	Serial.print(desiredRight);
 	Serial.print(", ");
-	Serial.println(desiredBack);
+	Serial.print(desiredBack);
+
+	Serial.print(",\tgyro: ");
+	Serial.println(gyro.getCurrentAngle());
 }
 #endif
