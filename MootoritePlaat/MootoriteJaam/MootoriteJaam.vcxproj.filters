@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <GCC_CPP_AVR Include="_vsAddIn\include_sketch.cpp" />
     <GCC_CPP_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\HardwareSerial.cpp">
       <Filter>_core\src</Filter>
     </GCC_CPP_AVR>
@@ -27,6 +26,8 @@
     <GCC_CPP_AVR Include="..\..\..\Arduino IDE\libraries\TimedAction\TimedAction.cpp">
       <Filter>_libraries\Core\TimedAction</Filter>
     </GCC_CPP_AVR>
+    <GCC_CPP_AVR Include="SinLookupTableInl.h" />
+    <GCC_CPP_AVR Include="CGyroscope.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="_core">
@@ -113,13 +114,14 @@
     <ClInclude Include="CMotor.h" />
     <ClInclude Include="CommandData.h" />
     <ClInclude Include="CPid.h" />
-    <ClInclude Include="CWheels.h" />
-    <ClInclude Include="CWheelSpeedTable.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="..\..\..\Arduino IDE\libraries\TimedAction\TimedAction.h">
       <Filter>_libraries\Core\TimedAction</Filter>
     </ClInclude>
     <ClInclude Include="PidDebugSerial.h" />
+    <ClInclude Include="SinLookupTable.h" />
+    <ClInclude Include="CWheels.h" />
+    <ClInclude Include="CGyroscope.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MagnetSensors.pde" />
@@ -129,8 +131,10 @@
     </None>
     <None Include="Motors.pde" />
     <None Include="MovementPatterns.pde" />
-    <None Include="PidDebug.pde" />
     <None Include="Pids.pde" />
     <None Include="WireReceiver.pde" />
+    <None Include="SinLookupTable.cpp" />
+    <None Include="SinLookupTable.cpp" />
+    <None Include="Gyro.pde" />
   </ItemGroup>
 </Project>

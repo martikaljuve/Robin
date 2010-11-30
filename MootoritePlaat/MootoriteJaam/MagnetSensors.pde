@@ -4,6 +4,7 @@ void magnet_sensors_setup() { }
 
 void magnet_sensors_loop(){
 	angleAction.check();
+
 }
 
 void checkAngles() {

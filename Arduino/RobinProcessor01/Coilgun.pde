@@ -30,7 +30,7 @@ void coilgunLoop() {
 void fireCoilgun(byte power) {
 	power = constrain(power, 0, 100);
 	digitalWrite(KICK_PIN, HIGH);
-	delay(map(power, 0, 100, 0, 10));
+	delayMicroseconds(map(power, 0, 100, 0, 5000));
 	digitalWrite(KICK_PIN, LOW);
 
 	coilgunShouldCharge = true;

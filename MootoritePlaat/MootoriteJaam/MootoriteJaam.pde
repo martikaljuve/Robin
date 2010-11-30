@@ -4,7 +4,7 @@
 #include "ArduinoPins.h"
 #include "Definitions.h"
 
-#define DEBUG
+//#define DEBUG
 bool shouldInitialize = true;
 
 void setup() {
@@ -27,7 +27,7 @@ void setup() {
 	// HACK: Testing is easier with a delay.
 	//delay(4000);
 
-	//wheels.moveAndTurnDistance(2700, 500, 0);
+	wheels.moveAndTurnDistance(3150, 400, 0);
 	//pidBack.setSetpoint(200);
 	//pidLeft.setSetpoint(200);
 }
@@ -37,7 +37,7 @@ void loop() {
 		// LOOP
 		motors_loop();
 		magnet_sensors_loop();
-		//gyro_loop();
+		gyro_loop();
 		pids_loop();
 		wireReceiverLoop();
 		// END LOOP

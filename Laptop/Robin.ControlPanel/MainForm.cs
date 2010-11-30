@@ -76,14 +76,12 @@ namespace Robin.ControlPanel
 
 			uxShowVideo.Click += (sender, args) =>
 			{
-				if (videoForm != null) {
-					videoForm.Dispose();
-					return;
+				if (videoForm == null || videoForm.IsDisposed)
+				{
+					videoForm = new VideoForm();
+					videoForm.KeyPress += OnKeyPress;
+					videoForm.Show(this);
 				}
-
-				videoForm = new VideoForm();
-				videoForm.KeyPress += OnKeyPress;
-				videoForm.Show(this);
 			};
 		}
 
@@ -225,7 +223,7 @@ namespace Robin.ControlPanel
 			{
 				default:
 				case 0:
-					uxIrChannelNone.Checked = true;
+				//	uxIrChannelNone.Checked = true;
 					break;
 				case 1:
 					uxIrChannel1.Checked = true;

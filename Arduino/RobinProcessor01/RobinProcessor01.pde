@@ -2,6 +2,7 @@
 #include "CMotorBoard.h"
 
 static bool POWER = false;
+int globalX, globalY, globalDirection;
 
 void setup(){
 	Serial.begin(57600);
@@ -10,25 +11,26 @@ void setup(){
 	pinMode(TRIP_SENSOR, INPUT);
 
 	//stateMachineSetup();
-	//gyroSetup();
 	powerSetup();
 	serialReceiverSetup();
 	serialSenderSetup();
 	wireSenderSetup();
+	wireReceiverSetup();
 	coilgunSetup();
-	beaconFinderSetup();
+	//beaconFinderSetup();
+	ledsSetup();
 }
 
 void loop(){
 
 	//stateMachineLoop();
-	//gyroLoop();
 	powerLoop();
 	POWER ? serialReceiverLoop() : Serial.flush();
 	serialSenderLoop();
 	wireSenderLoop();
+	wireReceiverLoop();
 	coilgunLoop();
-	beaconFinderLoop();
+	//beaconFinderLoop();
 
 	//delay(100);
 }

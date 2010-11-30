@@ -46,10 +46,10 @@ public:
 	void stop();
 
 	void resetGlobalPosition();
-	void updateGlobalPosition(int leftWheel, int rightWheel, int backWheel);
-	void getDesiredWheelPositions(int &desiredLeft, int &desiredRight, int &desiredBack); // desired: decidegrees
+	void updateGlobalPosition(long leftWheel, long rightWheel, long backWheel);
+	void getDesiredWheelPositions(long &desiredLeft, long &desiredRight, long &desiredBack); // desired: decidegrees
 	
-	static void forwardKinematics(int left, int right, int back, int &x, int &y, int &theta);
-	static void inverseKinematics(int x, int y, int theta, int &left, int &right, int &back);
+	static void forwardKinematics(long left, long right, long back, long &x, long &y, long &theta);
+	static void inverseKinematics(long x, long y, long theta, long &left, long &right, long &back);
 };
 

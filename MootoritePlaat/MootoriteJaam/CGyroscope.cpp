@@ -6,14 +6,19 @@ Gyroscope::Gyroscope(int slaveSelect, int sck, int mosi, int miso) {
 	pinMOSI = mosi;
 	pinMISO = miso;
 
+	pinMode(pinMISO, INPUT);
 	pinMode(pinMOSI, OUTPUT);
 	pinMode(pinSCK, OUTPUT);
 	pinMode(pinSS, OUTPUT);
+
+	digitalWrite(pinSS, HIGH);
 }
 
 void Gyroscope::calibrate(int count) {
+	calibrationIndex = 0;
 	calibrationCount = count;
 	isCalibrating = true;
+	calibrationAdcMin = 2048;
 }
 
 void Gyroscope::update(unsigned long deltaInMilliseconds) {
@@ -26,25 +31,39 @@ void Gyroscope::update(unsigned long deltaInMilliseconds) {
 
 	if (isCalibrating) {
 		calibrationAdcSum += adcCode;
+		calibrationIndex++;
 		calibrationAdcMin = min(calibrationAdcMin, adcCode);
 		calibrationAdcMax = max(calibrationAdcMax, adcCode);
-		calibrationIndex++;
 
 		if (calibrationIndex >= calibrationCount) {
 			isCalibrating = false;
 			calibrationAdcAvg = calibrationAdcSum / calibrationIndex;
 			calibrationRateAvg = adcToAngularRate(calibrationAdcAvg);
+			Serial.print("Count: ");
+			Serial.print(calibrationIndex);
+			Serial.print(", Minimum: ");
+			Serial.print(calibrationAdcMin);
+			Serial.print(", Maximum: ");
+			Serial.print(calibrationAdcMax);
+			Serial.print(", Calibration sum: ");
+			Serial.print(calibrationAdcSum);
+			Serial.print(", Average ADC: ");
+			Serial.print(calibrationAdcAvg);
+			Serial.print(", Average Rate: ");
+			Serial.println(calibrationRateAvg);
 		}
 
 		return;
 	}
 
-	double angularRate = adcToAngularRate(adcCode) * deltaInMilliseconds;
+	double angularRate = adcToAngularRate(adcCode) - calibrationRateAvg;
 
-	currentAngle += angularRate - calibrationRateAvg;
+	if (adcCode < calibrationAdcMin - 5 || adcCode > calibrationAdcMax + 5) {
+		currentAngle -= angularRate * deltaInMilliseconds / 1000.0;
+	}
 }
 
-int Gyroscope::getCurrentAngle() {
+double Gyroscope::getCurrentAngle() {
 	return currentAngle;
 }
 
@@ -54,44 +73,35 @@ void Gyroscope::resetAngle(int angle) {
 
 void Gyroscope::enable() {
 	enabled = true;
-	pinMode(pinSS, OUTPUT);
-
-	//spiTransfer(ADCC_RATE);
-	/*
-	//digitalWrite(pinSS, HIGH);	
+	
+	digitalWrite(pinSS, LOW); // LOW - enable device	
 	spiTransfer(ADCC_RATE); // put ADC to active mode if it wasn't
-	delayMicroseconds(250);
-	byte high = spiTransfer(0x00); // result high
-	byte low = spiTransfer(0x00); // result low
-	//digitalWrite(pinSS, LOW);
-
-	if ((high & 0x80) == 0x80) {
-		Serial.print("Command was refused. result: ");
-		Serial.print(high, BIN);
-		Serial.println(LOW, BIN);
-	}
-	else {
-		Serial.print("Command was accepted. result: ");
-		Serial.print(high, BIN);
-		Serial.println(low, BIN);
-	}*/
+	digitalWrite(pinSS, HIGH);
 }
 
 bool Gyroscope::tryReadAdc(unsigned int &result) {
 	digitalWrite(pinSS, LOW);
 	spiTransfer(ADCC_RATE); // send control command (conversion start)	
-	delayMicroseconds(200);	
+	digitalWrite(pinSS, HIGH);
+
+	delayMicroseconds(250);
+
+	digitalWrite(pinSS, LOW);
 	spiTransfer(ADCR); // send reading command
 	byte dataHigh = spiTransfer(0x00);
 	byte dataLow = spiTransfer(0x00);
 	digitalWrite(pinSS, HIGH);
 
-	if ((dataHigh & 0x80) == 0x80) // 0x80 == 0b10000000, 15th bit
+	if ((dataHigh & 0x80) == 0x80) { // 0x80 == 0b10000000, 15th bit
+		Serial.print("!");
 		return false; // operation refused
-	if ((dataHigh & 0x20) != 0x20) // 0x20 == 0b00100000, 13th bit (EOC)
+	}
+	if ((dataHigh & 0x20) != 0x20) { // 0x20 == 0b00100000, 13th bit (EOC)
+		Serial.print("?");
 		return false; // conversion in progress
+	}
 
-	result = (word(0, dataHigh & 0x0F) << 7) + (dataLow >> 1);
+	result = (word(0, dataHigh & 0b00001111) << 7) + (dataLow >> 1);
 
 	return true;
 }

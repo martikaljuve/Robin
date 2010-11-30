@@ -1,3 +1,5 @@
+#pragma once
+
 struct CommandData {
 	char command;
 	int first;

@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Colors.cs" />
     <Compile Include="IRobinControllerMetadata.cs" />
     <Compile Include="IRobotController.cs" />
     <Compile Include="IRobotCommander.cs" />

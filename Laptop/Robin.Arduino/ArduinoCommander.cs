@@ -16,14 +16,14 @@ namespace Robin.Arduino
 			arduino.Command(ArduinoPrefix.CoilgunFire, power);
 		}
 
-		public void Move(short direction, short speed)
+		public void Move(short localDirectionInDegrees, short distance)
 		{
-			arduino.Command(ArduinoPrefix.Move, direction, speed);
+			arduino.Command(ArduinoPrefix.Move, localDirectionInDegrees, distance);
 		}
 
-		public void Turn(short speed)
+		public void Turn(short localDirectionInDegrees)
 		{
-			arduino.Command(ArduinoPrefix.Turn, speed);
+			arduino.Command(ArduinoPrefix.Turn, localDirectionInDegrees);
 		}
 		
 		public void Stop()
@@ -41,9 +41,9 @@ namespace Robin.Arduino
 			arduino.Command(ArduinoPrefix.SetDribbler, speed);
 		}
 
-		public void MoveAndTurn(short direction, short moveSpeed, short turnSpeed)
+		public void MoveAndTurn(short localDirectionInDegrees, short distance, short localRotationInDegrees)
 		{
-			arduino.Command(ArduinoPrefix.MoveAndTurn, direction, moveSpeed, turnSpeed);
+			arduino.Command(ArduinoPrefix.MoveAndTurn, localDirectionInDegrees, distance, localRotationInDegrees);
 		}
 
 		public void SetIrChannel(byte channel)
@@ -51,11 +51,11 @@ namespace Robin.Arduino
 			arduino.Command(ArduinoPrefix.SetIrChannel, channel);
 		}
 
-		public void SetState(byte state)
+		public void SetColors(Colors colors)
 		{
-			arduino.Command(ArduinoPrefix.SetState, state);
+			arduino.Command(ArduinoPrefix.SetState, colors);
 		}
-
+		
 		public ArduinoSerial ArduinoSerial
 		{
 			get { return arduino; }

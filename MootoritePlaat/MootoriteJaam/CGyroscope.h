@@ -9,17 +9,17 @@
 class Gyroscope {
 	bool isCalibrating;
 	bool enabled;
-	int currentAngle;
+	double currentAngle;
 	int pinSS;
 	int pinSCK;
 	int pinMOSI;
 	int pinMISO;
 	int calibrationCount;
-	int calibrationAdcSum;
-	int calibrationIndex;
-	int calibrationAdcMin;
-	int calibrationAdcMax;
-	int calibrationAdcAvg;
+	unsigned long calibrationAdcSum;
+	unsigned int calibrationIndex;
+	unsigned int calibrationAdcMin;
+	unsigned int calibrationAdcMax;
+	double calibrationAdcAvg;
 	double calibrationRateAvg;
 
 public:
@@ -27,7 +27,7 @@ public:
 
 	void enable();
 	void update(unsigned long deltaInMilliseconds);
-	int getCurrentAngle();
+	double getCurrentAngle();
 	void resetAngle(int angle);
 	void calibrate(int count);
 

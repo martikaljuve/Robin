@@ -20,7 +20,7 @@ public:
 
 	void reset();
 	long getPositionTotal();
-	int getCurrentDelta();
+	long getCurrentDelta();
 	void resetCurrentDelta();
 
 private:

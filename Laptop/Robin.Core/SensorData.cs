@@ -1,3 +1,6 @@
+using System;
+using System.Drawing;
+
 namespace Robin.Core
 {
 	public class SensorData
@@ -10,8 +13,6 @@ namespace Robin.Core
 
 		public short BeaconServoDirection { get; set; }
 
-		public short GyroDirection { get; set; }
-
 		public bool OpponentBeaconFound
 		{
 			get { return BeaconIrLeftInView && BeaconIrRightInView; }
@@ -21,14 +22,34 @@ namespace Robin.Core
 
 		public byte IrChannel { get; set; }
 
+		public short EstimatedGlobalDirection { get; set; }
+
+		// Coordinate system:
+		//    ^ +Y
+		//    |
+		// <--+--> +X
+		//    |        |
+		//    V      <- +Theta
+
+		public short EstimatedGlobalX { get; set; }
+
+		public short EstimatedGlobalY { get; set; }
+
+		public Point EstimatedGlobalPosition
+		{
+			get { return new Point(EstimatedGlobalX, EstimatedGlobalY); }
+		}
+
 		public override string ToString()
 		{
-			return string.Format("Drb:{0}, IrL:{1}, IrR:{2}, Srv:{3}, Gyr:{4}, Pow:{5}, IrC: {6}",
+			return string.Format("Drb:{0}, IrL:{1}, IrR:{2}, Srv:{3}, Dir:{4}, Pos:{5}x{6}, Pow:{7}, IrC: {8}",
 				BallInDribbler,
 				BeaconIrLeftInView,
 				BeaconIrRightInView,
 				BeaconServoDirection,
-				GyroDirection,
+				EstimatedGlobalDirection,
+				EstimatedGlobalX,
+				EstimatedGlobalY,
 				IsPowered,
 				IrChannel);
 		}

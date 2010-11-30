@@ -92,8 +92,8 @@ uint8_t  MLX90316::_spiByte(uint8_t  tx) {
     digitalWrite(_pinMOSI,0);  // set MOSI databit 0
   }
   
-  return(rxb);
+  pinMode(_pinMOSI, INPUT);
   
-
+  return(rxb);
 }
 

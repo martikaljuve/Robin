@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Media;
 using System.Text;
 using Robin.Core;
@@ -15,7 +16,10 @@ namespace Robin.RetroEncabulator
 	{
 		private readonly StateMachine<State, Trigger> stateMachine;
 		private static readonly Timer timer = new Timer();
+		private static readonly Stopwatch stopwatch = new Stopwatch();
 		private static SoundPlayer soundPlayer = new SoundPlayer();
+		private static readonly Colors[] AllColors = (Colors[])Enum.GetValues(typeof(Colors));
+		private static int colorsIndex = 0;
 		
 		public MainLogicProcessor()
 		{
@@ -24,32 +28,49 @@ namespace Robin.RetroEncabulator
 			
 			stateMachine = new StateMachine<State, Trigger>(State.Idle);
 
+			stateMachine.OnUnhandledTrigger((state, trigger) => { });
+
 			stateMachine.Configure(State.Idle)
-				.Permit(Trigger.PoweredUp, State.Starting);
+				.Permit(Trigger.PoweredUp, State.Starting)
+				.OnEntry(() => Commander.SetColors(Colors.Yellow));
 
 			stateMachine.Configure(State.Starting)
 				.Permit(Trigger.Finished, State.LookingForBall)
 				.Permit(Trigger.BallCaught, State.FindingGoal)
-				.OnEntry(SoundClipPlayer.PlayIntro);
+				.OnEntry(() =>
+				{
+					SoundClipPlayer.PlayIntro();
+					Commander.SetColors(Colors.Cyan);
+				});
 
 			stateMachine.Configure(State.LookingForBall)
 				.Permit(Trigger.CameraLockedOnBall, State.ClosingInOnBall)
 				.Permit(Trigger.BallCaught, State.FindingGoal)
-				.OnEntry(StopTimer);
+				.OnEntry(() => Commander.SetColors(Colors.Blue));
 
 			stateMachine.Configure(State.ClosingInOnBall)
 				.Permit(Trigger.CameraLostBall, State.LookingForBall)
 				.Permit(Trigger.BallCaught, State.FindingGoal)
 				.Permit(Trigger.Timeout, State.LookingForBall)
-				.OnEntry(() => StartTimer(10000, Trigger.Timeout))
+				.OnEntry(() =>
+				{
+					StartTimer(10000, Trigger.Timeout);
+					Commander.SetColors(Colors.Red);
+				})
 				.OnExit(StopTimer);
 
 			stateMachine.Configure(State.FindingGoal)
 				.Permit(Trigger.CoilgunLaunched, State.LookingForBall)
 				.Permit(Trigger.BallLost, State.LookingForBall)
 				.Permit(Trigger.Timeout, State.LookingForBall)
-				.OnEntry(() => StartTimer(5000, Trigger.Timeout))
+				.OnEntry(() =>
+				{
+					StartTimer(5000, Trigger.Timeout);
+					Commander.SetColors(Colors.Magenta);
+				})
 				.OnExit(StopTimer);
+
+			stopwatch.Start();
 		}
 
 		public VisionData VisionData { get; set; }
@@ -104,23 +125,24 @@ namespace Robin.RetroEncabulator
 			System.Threading.Thread.Sleep(100);
 		}
 
-		private long startFinished;
+		private int ledToggleNext = 0;
 		private void Idle()
 		{
-			if (SensorData.IsPowered) { 
-				stateMachine.Fire(Trigger.PoweredUp);
-				startFinished = DateTime.Now.Ticks + 2000 * TimeSpan.TicksPerMillisecond;
+			//if (SensorData.IsPowered) { 
+			//	stateMachine.Fire(Trigger.PoweredUp);
+			//}
+
+			// Toggle through different colors
+			if (stopwatch.ElapsedMilliseconds > ledToggleNext)
+			{
+				ToggleLeds();
+				ledToggleNext += 2000;
 			}
 		}
 
 		private void Starting()
 		{
-			if (startFinished < DateTime.Now.Ticks)
-				Commander.MoveAndTurn(315, 50, -50);
-			else {
-				Commander.Stop();
-				stateMachine.Fire(Trigger.Finished);
-			}
+			stateMachine.Fire(Trigger.Finished);
 		}
 
 		private void LookingForBall()
@@ -131,7 +153,7 @@ namespace Robin.RetroEncabulator
 			if (VisionData.TrackingBall)
 				stateMachine.Fire(Trigger.CameraLockedOnBall);
 
-			Commander.Turn(-20);
+			Commander.Turn(10);
 		}
 
 		private void ClosingInOnBall()
@@ -148,16 +170,19 @@ namespace Robin.RetroEncabulator
 		private void FindingGoal()
 		{
 			var beaconInFront = SensorData.OpponentBeaconFound && Math.Abs(SensorData.BeaconServoDirection) < 10;
-			if (beaconInFront && !VisionData.FrontBallPathObstructed)
+			if (beaconInFront || VisionData.OpponentGoalInFront)
 			{
-				LaunchBall();
-				return;
+				if (!VisionData.FrontBallPathObstructed) {
+					LaunchBall();
+					return;
+				}
 			}
 
 			if (!SensorData.BallInDribbler)
 				stateMachine.Fire(Trigger.BallLost);
 
-			Commander.MoveAndTurn(0, 0, SensorData.BeaconServoDirection < 0 ? (short)-100 : (short)100);
+			Commander.TurnTowardsGoal(SensorData.EstimatedGlobalPosition, SensorData.EstimatedGlobalDirection);
+			//Commander.MoveAndTurn(0, 0, SensorData.BeaconServoDirection < 0 ? (short)-100 : (short)100);
 		}
 
 		private void LaunchBall()
@@ -227,6 +252,14 @@ namespace Robin.RetroEncabulator
 		public void Dispose()
 		{
 			
+		}
+
+		private void ToggleLeds()
+		{
+			Commander.SetColors(AllColors[colorsIndex]);
+			colorsIndex++;
+			if (colorsIndex == AllColors.Length)
+				colorsIndex = 0;
 		}
 	}
 }

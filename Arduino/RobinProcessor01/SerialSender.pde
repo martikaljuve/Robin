@@ -1,5 +1,5 @@
 long nextSend;
-const int sendInterval = 500;
+const int sendInterval = 100;
 
 void serialSenderSetup() {
 	
@@ -24,7 +24,9 @@ void sendMessage() {
 	Serial.write((byte)'D');
 	Serial.write(first);
 	Serial.write(second);
-	SerialUtil.writeInt(getGyroDirection());
+	SerialUtil.writeInt(getGlobalX());
+	SerialUtil.writeInt(getGlobalY());
+	SerialUtil.writeInt(getGlobalDirection());
 	SerialUtil.writeInt(getServoDirection());
 	Serial.println();
 }
@@ -41,8 +43,16 @@ bool getRightIrStatus() {
 	return isRightIr(); // rightIrInView;
 }
 
-int getGyroDirection() {
-	return (int)'A'; // gyroDirection;
+int getGlobalX() {
+	return globalX; // X-coordinate
+}
+
+int getGlobalY() {
+	return globalY; // Y-coordinate
+}
+
+int getGlobalDirection() {
+	return globalDirection; // gyro direction
 }
 
 int getServoDirection() {

@@ -1,5 +1,5 @@
 //#define PID_DEBUG
-#define KIN_DEBUG
+//#define KIN_DEBUG
 
 TimedAction pidAction = TimedAction(50, pidCompute);
 #ifdef KIN_DEBUG
@@ -7,7 +7,8 @@ TimedAction debugAction = TimedAction(500, pidDebug);
 #endif
 
 long timePrevious = 0;
-int desiredLeft, desiredRight, desiredBack;
+long desiredLeft, desiredRight, desiredBack;
+long leftSpeed, rightSpeed, backSpeed;
 
 void pids_setup() {
 	//pidLeft.setOutputLimits(-255, 255);
@@ -31,9 +32,9 @@ void pidCompute() {
 	long dt = now - timePrevious;
 	timePrevious = now;
 
-	int left = magnetLeft.getCurrentDelta();
-	int right = magnetRight.getCurrentDelta();
-	int back = magnetBack.getCurrentDelta();
+	long left = magnetLeft.getCurrentDelta();
+	long right = magnetRight.getCurrentDelta();
+	long back = magnetBack.getCurrentDelta();
 
 	magnetLeft.resetCurrentDelta();
 	magnetRight.resetCurrentDelta();
@@ -42,13 +43,12 @@ void pidCompute() {
 	wheels.updateGlobalPosition(left, right, back);
 	wheels.getDesiredWheelPositions(desiredLeft, desiredRight, desiredBack);
 
-	int leftSpeed, rightSpeed, backSpeed;
 	if (abs(desiredLeft) > 500 || abs(desiredRight) > 500 || abs(desiredBack) > 500) {
 		int maxSpeed = max(abs(desiredLeft), max(abs(desiredRight), abs(desiredBack)));
 
-		int leftSpeed = desiredLeft / maxSpeed * 500;
-		int rightSpeed = desiredRight / maxSpeed * 500;
-		int backSpeed = desiredBack / maxSpeed * 500;
+		leftSpeed = desiredLeft * 500 / maxSpeed;
+		rightSpeed = desiredRight * 500 / maxSpeed;
+		backSpeed = desiredBack * 500 / maxSpeed;
 	}
 	else {
 		leftSpeed = desiredLeft;
@@ -56,9 +56,9 @@ void pidCompute() {
 		backSpeed = desiredBack;
 	}
 
-	pidLeft.setSetpoint(desiredLeft);
-	pidRight.setSetpoint(desiredRight);
-	pidBack.setSetpoint(desiredBack);
+	pidLeft.setSetpoint(leftSpeed);
+	pidRight.setSetpoint(rightSpeed);
+	pidBack.setSetpoint(backSpeed);
 
 	pidLeft.compute(dt / 1000.0);
 	pidRight.compute(dt / 1000.0);
@@ -67,36 +67,27 @@ void pidCompute() {
 	motorLeft.setSpeedWithDirection(pidLeft.output);
 	motorRight.setSpeedWithDirection(pidRight.output);
 	motorBack.setSpeedWithDirection(pidBack.output);
-
-#ifdef PID_DEBUG
-	Serial.print("right input: ");
-	Serial.print(magnetRight.position);
-	Serial.print(", setpoint: ");
-	Serial.print(wheels.desiredPositionRight);
-	Serial.print(", output: ");
-	Serial.println(pidRight.output);
-#endif
 }
 
 #ifdef KIN_DEBUG
 int previousX, previousY, previousTheta;
 
 void pidDebug() {
-	/*if (previousX == wheels.worldCurrentX &&
+	if (previousX == wheels.worldCurrentX &&
 		previousY == wheels.worldCurrentY &&
 		previousTheta == wheels.worldCurrentTheta)
-		return;*/
+		return;
 
 	previousX = wheels.worldCurrentX;
 	previousY = wheels.worldCurrentY;
 	previousTheta = wheels.worldCurrentTheta;
 
-	Serial.print("wheels: ");
-	Serial.print(magnetLeft.getPositionTotal() / 10.0);
+	Serial.print("final: ");
+	Serial.print(wheels.worldFinalX / 10.0);
 	Serial.print(", ");
-	Serial.print(magnetRight.getPositionTotal() / 10.0);
+	Serial.print(wheels.worldFinalY / 10.0);
 	Serial.print(", ");
-	Serial.print(magnetBack.getPositionTotal() / 10.0);
+	Serial.print(wheels.worldFinalTheta / 10.0);
 
 	Serial.print("\tworld: ");
 	Serial.print(wheels.worldCurrentX / 10.0);
@@ -105,12 +96,26 @@ void pidDebug() {
 	Serial.print(", ");
 	Serial.print(wheels.worldCurrentTheta / 10.0);
 
+	Serial.print("\twheels: ");
+	Serial.print(magnetLeft.getPositionTotal() / 10.0);
+	Serial.print(", ");
+	Serial.print(magnetRight.getPositionTotal() / 10.0);
+	Serial.print(", ");
+	Serial.print(magnetBack.getPositionTotal() / 10.0);
+
 	Serial.print("\tdiff: ");
-	Serial.print(desiredLeft);
+	Serial.print(desiredLeft / 10.0);
 	Serial.print(", ");
-	Serial.print(desiredRight);
+	Serial.print(desiredRight / 10.0);
 	Serial.print(", ");
-	Serial.print(desiredBack);
+	Serial.print(desiredBack / 10.0);
+
+	Serial.print("\tspeed: ");
+	Serial.print(leftSpeed);
+	Serial.print(", ");
+	Serial.print(rightSpeed);
+	Serial.print(", ");
+	Serial.print(backSpeed);
 
 	Serial.print(",\tgyro: ");
 	Serial.println(gyro.getCurrentAngle());

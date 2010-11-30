@@ -166,6 +166,7 @@ goto :eof
     <GCC_CPP_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\WMath.cpp" />
     <GCC_CPP_AVR Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\WString.cpp" />
     <GCC_CPP_AVR Include="..\..\..\Arduino IDE\libraries\TimedAction\TimedAction.cpp" />
+    <GCC_CPP_AVR Include="CGyroscope.cpp" />
     <GCC_CPP_AVR Include="CMagnetSensor.cpp" />
     <GCC_CPP_AVR Include="CMotor.cpp" />
     <GCC_CPP_AVR Include="CPid.cpp" />
@@ -194,6 +195,7 @@ goto :eof
     <ClInclude Include="..\..\..\Arduino IDE\hardware\arduino\cores\arduino\WString.h" />
     <ClInclude Include="..\..\..\Arduino IDE\libraries\TimedAction\TimedAction.h" />
     <ClInclude Include="ArduinoPins.h" />
+    <ClInclude Include="CGyroscope.h" />
     <ClInclude Include="CMagnetSensor.h" />
     <ClInclude Include="CMotor.h" />
     <ClInclude Include="CommandData.h" />
@@ -205,11 +207,11 @@ goto :eof
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Arduino IDE\libraries\TimedAction\keywords.txt" />
+    <None Include="Gyro.pde" />
     <None Include="MagnetSensors.pde" />
     <None Include="MootoriteJaam.pde" />
     <None Include="Motors.pde" />
     <None Include="MovementPatterns.pde" />
-    <None Include="PidDebug.pde" />
     <None Include="Pids.pde" />
     <None Include="SinLookupTable.cpp" />
     <None Include="WireReceiver.pde" />

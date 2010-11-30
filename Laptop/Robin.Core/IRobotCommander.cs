@@ -3,13 +3,13 @@ namespace Robin.Core
 	public interface IRobotCommander
 	{
 		void FireCoilgun(byte power);
-		void Move(short direction, short speed);
-		void Turn(short speed);
+		void Turn(short localDirectionInDegrees);
+		void Move(short localDirectionInDegrees, short distance);
+		void MoveAndTurn(short localDirectionInDegrees, short distance, short localRotationInDegrees);
 		void Stop();
 		void SetDribbler(bool enabled);
 		void SetDribbler(short speed);
-		void MoveAndTurn(short direction, short moveSpeed, short turnSpeed);
 		void SetIrChannel(byte channel);
-		void SetState(byte state);
+		void SetColors(Colors colors);
 	}
 }

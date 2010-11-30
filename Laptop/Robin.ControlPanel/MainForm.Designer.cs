@@ -49,23 +49,23 @@ namespace Robin.ControlPanel
 			this.uxIrChannelNone = new System.Windows.Forms.RadioButton();
 			this.uxIrChannelPanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.uxSerialPanel = new System.Windows.Forms.GroupBox();
-			this.uxSerialReceive = new System.Windows.Forms.Label();
-			this.uxSerialSend = new System.Windows.Forms.Label();
-			this.uxSerialSendData = new System.Windows.Forms.TextBox();
-			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.uxShowVideo = new System.Windows.Forms.Button();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.uxSerialSendData = new System.Windows.Forms.TextBox();
+			this.uxSerialSend = new System.Windows.Forms.Label();
+			this.uxSerialReceive = new System.Windows.Forms.Label();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.uxShowVideo = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.uxIrChannelPanel.SuspendLayout();
 			this.uxSerialPanel.SuspendLayout();
-			this.tableLayoutPanel2.SuspendLayout();
-			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -322,81 +322,6 @@ namespace Robin.ControlPanel
 			this.uxSerialPanel.TabStop = false;
 			this.uxSerialPanel.Text = "Arduino";
 			// 
-			// uxSerialReceive
-			// 
-			this.uxSerialReceive.AutoSize = true;
-			this.uxSerialReceive.Location = new System.Drawing.Point(3, 0);
-			this.uxSerialReceive.Name = "uxSerialReceive";
-			this.uxSerialReceive.Size = new System.Drawing.Size(66, 21);
-			this.uxSerialReceive.TabIndex = 16;
-			this.uxSerialReceive.Text = "Receive:";
-			// 
-			// uxSerialSend
-			// 
-			this.uxSerialSend.AutoSize = true;
-			this.uxSerialSend.Location = new System.Drawing.Point(3, 0);
-			this.uxSerialSend.Name = "uxSerialSend";
-			this.uxSerialSend.Size = new System.Drawing.Size(48, 21);
-			this.uxSerialSend.TabIndex = 15;
-			this.uxSerialSend.Text = "Send:";
-			// 
-			// uxSerialSendData
-			// 
-			this.uxSerialSendData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.uxSerialSendData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.uxSerialSendData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.uxSerialSendData.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-			this.uxSerialSendData.ForeColor = System.Drawing.Color.White;
-			this.uxSerialSendData.Location = new System.Drawing.Point(4, 24);
-			this.uxSerialSendData.Multiline = true;
-			this.uxSerialSendData.Name = "uxSerialSendData";
-			this.uxSerialSendData.ReadOnly = true;
-			this.uxSerialSendData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.uxSerialSendData.Size = new System.Drawing.Size(471, 131);
-			this.uxSerialSendData.TabIndex = 14;
-			this.uxSerialSendData.WordWrap = false;
-			// 
-			// tableLayoutPanel2
-			// 
-			this.tableLayoutPanel2.AutoScroll = true;
-			this.tableLayoutPanel2.BackColor = System.Drawing.Color.Transparent;
-			this.tableLayoutPanel2.ColumnCount = 1;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Controls.Add(this.uxSerialPanel, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.groupBox1, 0, 1);
-			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 89);
-			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 2;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 126F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(981, 440);
-			this.tableLayoutPanel2.TabIndex = 15;
-			// 
-			// uxShowVideo
-			// 
-			this.uxShowVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.uxShowVideo.Location = new System.Drawing.Point(812, 28);
-			this.uxShowVideo.Name = "uxShowVideo";
-			this.uxShowVideo.Size = new System.Drawing.Size(154, 39);
-			this.uxShowVideo.TabIndex = 0;
-			this.uxShowVideo.Text = "Show/Hide &Video";
-			this.uxShowVideo.UseVisualStyleBackColor = true;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.uxShowVideo);
-			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
-			this.groupBox1.Location = new System.Drawing.Point(3, 250);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(975, 187);
-			this.groupBox1.TabIndex = 8;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Vision Settings";
-			// 
 			// splitContainer1
 			// 
 			this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -417,6 +342,81 @@ namespace Robin.ControlPanel
 			this.splitContainer1.Size = new System.Drawing.Size(957, 158);
 			this.splitContainer1.SplitterDistance = 478;
 			this.splitContainer1.TabIndex = 1;
+			// 
+			// uxSerialSendData
+			// 
+			this.uxSerialSendData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.uxSerialSendData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.uxSerialSendData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.uxSerialSendData.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxSerialSendData.ForeColor = System.Drawing.Color.White;
+			this.uxSerialSendData.Location = new System.Drawing.Point(4, 24);
+			this.uxSerialSendData.Multiline = true;
+			this.uxSerialSendData.Name = "uxSerialSendData";
+			this.uxSerialSendData.ReadOnly = true;
+			this.uxSerialSendData.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.uxSerialSendData.Size = new System.Drawing.Size(471, 131);
+			this.uxSerialSendData.TabIndex = 14;
+			this.uxSerialSendData.WordWrap = false;
+			// 
+			// uxSerialSend
+			// 
+			this.uxSerialSend.AutoSize = true;
+			this.uxSerialSend.Location = new System.Drawing.Point(3, 0);
+			this.uxSerialSend.Name = "uxSerialSend";
+			this.uxSerialSend.Size = new System.Drawing.Size(48, 21);
+			this.uxSerialSend.TabIndex = 15;
+			this.uxSerialSend.Text = "Send:";
+			// 
+			// uxSerialReceive
+			// 
+			this.uxSerialReceive.AutoSize = true;
+			this.uxSerialReceive.Location = new System.Drawing.Point(3, 0);
+			this.uxSerialReceive.Name = "uxSerialReceive";
+			this.uxSerialReceive.Size = new System.Drawing.Size(66, 21);
+			this.uxSerialReceive.TabIndex = 16;
+			this.uxSerialReceive.Text = "Receive:";
+			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.AutoScroll = true;
+			this.tableLayoutPanel2.BackColor = System.Drawing.Color.Transparent;
+			this.tableLayoutPanel2.ColumnCount = 1;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Controls.Add(this.uxSerialPanel, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.groupBox1, 0, 1);
+			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 89);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 2;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 126F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(981, 440);
+			this.tableLayoutPanel2.TabIndex = 15;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.uxShowVideo);
+			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.groupBox1.Location = new System.Drawing.Point(3, 250);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(975, 187);
+			this.groupBox1.TabIndex = 8;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Vision Settings";
+			// 
+			// uxShowVideo
+			// 
+			this.uxShowVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.uxShowVideo.Location = new System.Drawing.Point(812, 28);
+			this.uxShowVideo.Name = "uxShowVideo";
+			this.uxShowVideo.Size = new System.Drawing.Size(154, 39);
+			this.uxShowVideo.TabIndex = 0;
+			this.uxShowVideo.Text = "Show &Video";
+			this.uxShowVideo.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 
@@ -439,14 +439,14 @@ namespace Robin.ControlPanel
 			this.uxIrChannelPanel.PerformLayout();
 			this.uxSerialPanel.ResumeLayout(false);
 			this.uxSerialPanel.PerformLayout();
-			this.tableLayoutPanel2.ResumeLayout(false);
-			this.groupBox1.ResumeLayout(false);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel1.PerformLayout();
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			this.splitContainer1.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
+			this.tableLayoutPanel2.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

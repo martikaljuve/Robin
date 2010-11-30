@@ -13,11 +13,11 @@
 			new[]
 				{
 					Pacman, 
-					R2D2a, 
+					//R2D2a, 
 					R2D2b, 
-					SuperBomberman, 
-					SuperMarioBros3Start, 
-					SuperMarioBrosTimeWarning
+					//SuperBomberman, 
+					//SuperMarioBros3Start, 
+					//SuperMarioBrosTimeWarning
 				};
 	}
 }

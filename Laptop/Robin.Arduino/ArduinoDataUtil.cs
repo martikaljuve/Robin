@@ -21,8 +21,10 @@ namespace Robin.Arduino
 
 			sensorData.IrChannel = data[2];
 
-			sensorData.GyroDirection = GetShortFromBytes(data, 3);
-			sensorData.BeaconServoDirection = GetShortFromBytes(data, 5);
+			sensorData.EstimatedGlobalX = GetShortFromBytes(data, 3);
+			sensorData.EstimatedGlobalY = GetShortFromBytes(data, 5);
+			sensorData.EstimatedGlobalDirection = GetShortFromBytes(data, 7);
+			sensorData.BeaconServoDirection = GetShortFromBytes(data, 9);
 		}
 
 		public static SensorData GetSensorDataFromBytes(byte[] data)

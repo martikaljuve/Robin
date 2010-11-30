@@ -23,7 +23,8 @@ namespace Robin.VideoProcessor
 			var data = new VisionData();
 			data.TrackingBall = TrackingBall;
 			data.TrackedBallLocation = TrackWindow.Center();
-			data.FrontBallPathObstructed = false;
+			data.FrontBallPathObstructed = false; // TODO: implement!
+			data.OpponentGoalInFront = false;
 			return data;
 		}
 	}

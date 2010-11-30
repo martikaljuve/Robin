@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using Robin.Core;
 
 namespace Robin.Arduino
 {
@@ -106,6 +107,8 @@ namespace Robin.Arduino
 					byteList.AddRange(bytes);
 				}
 				else if (parameter is byte)
+					byteList.Add((byte)parameter);
+				else if (parameter is Colors)
 					byteList.Add((byte)parameter);
 				else {
 					var bytes = BitConverter.GetBytes((short)parameter);

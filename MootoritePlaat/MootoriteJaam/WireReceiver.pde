@@ -3,22 +3,15 @@
 #include "ArduinoPins.h"
 #include "CommandData.h"
 
-CommandData command;
 union CommandUnion cmdUnion;
 
 void wireReceiverSetup() {
-	setupTemp();
-
 	Wire.begin(1);
 	Wire.onReceive(dataReceived);
 }
 
 void wireReceiverLoop() {
 
-}
-
-void setupTemp() {
-	pinMode(LED, OUTPUT);
 }
 
 void parseCommand(struct CommandData &cmd) {
