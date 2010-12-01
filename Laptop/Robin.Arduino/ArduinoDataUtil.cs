@@ -1,16 +1,21 @@
 using System;
 using System.Linq;
-using System.Text;
 using Robin.Core;
 
 namespace Robin.Arduino
 {
 	public static class ArduinoDataUtil
 	{
-		private static void UpdateFromSerialData(SensorData sensorData, byte[] data)
+		private static bool TryUpdateFromSerialData(SensorData sensorData, byte[] data)
 		{
-			if (data.Length < 6) return;
-			if ((char)data[0] != ArduinoPrefix.IncomingData) return;
+			if (data.Length < 12)
+				return false;
+
+			if ((char)data[0] != ArduinoPrefix.IncomingData)
+				return false;
+
+			if (!ValidateChecksum(data))
+				return false;
 
 			var firstByte = data[1];
 
@@ -25,6 +30,20 @@ namespace Robin.Arduino
 			sensorData.EstimatedGlobalY = GetShortFromBytes(data, 5);
 			sensorData.EstimatedGlobalDirection = GetShortFromBytes(data, 7);
 			sensorData.BeaconServoDirection = GetShortFromBytes(data, 9);
+
+			return true;
+		}
+
+		private static bool ValidateChecksum(byte[] data)
+		{
+			if (data.Length == 0)
+				return false;
+
+			byte checksum = 0;
+			for (int i = 0; i < data.Length - 1; i++)
+				checksum ^= data[i];
+
+			return checksum == data[data.Length - 1];
 		}
 
 		public static SensorData GetSensorDataFromBytes(byte[] data)
@@ -34,9 +53,21 @@ namespace Robin.Arduino
 			if (data.Length == 0)
 				return sensorData;
 
-			var bytes = data.TakeWhile(x => (char) x != '\n').ToArray();
+			byte previous = 0;
+			int i;
+			for (i = 0; i < data.Length; i++)
+			{
+				byte current = data[i];
+				if (previous == '\r' && current == '\n')
+					break;
+				previous = current;
+			}
 
-			UpdateFromSerialData(sensorData, bytes);
+			var bytes = data.Take(i - 1).ToArray();
+
+			if (!TryUpdateFromSerialData(sensorData, bytes))
+				return null;
+
 			return sensorData;
 		}
 

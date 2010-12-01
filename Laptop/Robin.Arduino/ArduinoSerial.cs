@@ -68,7 +68,7 @@ namespace Robin.Arduino
 			{
 				port.PortName = name;
 				port.BaudRate = baudRate;
-				port.NewLine = "\n";
+				port.NewLine = "\r\n";
 				port.DtrEnable = true;
 				port.ReadTimeout = 2000;
 				port.WriteTimeout = 2000;
@@ -122,6 +122,7 @@ namespace Robin.Arduino
 			while (byteList.Count < 7)
 				byteList.Add(0);
 
+			byteList.Add((byte)'\r');
 			byteList.Add((byte)'\n');
 
 			if (!WriteLine(byteList))

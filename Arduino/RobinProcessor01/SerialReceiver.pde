@@ -4,9 +4,9 @@ void serialReceiverSetup() {
 }
 
 void serialReceiverLoop() {
-	if(Serial.available() < 8)
+	if(Serial.available() < 9)
 		return;
-	
+
 	parseSerialBuffer();
 }
 
@@ -18,9 +18,11 @@ void parseSerialBuffer() {
 			parseFireCommand();
 			break;
 		case 'M':
+			if (!POWER) break;
 			parseMoveCommand();
 			break;
 		case 'T':
+			if (!POWER) break;
 			parseTurnCommand();
 			break;
 		case 'S':
@@ -30,6 +32,7 @@ void parseSerialBuffer() {
 			parseDribblerCommand();
 			break;
 		case 'G':
+			if (!POWER) break;
 			parseMoveAndTurnCommand();
 			break;
 		case 'C':
@@ -42,7 +45,14 @@ void parseSerialBuffer() {
 			break;
 	}
 
-	Serial.flush();
+	// Read until \r\n or end
+	byte previous = 0;
+	while (Serial.available() > 0) {
+		byte current = SerialUtil.readByte();
+		if (previous == '\r' && current == '\n')
+			break;
+		previous = current;
+	}
 }
 
 void parseFireCommand() {

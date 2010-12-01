@@ -128,9 +128,9 @@ namespace Robin.RetroEncabulator
 		private int ledToggleNext = 0;
 		private void Idle()
 		{
-			//if (SensorData.IsPowered) { 
-			//	stateMachine.Fire(Trigger.PoweredUp);
-			//}
+			if (SensorData.IsPowered) { 
+				stateMachine.Fire(Trigger.PoweredUp);
+			}
 
 			// Toggle through different colors
 			if (stopwatch.ElapsedMilliseconds > ledToggleNext)

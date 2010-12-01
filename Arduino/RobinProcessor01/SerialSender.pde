@@ -21,14 +21,20 @@ void sendMessage() {
 
 	byte second = getIrChannel();
 
-	Serial.write((byte)'D');
-	Serial.write(first);
-	Serial.write(second);
-	SerialUtil.writeInt(getGlobalX());
-	SerialUtil.writeInt(getGlobalY());
-	SerialUtil.writeInt(getGlobalDirection());
-	SerialUtil.writeInt(getServoDirection());
-	Serial.println();
+	sensorData.command = (byte)'D';
+	sensorData.first = first;
+	sensorData.second = second;
+	sensorData.x = getGlobalX();
+	sensorData.y = getGlobalY();
+	sensorData.direction = getGlobalDirection();
+	sensorData.servoDirection = getServoDirection();
+	sensorData.carriageReturn = '\r';
+	sensorData.lineFeed = '\n';
+
+	sensorUnion.data = sensorData;
+	sensorUnion.data.checksum = calculateChecksum(sensorUnion);
+
+	Serial.write(sensorUnion.bytes, 14);
 }
 
 bool getTripSensorStatus() {
@@ -44,18 +50,32 @@ bool getRightIrStatus() {
 }
 
 int getGlobalX() {
-	return globalX; // X-coordinate
+	return swap(globalX); // X-coordinate
 }
 
 int getGlobalY() {
-	return globalY; // Y-coordinate
+	return swap(globalY); // Y-coordinate
 }
 
 int getGlobalDirection() {
-	return globalDirection; // gyro direction
+	return swap(globalDirection); // gyro direction
 }
 
 int getServoDirection() {
 	//return -60;
-	return getServoAngle(); // servoDirection;
+	return swap(getServoAngle()); // servoDirection;
+}
+
+int swap(int data) {
+	return data;
+	//return (int)((data & 255) << 8) + (data >> 8);
+}
+
+byte calculateChecksum(SensorUnion sensorUnion) {
+	byte checksum = 0;
+
+	for (int i = 0; i < 11; i++)
+		checksum ^= sensorUnion.bytes[i];
+
+	return checksum;
 }

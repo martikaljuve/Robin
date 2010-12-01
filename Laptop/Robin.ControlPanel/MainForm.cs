@@ -143,7 +143,11 @@ namespace Robin.ControlPanel
 			arduinoSerial.DataReceived +=
 				(o, args) =>
 				{
+					if (args.Bytes == null || args.Bytes.Length == 0)
+						return;
+
 					var data = ArduinoDataUtil.GetSensorDataFromBytes(args.Bytes);
+
 					Action appendAction = () =>
 					{
 						if (args.Bytes.First() != (byte)ArduinoPrefix.IncomingData)
@@ -151,9 +155,11 @@ namespace Robin.ControlPanel
 						else
 							uxSerialData.AppendText(index++ + ": " + data + Environment.NewLine);
 
-						selectedController.SensorData = data;
-
-						SetIrChannelButton(data.IrChannel);
+						if (data != null)
+						{
+							selectedController.SensorData = data;
+							SetIrChannelButton(data.IrChannel);
+						}
 					};
 					uxSerialData.Invoke(appendAction);
 				};

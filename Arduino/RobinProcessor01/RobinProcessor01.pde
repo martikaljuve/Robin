@@ -17,7 +17,7 @@ void setup(){
 	wireSenderSetup();
 	wireReceiverSetup();
 	coilgunSetup();
-	//beaconFinderSetup();
+	beaconFinderSetup();
 	ledsSetup();
 }
 
@@ -25,12 +25,12 @@ void loop(){
 
 	//stateMachineLoop();
 	powerLoop();
-	POWER ? serialReceiverLoop() : Serial.flush();
+	serialReceiverLoop();
 	serialSenderLoop();
 	wireSenderLoop();
 	wireReceiverLoop();
 	coilgunLoop();
-	//beaconFinderLoop();
+	beaconFinderLoop();
 
 	//delay(100);
 }
