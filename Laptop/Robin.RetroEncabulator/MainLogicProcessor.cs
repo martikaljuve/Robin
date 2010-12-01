@@ -133,11 +133,11 @@ namespace Robin.RetroEncabulator
 			}
 
 			// Toggle through different colors
-			if (stopwatch.ElapsedMilliseconds > ledToggleNext)
+			/*if (stopwatch.ElapsedMilliseconds > ledToggleNext)
 			{
 				ToggleLeds();
 				ledToggleNext += 2000;
-			}
+			}*/
 		}
 
 		private void Starting()
@@ -188,6 +188,7 @@ namespace Robin.RetroEncabulator
 		private void LaunchBall()
 		{
 			Commander.FireCoilgun(50);
+			Commander.SetColors(Colors.White);
 			stateMachine.Fire(Trigger.CoilgunLaunched);
 		}
 

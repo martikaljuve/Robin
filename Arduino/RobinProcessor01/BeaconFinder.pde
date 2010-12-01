@@ -2,7 +2,7 @@
 #include <TimedAction.h>
 #include <EEPROM.h>
 
-#define SERVO_DEBUG
+//#define SERVO_DEBUG
 
 Servo servo;
 bool moveLeft = false;

@@ -58,6 +58,7 @@ void irCheck(){
 	if(right){
 		resultsRight.value &= 0b000000000111;
 		rightResult = resultsRight.value;      
+
 	}else{
 		rightResult = 0;
                if(rightSignalTimer <= millis()){
@@ -65,6 +66,8 @@ void irCheck(){
                      rightSignalTimer = millis()+SIGNAL_TIMER_PERIOD;
                }
 		//rightResult = 0;
+
+
 	}
 
 	irResume();
@@ -80,13 +83,13 @@ void irCheck(){
 		rightTimer--;
 
 	#ifdef SERVO_DEBUG
-	Serial.print("channel: ");
+	/*Serial.print("channel: ");
 	Serial.print((int)channelToSearch);
 	Serial.print("\t");
 	Serial.print(leftResult);
 	Serial.print("\t");
 	Serial.print(rightResult);
-	Serial.println();
+	Serial.println();*/
 	#endif
 }
 
