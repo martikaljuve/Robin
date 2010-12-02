@@ -1,5 +1,5 @@
 //#define PID_DEBUG
-//#define KIN_DEBUG
+#define KIN_DEBUG
 
 TimedAction pidAction = TimedAction(50, pidCompute);
 #ifdef KIN_DEBUG
@@ -40,15 +40,15 @@ void pidCompute() {
 	magnetRight.resetCurrentDelta();
 	magnetBack.resetCurrentDelta();
 
-	wheels.updateGlobalPosition(left, right, back);
+	wheels.updateGlobalPosition(left, right, back, gyro.getCurrentAngle());
 	wheels.getDesiredWheelPositions(desiredLeft, desiredRight, desiredBack);
 
-	if (abs(desiredLeft) > 500 || abs(desiredRight) > 500 || abs(desiredBack) > 500) {
+	if (abs(desiredLeft) > 5000 || abs(desiredRight) > 5000 || abs(desiredBack) > 5000) {
 		int maxSpeed = max(abs(desiredLeft), max(abs(desiredRight), abs(desiredBack)));
 
-		leftSpeed = desiredLeft * 500 / maxSpeed;
-		rightSpeed = desiredRight * 500 / maxSpeed;
-		backSpeed = desiredBack * 500 / maxSpeed;
+		leftSpeed = desiredLeft * 5000 / maxSpeed;
+		rightSpeed = desiredRight * 5000 / maxSpeed;
+		backSpeed = desiredBack * 5000 / maxSpeed;
 	}
 	else {
 		leftSpeed = desiredLeft;
@@ -56,9 +56,9 @@ void pidCompute() {
 		backSpeed = desiredBack;
 	}
 
-	pidLeft.setSetpoint(leftSpeed);
-	pidRight.setSetpoint(rightSpeed);
-	pidBack.setSetpoint(backSpeed);
+	pidLeft.setSetpoint(map(leftSpeed, -5000, 5000, -255, 255));
+	pidRight.setSetpoint(map(rightSpeed, -5000, 5000, -255, 255));
+	pidBack.setSetpoint(map(backSpeed, -5000, 5000, -255, 255));
 
 	pidLeft.compute(dt / 1000.0);
 	pidRight.compute(dt / 1000.0);
@@ -70,7 +70,8 @@ void pidCompute() {
 }
 
 #ifdef KIN_DEBUG
-int previousX, previousY, previousTheta;
+double previousX, previousY;
+int previousTheta;
 
 void pidDebug() {
 	if (previousX == wheels.worldCurrentX &&
@@ -82,14 +83,15 @@ void pidDebug() {
 	previousY = wheels.worldCurrentY;
 	previousTheta = wheels.worldCurrentTheta;
 
+/*
 	Serial.print("final: ");
 	Serial.print(wheels.worldFinalX / 10.0);
 	Serial.print(", ");
 	Serial.print(wheels.worldFinalY / 10.0);
 	Serial.print(", ");
-	Serial.print(wheels.worldFinalTheta / 10.0);
+	Serial.print(wheels.worldFinalTheta / 10.0);*/
 
-	Serial.print("\tworld: ");
+	Serial.print("world: ");
 	Serial.print(wheels.worldCurrentX / 10.0);
 	Serial.print(", ");
 	Serial.print(wheels.worldCurrentY / 10.0);
@@ -116,6 +118,13 @@ void pidDebug() {
 	Serial.print(rightSpeed);
 	Serial.print(", ");
 	Serial.print(backSpeed);
+
+	Serial.print("\tpid out (L,R,B): ");
+	Serial.print(pidLeft.output);
+	Serial.print(", ");
+	Serial.print(pidRight.output);
+	Serial.print(", ");
+	Serial.print(pidBack.output);
 
 	Serial.print(",\tgyro: ");
 	Serial.println(gyro.getCurrentAngle());

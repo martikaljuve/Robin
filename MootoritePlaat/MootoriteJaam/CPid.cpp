@@ -15,6 +15,9 @@ void Pid::setInput(long newInput) {
 }
 
 void Pid::setSetpoint(long newSetpoint) {
+	if (newSetpoint == setpoint)
+		return;
+
 	setpoint = newSetpoint;
 	errorPrevious = 0;
 	integral = 0;
@@ -34,4 +37,3 @@ void Pid::compute(double dt) {
 
 	output = constrain(output, outputMin, outputMax);
 }
-

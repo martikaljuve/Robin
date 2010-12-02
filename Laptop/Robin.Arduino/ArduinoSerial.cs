@@ -91,7 +91,7 @@ namespace Robin.Arduino
 
 			if (currentCommand == previousCommand && ArduinoPrefix.NonRepeatableCommands.Contains(command)) {
 				previousCommand = currentCommand;
-				return;
+				//return;
 			}
 
 			previousCommand = currentCommand;

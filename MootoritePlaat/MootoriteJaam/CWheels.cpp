@@ -22,15 +22,15 @@ void Wheels::moveAndTurnDistance(int localDirectionInDeciDegrees, int distance, 
 	long localX = SinLookupTable::getSin(localDirectionInRadians);
 	long localY = SinLookupTable::getCos(localDirectionInRadians);
 
-	long worldX = (localX * cosRotation) + (localY * sinRotation);
-	long worldY = (-localX * sinRotation) + (localY * cosRotation);
+	long worldX = (-localY * sinRotation) + (localX * cosRotation);
+	long worldY = (localY * cosRotation) + (localX * sinRotation);
 
-	worldX >>= LOOKUP_SCALE;
-	worldY >>= LOOKUP_SCALE;
+	worldX /= LOOKUP_SCALE;
+	worldY /= LOOKUP_SCALE;
 
 	worldFinalX = worldCurrentX + (worldX * distance / 1024.0);
 	worldFinalY = worldCurrentY + (worldY * distance / 1024.0);
-	worldFinalTheta = worldCurrentTheta + localRotation;
+	worldFinalTheta = worldCurrentTheta + (localRotation * 10);
 }
 
 void Wheels::stop() {
@@ -45,23 +45,22 @@ void Wheels::resetGlobalPosition() {
 	worldCurrentTheta = 0;
 }
 
-void Wheels::updateGlobalPosition(long leftWheel, long rightWheel, long backWheel) {
-	long localX, localY, localTheta;
+void Wheels::updateGlobalPosition(long leftWheel, long rightWheel, long backWheel, double gyroAngle) {
+	double localX, localY, localTheta;
 	forwardKinematics(leftWheel, rightWheel, backWheel, localX, localY, localTheta);
-
-	worldCurrentTheta += localTheta;
 
 	int cosRotation = SinLookupTable::getCos(worldCurrentTheta);
 	int sinRotation = SinLookupTable::getSin(worldCurrentTheta);
 
-	int worldX = (-localX * sinRotation) + (localY * cosRotation);
-	int worldY = (localX * cosRotation) + (localY * sinRotation);
+	double worldX = (-localY * sinRotation) + (localX * cosRotation);
+	double worldY = (localY * cosRotation) + (localX * sinRotation);
 
-	worldX >>= LOOKUP_SCALE;
-	worldY >>= LOOKUP_SCALE;
+	worldX /= LOOKUP_SCALE;
+	worldY /= LOOKUP_SCALE;
 		
 	worldCurrentX += worldX;
 	worldCurrentY += worldY;
+	worldCurrentTheta = gyroAngle * 10; // localTheta KALMAN?
 }
 
 void Wheels::getDesiredWheelPositions(long &desiredLeft, long &desiredRight, long &desiredBack) {
@@ -72,20 +71,22 @@ void Wheels::getDesiredWheelPositions(long &desiredLeft, long &desiredRight, lon
 	inverseKinematics(diffX, diffY, diffTheta, desiredLeft, desiredRight, desiredBack);
 }
 
-void Wheels::forwardKinematics(long left, long right, long back, long &x, long &y, long &theta) {
+void Wheels::forwardKinematics(long leftDegrees, long rightDegrees, long backDegrees, double &x, double &y, double &theta) {
 	// x = ((sqrt(3) * vRight) / 3) - ((sqrt(3) * vLeft) / 3)
 	// y = (vRight / 3) + (vLeft / 3) - ((2 * vBack) / 3)
 	// theta = (vRight / 3) + (vLeft / 3) + (vBack / 3)
 
-	const long sqrt3 = 1732; // sqrt(3) = 1.73205081 
+	const double sqrt3 = 1.732; // sqrt(3) = 1.73205081 
 
-	x = ((sqrt3 * left) - (sqrt3 * right)) / 3000; // * 1000, because sqrt3 is * 1000
-	y = (right + left - (2 * back)) / 3;
-	theta = (left + right + back) / -3;
+	double left = leftDegrees / WHEEL_DECIDEGREES_TO_MILLIMETERS_DIVISOR; //22.55
+	double right = rightDegrees / WHEEL_DECIDEGREES_TO_MILLIMETERS_DIVISOR;
+	double back = backDegrees / WHEEL_DECIDEGREES_TO_MILLIMETERS_DIVISOR;
 
-	x /= DECIDEGREES_TO_MILLIMETERS_DIVISOR;
-	y /= DECIDEGREES_TO_MILLIMETERS_DIVISOR;
-	theta *= WHEEL_TO_ROBOT_ROTATION_MULTIPLIER;
+	x = (right + left - (2 * back)) / 3.0;
+	y = ((sqrt3 * left) - (sqrt3 * right)) / 3.0; // * 1000, because sqrt3 is * 1000
+	theta = (left + right + back) / -3.0;
+
+	theta = (theta * 180) / (11 * M_PI);
 }
 
 void Wheels::inverseKinematics(long x, long y, long theta, long &left, long &right, long &back) {
@@ -97,8 +98,8 @@ void Wheels::inverseKinematics(long x, long y, long theta, long &left, long &rig
 	y *= DECIDEGREES_TO_MILLIMETERS_DIVISOR; // 22.5
 	theta /= WHEEL_TO_ROBOT_ROTATION_MULTIPLIER; // 0.21175225
 
-	int temp1 = -0.5 * x;
-	int temp2 = (0.866025404 * y);
+	long temp1 = -0.5 * x;
+	long temp2 = (0.866025404 * y);
 
 	right = temp1 + temp2 + theta;
 	left = (temp1 - temp2) + theta;

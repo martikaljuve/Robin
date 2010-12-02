@@ -22,6 +22,7 @@
 
 #define DECIDEGREES_TO_MILLIMETERS_DIVISOR 22.5
 #define WHEEL_TO_ROBOT_ROTATION_MULTIPLIER 0.21175225
+#define WHEEL_DECIDEGREES_TO_MILLIMETERS_DIVISOR 22.5573935
 
 class Wheels {
 	int speedLeft;
@@ -31,8 +32,8 @@ class Wheels {
 	//static const int MAX_DISTANCE = 3600;
 
 public:
-	int worldCurrentX; // millimeters
-	int worldCurrentY; // millimeters
+	double worldCurrentX; // millimeters
+	double worldCurrentY; // millimeters
 	int worldCurrentTheta; // decidegrees
 
 	int worldFinalX; // millimeters
@@ -46,10 +47,10 @@ public:
 	void stop();
 
 	void resetGlobalPosition();
-	void updateGlobalPosition(long leftWheel, long rightWheel, long backWheel);
+	void updateGlobalPosition(long leftWheel, long rightWheel, long backWheel, double gyroAngle);
 	void getDesiredWheelPositions(long &desiredLeft, long &desiredRight, long &desiredBack); // desired: decidegrees
 	
-	static void forwardKinematics(long left, long right, long back, long &x, long &y, long &theta);
+	static void forwardKinematics(long left, long right, long back, double &x, double &y, double &theta);
 	static void inverseKinematics(long x, long y, long theta, long &left, long &right, long &back);
 };
 

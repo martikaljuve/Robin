@@ -1,0 +1,51 @@
+<html>
+<script>
+
+function calculate_fkinem(left, right, back){
+		//sqrt3 = Math.pow(3, 1/2);
+		sqrt3 = 1732;
+		
+		left /= 2.25573935;
+		right /= 2.25573935;
+		back /= 2.25573935;
+		
+		x = (right + left - 2*back) / 3;
+		y = (sqrt3*left - sqrt3*right) / 3000;
+		theta = (left + right + back) / -3;
+		
+		//theta = (theta / 12) * (180 / Math.PI);
+		theta = (theta * 180) / (12 * Math.PI);
+		/*x *= 22.5;
+		y *= 22.5;
+		theta /= 0.212;*/
+		
+		/*x = Math.round(x);
+		y = Math.round(y);
+		theta = Math.round(theta);*/
+		document.write("x: "+x+"<br>y: "+y+"<br> theta: "+theta+"<br>");
+		
+		document.write("<br><br>World:<br>");
+		glob_pos(x, y, -45);
+		
+		
+		
+}
+
+function glob_pos(x, y, theta){
+		cos_rot = Math.cos(theta*Math.PI/180);
+		sin_rot = Math.sin(theta*Math.PI/180);
+		
+		world_x = -y * sin_rot + x * cos_rot;
+		world_y = y * cos_rot + x * sin_rot;
+	
+		document.write("x: "+world_x+"<br>y: "+world_y+"<br>");
+}
+
+//calculate_fkinem(1085.8, -925.2, 0);
+calculate_fkinem(1713-1681, 1559-1529, 2737-2706);
+
+</script>
+<body>
+
+</body>
+</html>

@@ -12,7 +12,7 @@ void wireReceiverLoop() {
 }
 
 void wireRequest() {
-	Wire.requestFrom(2, 7);
+	Wire.requestFrom(1, 7);
 
 	int available = min(7, Wire.available());
 	for(int i = 0; i < available; i++) {
