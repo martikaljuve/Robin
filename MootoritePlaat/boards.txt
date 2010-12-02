@@ -16,3 +16,24 @@ motoplaat.bootloader.lock_bits=0x0F
 motoplaat.build.mcu=atmega324p
 motoplaat.build.f_cpu=20000000L
 motoplaat.build.core=arduino
+
+##############################################################
+
+motoplaat2.name=Mootorite plaat w/ ATMEGA324PV (AVRISP MKII)
+
+motoplaat2.upload.protocol=avrispmkii
+motoplaat2.upload.maximum_size=30720
+motoplaat2.upload.speed=19200
+motoplaat2.upload.using=avrispmkii
+
+motoplaat2.bootloader.low_fuses=0xFF
+motoplaat2.bootloader.high_fuses=0xDA
+motoplaat2.bootloader.extended_fuses=0xFD
+motoplaat2.bootloader.path=atmega644p
+motoplaat2.bootloader.file=ATmegaBOOT_324P.hex
+motoplaat2.bootloader.unlock_bits=0x3F
+motoplaat2.bootloader.lock_bits=0x0F
+
+motoplaat2.build.mcu=atmega324p
+motoplaat2.build.f_cpu=20000000L
+motoplaat2.build.core=arduino
