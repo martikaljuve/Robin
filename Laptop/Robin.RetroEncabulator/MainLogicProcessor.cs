@@ -25,6 +25,7 @@ namespace Robin.RetroEncabulator
 		{
 			VisionData = new VisionData();
 			SensorData = new SensorData();
+			LogicState = new LogicState();
 			
 			stateMachine = new StateMachine<State, Trigger>(State.Idle);
 
@@ -65,10 +66,16 @@ namespace Robin.RetroEncabulator
 				.Permit(Trigger.Timeout, State.LookingForBall)
 				.OnEntry(() =>
 				{
+					LogicState.FindingGoal = true;
 					StartTimer(5000, Trigger.Timeout);
 					Commander.SetColors(Colors.Magenta);
 				})
-				.OnExit(StopTimer);
+				.OnExit(
+				() =>
+				{
+					LogicState.FindingGoal = false;
+					StopTimer();
+				});
 
 			stopwatch.Start();
 		}
@@ -78,6 +85,8 @@ namespace Robin.RetroEncabulator
 		public SensorData SensorData { get; set; }
 		
 		public IRobotCommander Commander { get; set; }
+
+		public LogicState LogicState { get; set; }
 
 		public IntPtr Parent { get; set; }
 

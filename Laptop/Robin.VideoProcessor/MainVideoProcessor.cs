@@ -3,14 +3,16 @@ using System.Drawing;
 using System.Linq;
 using System.Timers;
 using AForge.Video;
+using Robin.Core;
 
 namespace Robin.VideoProcessor
 {
 	public class MainVideoProcessor
 	{
-		private readonly Camshift camshift = new Camshift();
-		private readonly VisionResults results = new VisionResults();
+		private readonly VisionResults results;
 		private readonly VideoFeed feed;
+		private readonly Camshift camshift;
+		private readonly LogicState logicState = new LogicState();
 
 		private bool foundBall;
 		private int framesPerSecond;
@@ -19,8 +21,11 @@ namespace Robin.VideoProcessor
 
 		public MainVideoProcessor(int camIndex = 0)
 		{
-			feed = VideoFeed.FromCamIndex(camIndex);
-			//feed = new VideoFeed(VideoFeed.Sample6);
+			results = new VisionResults();
+			camshift = new Camshift();
+
+			//feed = VideoFeed.FromCamIndex(camIndex);
+			feed = new VideoFeed(VideoFeed.Sample7);
 			if (feed == null)
 				return;
 
@@ -37,6 +42,14 @@ namespace Robin.VideoProcessor
 		{
 			var result = VisionExperiments.FindCirclesAndLinesWithHough(eventArgs.Frame);
 			var rect = new Rectangle(Point.Empty, result.Size);
+
+			//foreach (var line in VisionExperiments.Lines)
+			//{
+			//    if (func(line.P1) == 1)
+			//    {
+					
+			//    }
+			//}
 
 			var circles = VisionExperiments.Circles;
 			if (!ballHistogramCalculated && circles.Any())
@@ -56,7 +69,6 @@ namespace Robin.VideoProcessor
 				frame.ROI = circle.GetRectangle();
 				camshift.CalculateHistogram(frame);
 				frame.ROI = Rectangle.Empty;
-				
 			}
 
 			if (!foundBall && circles.Any())
@@ -94,6 +106,17 @@ namespace Robin.VideoProcessor
 				}
 			}
 
+			if (LogicState != null && LogicState.FindingGoal)
+			{
+				if (LogicState.GoalRed != null)
+				{
+					if (LogicState.GoalRed == true)
+						results.GoalRectangles = VisionExperiments.FindRedGoalRectangles();
+					else
+						results.GoalRectangles = VisionExperiments.FindBlueGoalRectangles();
+				}
+			}
+
 			results.Circles = VisionExperiments.Circles;
 			results.TrackingBall = foundBall;
 			results.TrackWindow = camshift.TrackWindow;
@@ -121,6 +144,11 @@ namespace Robin.VideoProcessor
 		{
 			if (feed != null)
 				feed.Restart();
+		}
+
+		public LogicState LogicState
+		{
+			get { return logicState; }
 		}
 
 		public VisionResults Results

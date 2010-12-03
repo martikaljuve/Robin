@@ -18,6 +18,7 @@ namespace Robin.GamepadController
 		public MainController()
 		{
 			var directInput = new DirectInput();
+			LogicState = new LogicState();
 
 			foreach (var deviceInstance in directInput.GetDevices(DeviceClass.GameController, DeviceEnumerationFlags.AttachedOnly))
 			{
@@ -45,6 +46,8 @@ namespace Robin.GamepadController
 		public VisionData VisionData { get; set; }
 
 		public SensorData SensorData { get; set; }
+
+		public LogicState LogicState { get; set; }
 
 		public IRobotCommander Commander { get; set; }
 

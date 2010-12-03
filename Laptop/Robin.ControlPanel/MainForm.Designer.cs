@@ -49,17 +49,24 @@ namespace Robin.ControlPanel
 			this.uxIrChannelNone = new System.Windows.Forms.RadioButton();
 			this.uxIrChannelPanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.uxSerialPanel = new System.Windows.Forms.GroupBox();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.uxGoalLabel = new System.Windows.Forms.Label();
+			this.uxGoalNone = new System.Windows.Forms.RadioButton();
+			this.uxGoalRed = new System.Windows.Forms.RadioButton();
+			this.uxGoalBlue = new System.Windows.Forms.RadioButton();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.uxSerialSendData = new System.Windows.Forms.TextBox();
 			this.uxSerialSend = new System.Windows.Forms.Label();
 			this.uxSerialReceive = new System.Windows.Forms.Label();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.uxVideoParameters = new System.Windows.Forms.PropertyGrid();
 			this.uxShowVideo = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.uxIrChannelPanel.SuspendLayout();
 			this.uxSerialPanel.SuspendLayout();
+			this.flowLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -307,6 +314,7 @@ namespace Robin.ControlPanel
 			// uxSerialPanel
 			// 
 			this.uxSerialPanel.BackColor = System.Drawing.Color.Transparent;
+			this.uxSerialPanel.Controls.Add(this.flowLayoutPanel1);
 			this.uxSerialPanel.Controls.Add(this.splitContainer1);
 			this.uxSerialPanel.Controls.Add(this.uxIrChannelPanel);
 			this.uxSerialPanel.Controls.Add(this.uxPorts);
@@ -321,6 +329,75 @@ namespace Robin.ControlPanel
 			this.uxSerialPanel.TabIndex = 0;
 			this.uxSerialPanel.TabStop = false;
 			this.uxSerialPanel.Text = "Arduino";
+			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.AutoSize = true;
+			this.flowLayoutPanel1.BackColor = System.Drawing.Color.Transparent;
+			this.flowLayoutPanel1.Controls.Add(this.uxGoalLabel);
+			this.flowLayoutPanel1.Controls.Add(this.uxGoalNone);
+			this.flowLayoutPanel1.Controls.Add(this.uxGoalRed);
+			this.flowLayoutPanel1.Controls.Add(this.uxGoalBlue);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(601, 28);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(345, 43);
+			this.flowLayoutPanel1.TabIndex = 14;
+			// 
+			// uxGoalLabel
+			// 
+			this.uxGoalLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.uxGoalLabel.AutoSize = true;
+			this.uxGoalLabel.BackColor = System.Drawing.Color.Transparent;
+			this.uxGoalLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxGoalLabel.Location = new System.Drawing.Point(3, 8);
+			this.uxGoalLabel.Name = "uxGoalLabel";
+			this.uxGoalLabel.Size = new System.Drawing.Size(122, 20);
+			this.uxGoalLabel.TabIndex = 11;
+			this.uxGoalLabel.Text = "Opponent Goal:";
+			// 
+			// uxGoalNone
+			// 
+			this.uxGoalNone.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.uxGoalNone.AutoSize = true;
+			this.uxGoalNone.BackColor = System.Drawing.Color.Transparent;
+			this.uxGoalNone.Checked = true;
+			this.uxGoalNone.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxGoalNone.Location = new System.Drawing.Point(131, 3);
+			this.uxGoalNone.Name = "uxGoalNone";
+			this.uxGoalNone.Padding = new System.Windows.Forms.Padding(3);
+			this.uxGoalNone.Size = new System.Drawing.Size(71, 30);
+			this.uxGoalNone.TabIndex = 13;
+			this.uxGoalNone.TabStop = true;
+			this.uxGoalNone.Text = "None";
+			this.uxGoalNone.UseVisualStyleBackColor = false;
+			// 
+			// uxGoalRed
+			// 
+			this.uxGoalRed.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.uxGoalRed.AutoSize = true;
+			this.uxGoalRed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+			this.uxGoalRed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxGoalRed.Location = new System.Drawing.Point(208, 3);
+			this.uxGoalRed.Name = "uxGoalRed";
+			this.uxGoalRed.Padding = new System.Windows.Forms.Padding(3);
+			this.uxGoalRed.Size = new System.Drawing.Size(63, 30);
+			this.uxGoalRed.TabIndex = 12;
+			this.uxGoalRed.Text = "Red";
+			this.uxGoalRed.UseVisualStyleBackColor = false;
+			// 
+			// uxGoalBlue
+			// 
+			this.uxGoalBlue.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.uxGoalBlue.AutoSize = true;
+			this.uxGoalBlue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+			this.uxGoalBlue.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+			this.uxGoalBlue.Location = new System.Drawing.Point(277, 3);
+			this.uxGoalBlue.Name = "uxGoalBlue";
+			this.uxGoalBlue.Padding = new System.Windows.Forms.Padding(3);
+			this.uxGoalBlue.Size = new System.Drawing.Size(65, 30);
+			this.uxGoalBlue.TabIndex = 10;
+			this.uxGoalBlue.Text = "Blue";
+			this.uxGoalBlue.UseVisualStyleBackColor = false;
 			// 
 			// splitContainer1
 			// 
@@ -398,6 +475,7 @@ namespace Robin.ControlPanel
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.uxVideoParameters);
 			this.groupBox1.Controls.Add(this.uxShowVideo);
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
@@ -407,6 +485,20 @@ namespace Robin.ControlPanel
 			this.groupBox1.TabIndex = 8;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Vision Settings";
+			// 
+			// uxVideoParameters
+			// 
+			this.uxVideoParameters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.uxVideoParameters.HelpVisible = false;
+			this.uxVideoParameters.Location = new System.Drawing.Point(10, 28);
+			this.uxVideoParameters.Name = "uxVideoParameters";
+			this.uxVideoParameters.Size = new System.Drawing.Size(796, 150);
+			this.uxVideoParameters.TabIndex = 1;
+			this.uxVideoParameters.ToolbarVisible = false;
+			this.uxVideoParameters.ViewBackColor = System.Drawing.SystemColors.Control;
+			this.uxVideoParameters.ViewForeColor = System.Drawing.SystemColors.ControlText;
 			// 
 			// uxShowVideo
 			// 
@@ -439,6 +531,8 @@ namespace Robin.ControlPanel
 			this.uxIrChannelPanel.PerformLayout();
 			this.uxSerialPanel.ResumeLayout(false);
 			this.uxSerialPanel.PerformLayout();
+			this.flowLayoutPanel1.ResumeLayout(false);
+			this.flowLayoutPanel1.PerformLayout();
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel1.PerformLayout();
 			this.splitContainer1.Panel2.ResumeLayout(false);
@@ -479,6 +573,12 @@ namespace Robin.ControlPanel
 		private GroupBox groupBox1;
 		private Button uxShowVideo;
 		private SplitContainer splitContainer1;
+		private PropertyGrid uxVideoParameters;
+		private FlowLayoutPanel flowLayoutPanel1;
+		private Label uxGoalLabel;
+		private RadioButton uxGoalRed;
+		private RadioButton uxGoalBlue;
+		private RadioButton uxGoalNone;
 	}
 }
 

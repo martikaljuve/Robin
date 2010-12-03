@@ -9,7 +9,7 @@ namespace Robin.RetroEncabulator
 		public static T NextRandom<T>(this IEnumerable<T> source)
 		{
 			var gen = new Random();
-			return source.Skip(gen.Next(0, source.Count() - 1)).Take(1).First();
+			return source.Skip(gen.Next(0, source.Count() - 1) - 1).Take(1).First();
 		}
 	}
 }

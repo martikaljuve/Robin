@@ -18,6 +18,10 @@ namespace Robin.VideoProcessor
 
 		public IEnumerable<LineSegment2D> Lines { get; set; }
 
+		public Rectangle OpponentGoal { get; set; }
+
+		public IEnumerable<Rectangle> GoalRectangles { get; set; }
+
 		public VisionData ToVisionData()
 		{
 			var data = new VisionData();
@@ -25,6 +29,7 @@ namespace Robin.VideoProcessor
 			data.TrackedBallLocation = TrackWindow.Center();
 			data.FrontBallPathObstructed = false; // TODO: implement!
 			data.OpponentGoalInFront = false;
+			data.OpponentGoalOffset = (VisionData.FrameSize.Width / 2) - OpponentGoal.Center().X;
 			return data;
 		}
 	}

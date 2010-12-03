@@ -9,5 +9,7 @@ namespace Robin.Core
 		IRobotCommander Commander { get; set; }
 		VisionData VisionData { get; set; }
 		SensorData SensorData { get; set; }
+
+		LogicState LogicState { get; }
 	}
 }

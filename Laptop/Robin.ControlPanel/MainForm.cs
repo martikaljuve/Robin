@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO.Ports;
 using System.Reflection;
 using System.Windows.Forms;
+using Emgu.CV.Structure;
 using Robin.Arduino;
 using Robin.ControlPanel.Properties;
 using Robin.Core;
@@ -26,7 +27,7 @@ namespace Robin.ControlPanel
 		private int selectedIrChannel = -1;
 
 		private IRobotController selectedController;
-		private MainVideoProcessor videoProcessor;
+		private readonly MainVideoProcessor videoProcessor = new MainVideoProcessor(Settings.Default.CamIndex);
 
 		[ImportMany]
 		public IEnumerable<Lazy<IRobotController, IRobotControllerMetadata>> RobotControllers { get; set; }
@@ -61,7 +62,7 @@ namespace Robin.ControlPanel
 		
 		private void InitializeVisionControls()
 		{
-			videoProcessor = new MainVideoProcessor(Settings.Default.CamIndex);
+			//videoProcessor = new MainVideoProcessor(Settings.Default.CamIndex);
 			videoProcessor.FrameProcessed += VideoProcessorOnFrameProcessed;
 			Application.ApplicationExit +=
 				(o1, args1) =>
@@ -83,6 +84,22 @@ namespace Robin.ControlPanel
 					videoForm.Show(this);
 				}
 			};
+
+			uxVideoParameters.SelectedObject = VideoParameters.Default;
+
+			uxGoalBlue.CheckedChanged += UxGoalOnCheckedChanged;
+			uxGoalRed.CheckedChanged += UxGoalOnCheckedChanged;
+			uxGoalNone.CheckedChanged += UxGoalOnCheckedChanged;
+		}
+
+		private void UxGoalOnCheckedChanged(object sender, EventArgs eventArgs)
+		{
+			if (uxGoalRed.Checked)
+				videoProcessor.LogicState.GoalRed = true;
+			else if (uxGoalBlue.Checked)
+				videoProcessor.LogicState.GoalRed = false;
+			else
+				videoProcessor.LogicState.GoalRed = null;
 		}
 
 		private void InitializeMainLogicControls()
@@ -261,7 +278,7 @@ namespace Robin.ControlPanel
 		private static readonly Pen ellipsePen = new Pen(Color.Fuchsia, 2);
 		private static readonly Pen linePen = new Pen(Color.Gold, 2);
 		private static readonly Pen camshiftPen = new Pen(Color.Red, 2);
-		private static readonly Pen regionPen = new Pen(Color.Coral, 2);
+		private static readonly Pen regionPen = new Pen(Color.Coral, 1);
 		private static readonly Pen regionArrowPen = new Pen(Color.LightCoral, 8);
 
 		private void VideoProcessorOnFrameProcessed(object sender, FrameEventArgs frameEventArgs)
@@ -300,7 +317,10 @@ namespace Robin.ControlPanel
 
 				if (showLines)
 					foreach (var line in results.Lines)
+					{
 						g.DrawLine(linePen, line.P1, line.P2);
+						g.DrawString(line.Length.ToString("0.00"), SystemFonts.DefaultFont, Brushes.OrangeRed, line.P2);
+					}
 
 				if (results.TrackingBall)
 				{
@@ -319,8 +339,6 @@ namespace Robin.ControlPanel
 				showCircles = !showCircles;
 			if (key == 'l')
 				showLines = !showLines;
-
-			VisionExperiments.ProcessKey(key);
 		}
 		
 		private void MainLogicWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
@@ -349,15 +367,23 @@ namespace Robin.ControlPanel
 				}
 
 				selectedController.Update();
-				mainLogicWorker.ReportProgress(0, fps);
+				mainLogicWorker.ReportProgress(0,
+					new LogicWorkerData { Fps = fps, LogicState = videoProcessor.LogicState });
 			}
 		}
 
 		private void MainLogicWorkerOnProgressChanged(object sender, ProgressChangedEventArgs progressChangedEventArgs)
 		{
-			var fps = (float)progressChangedEventArgs.UserState;
-			uxLogicFps.Text = string.Format("Main Logic: {0:0.00}fps", fps);
+			var data = (LogicWorkerData)progressChangedEventArgs.UserState;
+			videoProcessor.LogicState.FindingGoal = data.LogicState.FindingGoal;
+			uxLogicFps.Text = string.Format("Main Logic: {0:0.00}fps", data.Fps);
 			uxVisionFps.Text = string.Format("Vision: {0:0.00}fps", videoProcessor.FramesPerSecond);
+		}
+
+		private struct LogicWorkerData
+		{
+			public float Fps { get; set; }
+			public LogicState LogicState { get; set; }
 		}
 	}
 }

@@ -15,20 +15,17 @@ namespace Robin.VideoProcessor
 		private Rectangle trackWindow;
 		private PointF trackCenter;
 		private MCvConnectedComp trackComp;
-
-		private readonly Gray maskLow = new Gray(100);
-		private readonly Gray maskHigh = new Gray(360);
 		
 		public Camshift()
 		{
 			histogram = new DenseHistogram(16, new RangeF(0, 180));
 		}
-		
+
 		public void CalculateHistogram(Image<Gray, byte> source)
 		{
 			histogram = new DenseHistogram(16, new RangeF(0, 180));
 
-			mask = source.InRange(maskLow, maskHigh);
+			mask = source.InRange(VideoParameters.Default.CamshiftMaskLow, VideoParameters.Default.CamshiftMaskHigh);
 			CvInvoke.cvCalcHist(new[] { source.Ptr }, histogram.Ptr, false, mask.Ptr);
 
 			SetTrackWindow(source.ROI);
@@ -44,7 +41,7 @@ namespace Robin.VideoProcessor
 			if (histogram == null)
 				return;
 
-			mask = source.InRange(maskLow, maskHigh);
+			mask = source.InRange(VideoParameters.Default.CamshiftMaskLow, VideoParameters.Default.CamshiftMaskHigh);
 			backProjection = new Image<Gray, byte>(source.Size);
 
 			CvInvoke.cvCalcBackProject(new[] {source.Ptr}, backProjection.Ptr, histogram.Ptr);
