@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Timers;
 using AForge.Video;
+using Emgu.CV.Structure;
 using Robin.Core;
 
 namespace Robin.VideoProcessor
@@ -10,12 +11,13 @@ namespace Robin.VideoProcessor
 	public class MainVideoProcessor
 	{
 		private readonly VisionResults results;
-		private readonly VideoFeed feed;
 		private readonly Camshift camshift;
 		private readonly LogicState logicState = new LogicState();
 
+		private VideoFeed feed;
 		private bool foundBall;
 		private int framesPerSecond;
+		private bool ballHistogramCalculated;
 
 		public event EventHandler<FrameEventArgs> FrameProcessed;
 
@@ -24,20 +26,20 @@ namespace Robin.VideoProcessor
 			results = new VisionResults();
 			camshift = new Camshift();
 
-			//feed = VideoFeed.FromCamIndex(camIndex);
-			feed = new VideoFeed(VideoFeed.Sample7);
-			if (feed == null)
-				return;
-
-			feed.NewFrame += VideoSourceOnNewFrame;
-			feed.Start();
+			//Feed2 = new VideoFeed2(0);
+			Feed = VideoFeed.FromCamIndex(camIndex);
+			//Feed = new VideoFeed(VideoFeed.Sample7);
 
 			var timer = new Timer(1000);
-			timer.Elapsed += (sender, args) => framesPerSecond = feed.FramesReceived;
+			timer.Elapsed += (sender, args) => framesPerSecond = Feed.FramesReceived;
 			timer.Start();
 		}
 
-		private bool ballHistogramCalculated = false;
+		public void ProcessFrame(Emgu.CV.Image<Bgr, byte> frame)
+		{
+			
+		}
+
 		private void VideoSourceOnNewFrame(object sender, NewFrameEventArgs eventArgs)
 		{
 			var result = VisionExperiments.FindCirclesAndLinesWithHough(eventArgs.Frame);
@@ -136,14 +138,14 @@ namespace Robin.VideoProcessor
 
 		public void Stop()
 		{
-			if (feed != null)
-				feed.Stop();
+			if (Feed != null)
+				Feed.Stop();
 		}
 
 		public void Restart()
 		{
-			if (feed != null)
-				feed.Restart();
+			if (Feed != null)
+				Feed.Restart();
 		}
 
 		public LogicState LogicState
@@ -160,5 +162,25 @@ namespace Robin.VideoProcessor
 		{
 			get { return framesPerSecond; }
 		}
+
+		public VideoFeed Feed
+		{
+			get { return feed; }
+			set
+			{
+				if (feed != null)
+					feed.Stop();
+
+				feed = value;
+
+				if (feed == null)
+					return;
+
+				feed.NewFrame += VideoSourceOnNewFrame;
+				feed.Start();
+			}
+		}
+
+		public VideoFeed2 Feed2 { get; set; }
 	}
 }

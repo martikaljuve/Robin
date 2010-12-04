@@ -39,7 +39,7 @@ void Gyroscope::update(unsigned long deltaInMilliseconds) {
 			isCalibrating = false;
 			calibrationAdcAvg = calibrationAdcSum / calibrationIndex;
 			calibrationRateAvg = adcToAngularRate(calibrationAdcAvg);
-			Serial.print("Count: ");
+			/*Serial.print("Count: ");
 			Serial.print(calibrationIndex);
 			Serial.print(", Minimum: ");
 			Serial.print(calibrationAdcMin);
@@ -50,7 +50,7 @@ void Gyroscope::update(unsigned long deltaInMilliseconds) {
 			Serial.print(", Average ADC: ");
 			Serial.print(calibrationAdcAvg);
 			Serial.print(", Average Rate: ");
-			Serial.println(calibrationRateAvg);
+			Serial.println(calibrationRateAvg);*/
 		}
 
 		return;
@@ -59,7 +59,7 @@ void Gyroscope::update(unsigned long deltaInMilliseconds) {
 	double angularRate = adcToAngularRate(adcCode) - calibrationRateAvg;
 
 	if (adcCode < calibrationAdcMin - 5 || adcCode > calibrationAdcMax + 5) {
-		currentAngle -= angularRate * deltaInMilliseconds / 1000.0;
+		currentAngle -= (angularRate * deltaInMilliseconds) / 1000.0;
 	}
 }
 
@@ -93,11 +93,11 @@ bool Gyroscope::tryReadAdc(unsigned int &result) {
 	digitalWrite(pinSS, HIGH);
 
 	if ((dataHigh & 0x80) == 0x80) { // 0x80 == 0b10000000, 15th bit
-		Serial.print("!");
+		//Serial.print("!");
 		return false; // operation refused
 	}
 	if ((dataHigh & 0x20) != 0x20) { // 0x20 == 0b00100000, 13th bit (EOC)
-		Serial.print("?");
+		//Serial.print("?");
 		return false; // conversion in progress
 	}
 
@@ -107,7 +107,7 @@ bool Gyroscope::tryReadAdc(unsigned int &result) {
 }
 
 double Gyroscope::adcToAngularRate(unsigned int adcValue) {
-	int vOutAngularRate = (adcValue * 25/12) + 400;
+	double vOutAngularRate = (adcValue * 25/12) + 400;
 	return (vOutAngularRate - 2500) / 6.67;
 }
 

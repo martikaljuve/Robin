@@ -15,12 +15,7 @@ void Pid::setInput(long newInput) {
 }
 
 void Pid::setSetpoint(long newSetpoint) {
-	if (newSetpoint == setpoint)
-		return;
-
 	setpoint = newSetpoint;
-	errorPrevious = 0;
-	integral = 0;
 }
 
 void Pid::setOutputLimits(int min, int max) {
@@ -36,4 +31,9 @@ void Pid::compute(double dt) {
 	errorPrevious = error;
 
 	output = constrain(output, outputMin, outputMax);
+}
+
+void Pid::reset() {
+	errorPrevious = 0;
+	integral = 0;
 }

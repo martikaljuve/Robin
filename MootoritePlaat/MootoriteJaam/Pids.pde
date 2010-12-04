@@ -1,5 +1,5 @@
 //#define PID_DEBUG
-#define KIN_DEBUG
+//#define KIN_DEBUG
 
 TimedAction positionUpdateAction = TimedAction(20, positionUpdate);
 TimedAction pidAction = TimedAction(100, pidCompute);
@@ -83,12 +83,12 @@ int previousTheta;
 void pidDebug() {
 	if (previousX == wheels.worldCurrentX &&
 		previousY == wheels.worldCurrentY &&
-		previousTheta == wheels.worldCurrentTheta)
+		previousTheta == wheels.globalCurrentTheta)
 		return;
 
 	previousX = wheels.worldCurrentX;
 	previousY = wheels.worldCurrentY;
-	previousTheta = wheels.worldCurrentTheta;
+	previousTheta = wheels.globalCurrentTheta;
 
 /*
 	Serial.print("final: ");
@@ -103,7 +103,7 @@ void pidDebug() {
 	Serial.print(", ");
 	Serial.print(wheels.worldCurrentY / 10.0);
 	Serial.print(", ");
-	Serial.print(wheels.worldCurrentTheta / 10.0);
+	Serial.print(wheels.globalCurrentTheta / 10.0);
 
 	Serial.print("\twheels: ");
 	Serial.print(magnetLeft.getPositionTotal() / 10.0);

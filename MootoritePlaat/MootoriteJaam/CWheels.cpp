@@ -16,8 +16,8 @@ void Wheels::turnDistance(int localRotation) {
 void Wheels::moveAndTurnDistance(int localDirectionInDeciDegrees, int distance, int localRotation) {
 	int localDirectionInRadians = M_PI * localDirectionInDeciDegrees / 1.8; // 180 * 10 / 1000
 	
-	long sinRotation = SinLookupTable::getSinFromTenthDegrees(worldCurrentTheta);
-	long cosRotation = SinLookupTable::getCosFromTenthDegrees(worldCurrentTheta);
+	long sinRotation = SinLookupTable::getSinFromTenthDegrees(globalCurrentTheta);
+	long cosRotation = SinLookupTable::getCosFromTenthDegrees(globalCurrentTheta);
 
 	long localX = SinLookupTable::getSin(localDirectionInRadians);
 	long localY = SinLookupTable::getCos(localDirectionInRadians);
@@ -28,45 +28,53 @@ void Wheels::moveAndTurnDistance(int localDirectionInDeciDegrees, int distance, 
 	worldX /= LOOKUP_SCALE;
 	worldY /= LOOKUP_SCALE;
 
-	worldFinalX = worldCurrentX + (worldX * distance / 1024.0);
-	worldFinalY = worldCurrentY + (worldY * distance / 1024.0);
-	worldFinalTheta = worldCurrentTheta + (localRotation * 10);
+	localCurrentX = 0;
+	localCurrentY = 0;
+
+	localFinalX = (worldX * distance) / 1024.0;
+	localFinalY = (worldY * distance) / 1024.0;
+	globalFinalTheta = globalCurrentTheta + (localRotation * 10);
 }
 
 void Wheels::stop() {
-	worldFinalX = worldCurrentX;
-	worldFinalY = worldCurrentY;
-	worldFinalTheta = worldCurrentTheta;
+  	localCurrentX = 0;
+	localCurrentY = 0;
+  
+	localFinalX = 0;
+	localFinalY = 0;
+	globalFinalTheta = globalCurrentTheta;
 }
 
 void Wheels::resetGlobalPosition() {
 	worldCurrentX = 0;
 	worldCurrentY = 0;
-	worldCurrentTheta = 0;
 }
 
 void Wheels::updateGlobalPosition(long leftWheel, long rightWheel, long backWheel, double gyroAngle) {
 	double localX, localY, localTheta;
 	forwardKinematics(leftWheel, rightWheel, backWheel, localX, localY, localTheta);
 
-	int cosRotation = SinLookupTable::getCos(worldCurrentTheta);
-	int sinRotation = SinLookupTable::getSin(worldCurrentTheta);
+	int cosRotation = SinLookupTable::getCos(globalCurrentTheta);
+	int sinRotation = SinLookupTable::getSin(globalCurrentTheta);
 
 	double worldX = (-localY * sinRotation) + (localX * cosRotation);
 	double worldY = (localY * cosRotation) + (localX * sinRotation);
 
-	worldX /= LOOKUP_SCALE;
+	worldX /= LOOKUP_SCALE; // rotated from gyroscope
 	worldY /= LOOKUP_SCALE;
-		
+	
+	localCurrentX += worldX;
+	localCurrentY += worldY;
+	globalCurrentTheta = gyroAngle * 10;
+
 	worldCurrentX += worldX;
 	worldCurrentY += worldY;
-	worldCurrentTheta = gyroAngle * 10; // localTheta KALMAN?
 }
 
 void Wheels::getDesiredWheelPositions(long &desiredLeft, long &desiredRight, long &desiredBack) {
-	int diffX = worldCurrentX - worldFinalX;
-	int diffY = worldCurrentY - worldFinalY;
-	int diffTheta = worldCurrentTheta - worldFinalTheta;
+	int diffX = localCurrentX - localFinalX;
+	int diffY = localCurrentY - localFinalY;
+	int diffTheta = globalCurrentTheta - globalFinalTheta;
 
 	inverseKinematics(diffX, diffY, diffTheta, desiredLeft, desiredRight, desiredBack);
 }

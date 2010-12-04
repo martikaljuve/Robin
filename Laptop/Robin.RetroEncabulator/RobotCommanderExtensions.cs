@@ -68,7 +68,16 @@ namespace Robin.RetroEncabulator
 				diff -= 360;
 			if (diff < -180)
 				diff += 360;
+
 			commander.Turn((short) diff);
+		}
+
+		public static void TurnTowardsZero(this IRobotCommander commander, int direction)
+		{
+			if (direction < 30)			commander.Turn(-10);
+			else if (direction < 180)	commander.Turn(-20);
+			else if (direction > 330)	commander.Turn(10);
+			else                        commander.Turn(20);
 		}
 	}
 }

@@ -4,7 +4,7 @@
 #include "ArduinoPins.h"
 #include "Definitions.h"
 
-#define DEBUG
+//#define DEBUG
 bool shouldInitialize = true;
 
 void setup() {
@@ -20,6 +20,7 @@ void setup() {
 	gyro_setup();
 	pids_setup();
 	wireReceiverSetup();
+	wireSenderSetup();
 	// END SETUP
 
 	//pid_debug_setup();
@@ -40,6 +41,7 @@ void loop() {
 		gyro_loop();
 		pids_loop();
 		wireReceiverLoop();
+		wireSenderLoop();
 		// END LOOP
 	}
 	else if (shouldInitialize && millis() > 300) {

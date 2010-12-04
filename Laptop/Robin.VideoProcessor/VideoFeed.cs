@@ -1,5 +1,6 @@
 ﻿using AForge.Video;
 using AForge.Video.DirectShow;
+using Emgu.CV;
 
 namespace Robin.VideoProcessor
 {
@@ -68,6 +69,20 @@ namespace Robin.VideoProcessor
 		public int FramesReceived
 		{
 			get { return videoSource.FramesReceived; }
+		}
+	}
+
+	public class VideoFeed2
+	{
+		private Capture capture;
+		public VideoFeed2(int camIndex)
+		{
+			capture = new Capture(camIndex);
+		}
+
+		public VideoFeed2(string filename)
+		{
+			capture = new Capture(filename);
 		}
 	}
 }

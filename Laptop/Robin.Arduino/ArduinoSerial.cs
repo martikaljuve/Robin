@@ -26,9 +26,12 @@ namespace Robin.Arduino
 			port.DataReceived +=
 				(sender, args) =>
 					{
-						var bytes = new byte[port.BytesToRead];
-						port.Read(bytes, 0, port.BytesToRead);
-						OnDataReceived(new ArduinoSerialDataEventArgs(bytes));
+						lock (port)
+						{
+							var bytes = new byte[port.BytesToRead];
+							port.Read(bytes, 0, port.BytesToRead);
+							OnDataReceived(new ArduinoSerialDataEventArgs(bytes));
+						}
 					};
 		}
 

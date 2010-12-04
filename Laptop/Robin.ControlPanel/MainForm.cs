@@ -87,12 +87,22 @@ namespace Robin.ControlPanel
 
 			uxVideoParameters.SelectedObject = VideoParameters.Default;
 
-			uxGoalBlue.CheckedChanged += UxGoalOnCheckedChanged;
-			uxGoalRed.CheckedChanged += UxGoalOnCheckedChanged;
-			uxGoalNone.CheckedChanged += UxGoalOnCheckedChanged;
+			uxGoalBlue.CheckedChanged += UxGoalCheckedChanged;
+			uxGoalRed.CheckedChanged += UxGoalCheckedChanged;
+			uxGoalNone.CheckedChanged += UxGoalCheckedChanged;
+
+			uxVideoWebcam.CheckedChanged += UxVideoCheckedChanged;
 		}
 
-		private void UxGoalOnCheckedChanged(object sender, EventArgs eventArgs)
+		private void UxVideoCheckedChanged(object sender, EventArgs eventArgs)
+		{
+			if (uxVideoFile.Checked)
+				videoProcessor.Feed = new VideoFeed(VideoFeed.Sample7);
+			else
+				videoProcessor.Feed = VideoFeed.FromCamIndex(0);
+		}
+
+		private void UxGoalCheckedChanged(object sender, EventArgs eventArgs)
 		{
 			if (uxGoalRed.Checked)
 				videoProcessor.LogicState.GoalRed = true;

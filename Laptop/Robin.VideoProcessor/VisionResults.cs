@@ -3,6 +3,7 @@ using System.Drawing;
 using AForge.Imaging;
 using Emgu.CV.Structure;
 using Robin.Core;
+using System.Linq;
 
 namespace Robin.VideoProcessor
 {
@@ -18,18 +19,25 @@ namespace Robin.VideoProcessor
 
 		public IEnumerable<LineSegment2D> Lines { get; set; }
 
-		public Rectangle OpponentGoal { get; set; }
-
 		public IEnumerable<Rectangle> GoalRectangles { get; set; }
 
 		public VisionData ToVisionData()
 		{
 			var data = new VisionData();
+
 			data.TrackingBall = TrackingBall;
 			data.TrackedBallLocation = TrackWindow.Center();
 			data.FrontBallPathObstructed = false; // TODO: implement!
-			data.OpponentGoalInFront = false;
-			data.OpponentGoalOffset = (VisionData.FrameSize.Width / 2) - OpponentGoal.Center().X;
+
+			if (GoalRectangles != null)
+			{
+				var bestGoal = GoalRectangles.OrderByDescending(x => x.Width).FirstOrDefault();
+				data.OpponentGoalRectangle = bestGoal;
+				if (bestGoal == Rectangle.Empty)
+					data.OpponentGoalOffset = null;
+				else
+					data.OpponentGoalOffset = (short) ((VisionData.FrameSize.Width / 2) - bestGoal.Center().X);
+			}
 			return data;
 		}
 	}

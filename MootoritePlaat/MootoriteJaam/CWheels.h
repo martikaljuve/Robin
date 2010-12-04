@@ -34,11 +34,14 @@ class Wheels {
 public:
 	double worldCurrentX; // millimeters
 	double worldCurrentY; // millimeters
-	int worldCurrentTheta; // decidegrees
 
-	int worldFinalX; // millimeters
-	int worldFinalY; // millimeters
-	int worldFinalTheta; // decidegrees
+	int localFinalX; // millimeters
+	int localFinalY; // millimeters
+	int globalFinalTheta; // decidegrees
+
+	int localCurrentX; // millimeters
+	int localCurrentY; // millimeters
+	int globalCurrentTheta; // decidegrees
 
 	void moveDistance(int localDirection, int distance); // direction in "decidegrees" (0..3600), distance in millimeters (0..3500)
 	void turnDistance(int localRotation); // decidegrees, 1 turn = 3600

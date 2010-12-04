@@ -48,7 +48,7 @@ namespace Robin.Arduino
 
 		public void SetIrChannel(byte channel)
 		{
-			arduino.Command(ArduinoPrefix.SetIrChannel, channel);
+			//arduino.Command(ArduinoPrefix.SetIrChannel, channel);
 		}
 
 		public void SetColors(Colors colors)

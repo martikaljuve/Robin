@@ -17,6 +17,9 @@ void wireReceiverLoop() {
 void parseCommand(struct CommandData &cmd) {
 	switch(cmd.command) {
 		case 'S':
+			pidLeft.reset();
+			pidRight.reset();
+			pidBack.reset();
 			wheels.stop();
 			break;
 		case 'M':

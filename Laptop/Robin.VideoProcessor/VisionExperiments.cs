@@ -24,7 +24,6 @@ namespace Robin.VideoProcessor
 		private static int channel;
 		public static IEnumerable<HoughCircle> Circles;
 		public static IEnumerable<LineSegment2D> Lines;
-		public static IEnumerable<Rectangle> GoalRectangles;
 		private static readonly Image<Gray, byte> RobotMask = new Image<Gray, byte>(@"Resources\RobotMask.bmp");
 
 		private static Image<Bgr, byte> frameBgr;

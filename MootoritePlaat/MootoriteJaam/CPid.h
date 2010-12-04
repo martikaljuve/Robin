@@ -20,5 +20,6 @@ public:
 	void setInput(long newInput);
 	void setSetpoint(long newSetpoint);
 	void compute(double dt);
+	void reset();
 };
 

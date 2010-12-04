@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
+using System.Drawing;
 using System.Media;
 using System.Text;
 using Robin.Core;
@@ -190,7 +191,25 @@ namespace Robin.RetroEncabulator
 			if (!SensorData.BallInDribbler)
 				stateMachine.Fire(Trigger.BallLost);
 
-			Commander.TurnTowardsGoal(SensorData.EstimatedGlobalPosition, SensorData.EstimatedGlobalDirection);
+			var direction = SensorData.EstimatedGlobalDirection % 360;
+			if (direction < 0)
+				direction += 360;
+
+			if ((direction < 90 || direction > 270) && VisionData.OpponentGoalRectangle != Rectangle.Empty)
+			{
+				SoundClipPlayer.PlayAlarm();
+				Commander.SetColors(Colors.Green);
+
+				if (VisionData.OpponentGoalOffset != null)
+					Commander.Turn(VisionData.OpponentGoalOffset.Value);
+			}
+			else if (direction < 5 || direction > 355)
+			{
+				var isOnLeftSide = SensorData.EstimatedGlobalPosition.X < -1000;
+				Commander.Move((short) (isOnLeftSide ? 270 : 90), 100);
+			}
+			else
+				Commander.TurnTowardsZero(direction);
 			//Commander.MoveAndTurn(0, 0, SensorData.BeaconServoDirection < 0 ? (short)-100 : (short)100);
 		}
 
