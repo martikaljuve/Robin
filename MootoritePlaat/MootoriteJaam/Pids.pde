@@ -1,7 +1,8 @@
 //#define PID_DEBUG
 #define KIN_DEBUG
 
-TimedAction pidAction = TimedAction(50, pidCompute);
+TimedAction positionUpdateAction = TimedAction(20, positionUpdate);
+TimedAction pidAction = TimedAction(100, pidCompute);
 #ifdef KIN_DEBUG
 TimedAction debugAction = TimedAction(500, pidDebug);
 #endif
@@ -22,15 +23,13 @@ void pids_setup() {
 
 void pids_loop() {
 	pidAction.check();
+	positionUpdateAction.check();
 #ifdef KIN_DEBUG
 	debugAction.check();
 #endif
 }
 
-void pidCompute() {
-	long now = millis();
-	long dt = now - timePrevious;
-	timePrevious = now;
+void positionUpdate(){
 
 	long left = magnetLeft.getCurrentDelta();
 	long right = magnetRight.getCurrentDelta();
@@ -41,6 +40,14 @@ void pidCompute() {
 	magnetBack.resetCurrentDelta();
 
 	wheels.updateGlobalPosition(left, right, back, gyro.getCurrentAngle());
+
+}
+
+void pidCompute() {
+	long now = millis();
+	long dt = now - timePrevious;
+	timePrevious = now;
+
 	wheels.getDesiredWheelPositions(desiredLeft, desiredRight, desiredBack);
 
 	if (abs(desiredLeft) > 5000 || abs(desiredRight) > 5000 || abs(desiredBack) > 5000) {
