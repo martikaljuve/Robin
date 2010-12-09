@@ -1,16 +1,15 @@
 
 bool coilgunShouldCharge = true;
 bool coilgunCharging;
+long coilgunChargingStart;
 long coilgunChargingEnd;
-const int CHARGE_TIME = 3000;
+const int CHARGE_START_DELAY = 200;
+const int CHARGE_TIME = 1500;
 
 void coilgunSetup() {
 	pinMode(DONE_PIN, INPUT);
 	pinMode(KICK_PIN, OUTPUT);
 	pinMode(CHARGE_PIN, OUTPUT);
-
-	if (digitalRead(DONE_PIN) == LOW)
-		coilgunShouldCharge = false;
 }
 
 void coilgunLoop() {
@@ -20,10 +19,14 @@ void coilgunLoop() {
 	}
 
 	if (coilgunShouldCharge) {
+  		coilgunChargingStart = millis() + CHARGE_START_DELAY;
+  		coilgunShouldCharge = false;
+  	}
+  
+   	if (!coilgunCharging && millis() > coilgunChargingStart) {
 		digitalWrite(CHARGE_PIN, HIGH);
 		coilgunCharging = true;
 		coilgunChargingEnd = millis() + CHARGE_TIME;
-		coilgunShouldCharge = false;
 	}
 }
 

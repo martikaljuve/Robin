@@ -30,9 +30,9 @@ namespace Robin.VideoProcessor
 		private static Image<Gray, byte> frameGray;
 		private static Image<Gray, byte> frameCanny;
 
-		public static Bitmap FindCirclesAndLinesWithHough(Bitmap source)
+		public static Bitmap FindCirclesAndLinesWithHough(Image<Bgr, byte> source)
 		{
-			frameBgr = new Image<Bgr, byte>(source);
+			frameBgr = source;
 
 			frameGray = frameBgr[0]
 				.PyrDown()

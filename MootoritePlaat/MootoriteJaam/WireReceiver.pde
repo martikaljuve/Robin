@@ -23,13 +23,13 @@ void parseCommand(struct CommandData &cmd) {
 			wheels.stop();
 			break;
 		case 'M':
-			wheels.moveDistance(cmd.first, cmd.second);
+			wheels.moveDistance(cmd.first * 10, cmd.second);
 			break;
 		case 'T':
-			wheels.turnDistance(cmd.first);
+			wheels.turnDistance(cmd.first * 10);
 			break;
 		case 'G':
-			wheels.moveAndTurnDistance(cmd.first, cmd.second, cmd.third);
+			wheels.moveAndTurnDistance(cmd.first * 10, cmd.second, cmd.third * 10);
 			break;
 		case 'D':
 			dribbler.setSpeedWithDirection(cmd.first);

@@ -1,6 +1,9 @@
-﻿using AForge.Video;
+﻿using System;
+using AForge.Video;
 using AForge.Video.DirectShow;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
 
 namespace Robin.VideoProcessor
 {
@@ -83,6 +86,23 @@ namespace Robin.VideoProcessor
 		public VideoFeed2(string filename)
 		{
 			capture = new Capture(filename);
+		}
+
+		public Image<Bgr, byte> Query()
+		{
+			return capture.QueryFrame();
+		}
+
+		public void Stop()
+		{
+			
+		}
+
+		public void Restart()
+		{
+			if (capture.GetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_AVI_RATIO) > 0.9)
+				capture.SetCaptureProperty(CAP_PROP.CV_CAP_PROP_POS_AVI_RATIO, 0.0);
+			
 		}
 	}
 }

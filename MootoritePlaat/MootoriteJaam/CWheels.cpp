@@ -16,24 +16,34 @@ void Wheels::turnDistance(int localRotation) {
 void Wheels::moveAndTurnDistance(int localDirectionInDeciDegrees, int distance, int localRotation) {
 	int localDirectionInRadians = M_PI * localDirectionInDeciDegrees / 1.8; // 180 * 10 / 1000
 	
-	long sinRotation = SinLookupTable::getSinFromTenthDegrees(globalCurrentTheta);
-	long cosRotation = SinLookupTable::getCosFromTenthDegrees(globalCurrentTheta);
+	long sinRotation = SinLookupTable::getSinFromTenthDegrees(globalCurrentTheta + localDirectionInDeciDegrees);
+	long cosRotation = SinLookupTable::getCosFromTenthDegrees(globalCurrentTheta + localDirectionInDeciDegrees);
 
-	long localX = SinLookupTable::getSin(localDirectionInRadians);
-	long localY = SinLookupTable::getCos(localDirectionInRadians);
+//	int localX = SinLookupTable::getSin(localDirectionInRadians);
+//	int localY = SinLookupTable::getCos(localDirectionInRadians);
 
-	long worldX = (-localY * sinRotation) + (localX * cosRotation);
-	long worldY = (localY * cosRotation) + (localX * sinRotation);
+//	long worldX = (localX * cosRotation) - (localY * sinRotation);
+//	long worldY = (localX * sinRotation) + (localY * cosRotation);
+        long worldX = -sinRotation;
+        long worldY = cosRotation;
 
-	worldX /= LOOKUP_SCALE;
-	worldY /= LOOKUP_SCALE;
+	//worldX /= LOOKUP_SCALE;
+	//worldY /= LOOKUP_SCALE;
 
 	localCurrentX = 0;
 	localCurrentY = 0;
 
-	localFinalX = (worldX * distance) / 1024.0;
-	localFinalY = (worldY * distance) / 1024.0;
-	globalFinalTheta = globalCurrentTheta + (localRotation * 10);
+	localFinalX = (worldX * distance) / LOOKUP_SCALE;
+	localFinalY = (worldY * distance) / LOOKUP_SCALE;
+	globalFinalTheta = globalCurrentTheta + localRotation;
+
+	Serial.print("calculated distance (divide by 1024.0!): ");
+	Serial.print(worldX * distance);
+	Serial.print(", ");
+	Serial.print(worldY * distance);
+
+	Serial.print(", current angle: ");
+	Serial.println(globalCurrentTheta);
 }
 
 void Wheels::stop() {
@@ -45,20 +55,25 @@ void Wheels::stop() {
 	globalFinalTheta = globalCurrentTheta;
 }
 
-void Wheels::resetGlobalPosition() {
+void Wheels::resetGlobalPosition(int gyroAngle) {
 	worldCurrentX = 0;
 	worldCurrentY = 0;
+	globalFinalTheta = gyroAngle * 10;
+	globalCurrentTheta = gyroAngle * 10;
 }
 
 void Wheels::updateGlobalPosition(long leftWheel, long rightWheel, long backWheel, double gyroAngle) {
 	double localX, localY, localTheta;
 	forwardKinematics(leftWheel, rightWheel, backWheel, localX, localY, localTheta);
 
-	int cosRotation = SinLookupTable::getCos(globalCurrentTheta);
-	int sinRotation = SinLookupTable::getSin(globalCurrentTheta);
+	long cosRotation = SinLookupTable::getCosFromTenthDegrees(globalCurrentTheta);
+	long sinRotation = SinLookupTable::getSinFromTenthDegrees(globalCurrentTheta);
 
-	double worldX = (-localY * sinRotation) + (localX * cosRotation);
-	double worldY = (localY * cosRotation) + (localX * sinRotation);
+	//double worldX = (localX * sinRotation) - (localY * cosRotation);
+	//double worldY = (localX * cosRotation) + (localY * sinRotation);
+
+	long worldX = (localX * cosRotation) - (localY * sinRotation);
+	long worldY = (localX * sinRotation) + (localY * cosRotation);
 
 	worldX /= LOOKUP_SCALE; // rotated from gyroscope
 	worldY /= LOOKUP_SCALE;
@@ -75,6 +90,14 @@ void Wheels::getDesiredWheelPositions(long &desiredLeft, long &desiredRight, lon
 	int diffX = localCurrentX - localFinalX;
 	int diffY = localCurrentY - localFinalY;
 	int diffTheta = globalCurrentTheta - globalFinalTheta;
+	Serial.print("diff x: ");
+	Serial.print(diffX);
+
+	Serial.print(", diff y: ");
+	Serial.print(diffY);
+
+	Serial.print(", theta diff: ");
+	Serial.println(diffTheta);
 
 	inverseKinematics(diffX, diffY, diffTheta, desiredLeft, desiredRight, desiredBack);
 }

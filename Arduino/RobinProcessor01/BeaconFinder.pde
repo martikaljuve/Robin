@@ -14,7 +14,6 @@ int rightCount = 0;
 const int halfRotation = 90;
 
 TimedAction servoAction = TimedAction(200, turnServo);
-//TimedAction servoAction = TimedAction(200, turnServo);
 TimedAction beaconAction = TimedAction(40, beaconFinderAction);
 
 #ifdef SERVO_DEBUG

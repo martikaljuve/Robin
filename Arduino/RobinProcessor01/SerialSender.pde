@@ -50,26 +50,24 @@ bool getRightIrStatus() {
 }
 
 int getGlobalX() {
-	return swap(globalX); // X-coordinate
+	return globalX; // X-coordinate
 }
 
 int getGlobalY() {
-	return swap(globalY); // Y-coordinate
+	return globalY; // Y-coordinate
 }
 
 int getGlobalDirection() {
-	return swap(globalDirection); // gyro direction
+	return globalDirection; // gyro direction
 }
 
 int getServoDirection() {
-	//return -60;
-	return swap(getServoAngle()); // servoDirection;
+	return getServoAngle(); // servoDirection;
 }
 
-int swap(int data) {
-	return data;
-	//return (int)((data & 255) << 8) + (data >> 8);
-}
+//int swap(int data) {
+	return (int)((data & 255) << 8) + (data >> 8);
+//}
 
 byte calculateChecksum(SensorUnion sensorUnion) {
 	byte checksum = 0;

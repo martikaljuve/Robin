@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Timers;
 using AForge.Video;
+using Emgu.CV;
 using Emgu.CV.Structure;
 using Robin.Core;
 
@@ -14,7 +15,6 @@ namespace Robin.VideoProcessor
 		private readonly Camshift camshift;
 		private readonly LogicState logicState = new LogicState();
 
-		private VideoFeed feed;
 		private bool foundBall;
 		private int framesPerSecond;
 		private bool ballHistogramCalculated;
@@ -26,32 +26,24 @@ namespace Robin.VideoProcessor
 			results = new VisionResults();
 			camshift = new Camshift();
 
-			//Feed2 = new VideoFeed2(0);
-			Feed = VideoFeed.FromCamIndex(camIndex);
+			Feed = new VideoFeed2(0);
+			//Feed = VideoFeed.FromCamIndex(camIndex);
 			//Feed = new VideoFeed(VideoFeed.Sample7);
 
-			var timer = new Timer(1000);
-			timer.Elapsed += (sender, args) => framesPerSecond = Feed.FramesReceived;
-			timer.Start();
-		}
-
-		public void ProcessFrame(Emgu.CV.Image<Bgr, byte> frame)
-		{
-			
+			//var timer = new Timer(1000);
+			//timer.Elapsed += (sender, args) => framesPerSecond = Feed.FramesReceived;
+			//timer.Start();
 		}
 
 		private void VideoSourceOnNewFrame(object sender, NewFrameEventArgs eventArgs)
 		{
-			var result = VisionExperiments.FindCirclesAndLinesWithHough(eventArgs.Frame);
-			var rect = new Rectangle(Point.Empty, result.Size);
+			ProcessFrame(new Image<Bgr, byte>(eventArgs.Frame));
+		}
 
-			//foreach (var line in VisionExperiments.Lines)
-			//{
-			//    if (func(line.P1) == 1)
-			//    {
-					
-			//    }
-			//}
+		private void ProcessFrame(Image<Bgr, byte> frame)
+		{
+			var result = VisionExperiments.FindCirclesAndLinesWithHough(frame);
+			var rect = new Rectangle(Point.Empty, result.Size);
 
 			var circles = VisionExperiments.Circles;
 			if (!ballHistogramCalculated && circles.Any())
@@ -65,12 +57,12 @@ namespace Robin.VideoProcessor
 					camshift.CalculateHistogram(frame2);
 					frame2.ROI = Rectangle.Empty;
 				}*/
-				
+
 				var circle = circles.First();
-				var frame = VisionExperiments.FrameGray;
-				frame.ROI = circle.GetRectangle();
-				camshift.CalculateHistogram(frame);
-				frame.ROI = Rectangle.Empty;
+				var frameGray = VisionExperiments.FrameGray;
+				frameGray.ROI = circle.GetRectangle();
+				camshift.CalculateHistogram(frameGray);
+				frameGray.ROI = Rectangle.Empty;
 			}
 
 			if (!foundBall && circles.Any())
@@ -98,7 +90,8 @@ namespace Robin.VideoProcessor
 
 				if (!rect.Contains(camshift.TrackWindow))
 					foundBall = false;
-				else {
+				else
+				{
 					camshift.Mask.ROI = camshift.TrackWindow;
 					var avg = camshift.Mask.GetAverage();
 					camshift.Mask.ROI = Rectangle.Empty;
@@ -125,8 +118,7 @@ namespace Robin.VideoProcessor
 			results.TrackCenter = camshift.TrackCenter;
 			results.Lines = VisionExperiments.Lines;
 
-			//result = camshift.BackProjection.Convert<Bgr, byte>().Bitmap;
-			OnFrameProcessed(new FrameEventArgs(result));
+			OnFrameProcessed(new FrameEventArgs(frame.Bitmap));
 		}
 
 		private void OnFrameProcessed(FrameEventArgs eventargs)
@@ -163,6 +155,8 @@ namespace Robin.VideoProcessor
 			get { return framesPerSecond; }
 		}
 
+		
+		/*private VideoFeed feed;
 		public VideoFeed Feed
 		{
 			get { return feed; }
@@ -180,7 +174,18 @@ namespace Robin.VideoProcessor
 				feed.Start();
 			}
 		}
+		*/ 
 
-		public VideoFeed2 Feed2 { get; set; }
+		public VideoFeed2 Feed { get; set; }
+
+		public Bitmap Update()
+		{
+			var frame = Feed.Query();
+			if (frame == null)
+				return null;
+
+			ProcessFrame(frame);
+			return frame.Bitmap;
+		}
 	}
 }

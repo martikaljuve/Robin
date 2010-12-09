@@ -1,7 +1,7 @@
 //#define PID_DEBUG
 //#define KIN_DEBUG
 
-TimedAction positionUpdateAction = TimedAction(20, positionUpdate);
+TimedAction positionUpdateAction = TimedAction(50, positionUpdate);
 TimedAction pidAction = TimedAction(100, pidCompute);
 #ifdef KIN_DEBUG
 TimedAction debugAction = TimedAction(500, pidDebug);
@@ -40,7 +40,6 @@ void positionUpdate(){
 	magnetBack.resetCurrentDelta();
 
 	wheels.updateGlobalPosition(left, right, back, gyro.getCurrentAngle());
-
 }
 
 void pidCompute() {

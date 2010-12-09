@@ -6,7 +6,6 @@ int globalX, globalY, globalDirection;
 
 void setup(){
 	Serial.begin(57600);
-	//Serial.begin(9600);
 
 	pinMode(TRIP_SENSOR, INPUT);
 
@@ -17,7 +16,7 @@ void setup(){
 	wireSenderSetup();
 	wireReceiverSetup();
 	coilgunSetup();
-	beaconFinderSetup();
+	//beaconFinderSetup();
 	ledsSetup();
 }
 
@@ -30,7 +29,7 @@ void loop(){
 	wireSenderLoop();
 	wireReceiverLoop();
 	coilgunLoop();
-	beaconFinderLoop();
+	//beaconFinderLoop();
 
 	//delay(100);
 }

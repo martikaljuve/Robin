@@ -21,6 +21,7 @@ namespace Robin.RetroEncabulator
 		private static SoundPlayer soundPlayer = new SoundPlayer();
 		private static readonly Colors[] AllColors = (Colors[])Enum.GetValues(typeof(Colors));
 		private static int colorsIndex = 0;
+		private static long stopwatchTime;
 		
 		public MainLogicProcessor()
 		{
@@ -41,6 +42,7 @@ namespace Robin.RetroEncabulator
 				.Permit(Trigger.BallCaught, State.FindingGoal)
 				.OnEntry(() =>
 				{
+					stopwatchTime = stopwatch.ElapsedMilliseconds;
 					SoundClipPlayer.PlayIntro();
 					Commander.SetColors(Colors.Cyan);
 				});
@@ -48,7 +50,12 @@ namespace Robin.RetroEncabulator
 			stateMachine.Configure(State.LookingForBall)
 				.Permit(Trigger.CameraLockedOnBall, State.ClosingInOnBall)
 				.Permit(Trigger.BallCaught, State.FindingGoal)
-				.OnEntry(() => Commander.SetColors(Colors.Blue));
+				.OnEntry(
+				() =>
+				{
+					Commander.SetColors(Colors.Blue);
+					stopwatchTime = stopwatch.ElapsedMilliseconds;
+				});
 
 			stateMachine.Configure(State.ClosingInOnBall)
 				.Permit(Trigger.CameraLostBall, State.LookingForBall)
@@ -68,7 +75,7 @@ namespace Robin.RetroEncabulator
 				.OnEntry(() =>
 				{
 					LogicState.FindingGoal = true;
-					StartTimer(5000, Trigger.Timeout);
+					StartTimer(5000, LaunchBall);
 					Commander.SetColors(Colors.Magenta);
 				})
 				.OnExit(
@@ -152,7 +159,10 @@ namespace Robin.RetroEncabulator
 
 		private void Starting()
 		{
-			stateMachine.Fire(Trigger.Finished);
+			if (stopwatch.ElapsedMilliseconds < stopwatchTime + 1500)
+				Commander.Move(0, 200);
+			else
+				stateMachine.Fire(Trigger.Finished);
 		}
 
 		private void LookingForBall()
@@ -163,7 +173,18 @@ namespace Robin.RetroEncabulator
 			if (VisionData.TrackingBall)
 				stateMachine.Fire(Trigger.CameraLockedOnBall);
 
-			Commander.Turn(10);
+			if (stopwatch.ElapsedMilliseconds < stopwatchTime + 5000)
+			{
+				//Commander.Stop();
+				Commander.Turn(50);
+			}
+			else if (stopwatch.ElapsedMilliseconds < stopwatchTime + 6000)
+			{
+				Commander.Stop();
+				Commander.Move(0, 300);
+			}
+			else
+				stopwatchTime = stopwatch.ElapsedMilliseconds + 5000;
 		}
 
 		private void ClosingInOnBall()
@@ -174,6 +195,7 @@ namespace Robin.RetroEncabulator
 			if (SensorData.BallInDribbler)
 				stateMachine.Fire(Trigger.BallCaught);
 
+			Commander.Stop();
 			Commander.MoveToVisionLocation(VisionData.TrackedBallLocation);
 		}
 
@@ -201,15 +223,21 @@ namespace Robin.RetroEncabulator
 				Commander.SetColors(Colors.Green);
 
 				if (VisionData.OpponentGoalOffset != null)
-					Commander.Turn(VisionData.OpponentGoalOffset.Value);
+				{
+					Commander.Stop();
+					Commander.Turn((short) (VisionData.OpponentGoalOffset.Value * 10));
+				}
 			}
 			else if (direction < 5 || direction > 355)
 			{
 				var isOnLeftSide = SensorData.EstimatedGlobalPosition.X < -1000;
-				Commander.Move((short) (isOnLeftSide ? 270 : 90), 100);
+				Commander.Move((short)(isOnLeftSide ? 270 : 90), 200);
 			}
 			else
+			{
+				Commander.Stop();
 				Commander.TurnTowardsZero(direction);
+			}
 			//Commander.MoveAndTurn(0, 0, SensorData.BeaconServoDirection < 0 ? (short)-100 : (short)100);
 		}
 

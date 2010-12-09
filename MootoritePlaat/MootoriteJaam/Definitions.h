@@ -10,9 +10,9 @@
 #define CCW 1
 #define CW 0
 
-Pid pidLeft = Pid(1.5, 0.1, 0.03);
-Pid pidRight = Pid(1.5, 0.1, 0.03);
-Pid pidBack = Pid(1.5, 0.1, 0.03);
+Pid pidLeft = Pid(0.5, 0.01, 0.03);
+Pid pidRight = Pid(0.5, 0.01, 0.03);
+Pid pidBack = Pid(0.5, 0.01, 0.03);
 
 Gyroscope gyro = Gyroscope(SS_GYRO, SCK, MOSI, MISO);
 

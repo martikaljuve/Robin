@@ -62,8 +62,10 @@ namespace Robin.ControlPanel
 		
 		private void InitializeVisionControls()
 		{
-			//videoProcessor = new MainVideoProcessor(Settings.Default.CamIndex);
+			Application.Idle += (o, eventArgs) => videoProcessor.Update();
+
 			videoProcessor.FrameProcessed += VideoProcessorOnFrameProcessed;
+
 			Application.ApplicationExit +=
 				(o1, args1) =>
 				{
@@ -97,9 +99,11 @@ namespace Robin.ControlPanel
 		private void UxVideoCheckedChanged(object sender, EventArgs eventArgs)
 		{
 			if (uxVideoFile.Checked)
-				videoProcessor.Feed = new VideoFeed(VideoFeed.Sample7);
+				videoProcessor.Feed = new VideoFeed2(VideoFeed.Sample7);
+				//videoProcessor.Feed = new VideoFeed(VideoFeed.Sample7);
 			else
-				videoProcessor.Feed = VideoFeed.FromCamIndex(0);
+				videoProcessor.Feed = new VideoFeed2(0);
+				//videoProcessor.Feed = VideoFeed.FromCamIndex(0);
 		}
 
 		private void UxGoalCheckedChanged(object sender, EventArgs eventArgs)
@@ -291,18 +295,21 @@ namespace Robin.ControlPanel
 		private static readonly Pen regionPen = new Pen(Color.Coral, 1);
 		private static readonly Pen regionArrowPen = new Pen(Color.LightCoral, 8);
 
-		private void VideoProcessorOnFrameProcessed(object sender, FrameEventArgs frameEventArgs)
+		private void UpdateVideoResults(Bitmap frame)
 		{
 			var results = videoProcessor.Results;
 			selectedController.VisionData = results.ToVisionData();
-
-			var frame = frameEventArgs.Frame;
-
+			
 			if (videoForm == null || !videoForm.Visible)
 				return;
 
 			DrawDebugInfo(frame, results);
 			videoForm.Frame = frame;
+		}
+
+		private void VideoProcessorOnFrameProcessed(object sender, FrameEventArgs frameEventArgs)
+		{
+			UpdateVideoResults(frameEventArgs.Frame);
 		}
 
 		private void DrawDebugInfo(Bitmap frame, VisionResults results)
@@ -378,7 +385,7 @@ namespace Robin.ControlPanel
 
 				selectedController.Update();
 				mainLogicWorker.ReportProgress(0,
-					new LogicWorkerData { Fps = fps, LogicState = videoProcessor.LogicState });
+					new LogicWorkerData { Fps = fps, LogicState = selectedController.LogicState });
 			}
 		}
 

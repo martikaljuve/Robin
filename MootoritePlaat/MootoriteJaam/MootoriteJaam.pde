@@ -4,7 +4,7 @@
 #include "ArduinoPins.h"
 #include "Definitions.h"
 
-//#define DEBUG
+#define DEBUG
 bool shouldInitialize = true;
 
 void setup() {
@@ -49,10 +49,10 @@ void loop() {
 		magnetLeft.reset();
 		magnetRight.reset();
 		magnetBack.reset();
-		wheels.resetGlobalPosition();
 		gyro.enable();
 		gyro.calibrate(1024);
-		//gyro.resetAngle(60);
+		gyro.resetAngle(0);
+		wheels.resetGlobalPosition(0);
 	}
 
 	//pid_debug_loop();

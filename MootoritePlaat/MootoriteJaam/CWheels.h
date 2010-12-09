@@ -49,7 +49,7 @@ public:
 
 	void stop();
 
-	void resetGlobalPosition();
+	void resetGlobalPosition(int gyroAngle);
 	void updateGlobalPosition(long leftWheel, long rightWheel, long backWheel, double gyroAngle);
 	void getDesiredWheelPositions(long &desiredLeft, long &desiredRight, long &desiredBack); // desired: decidegrees
 	
